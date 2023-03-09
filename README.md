@@ -17,4 +17,9 @@ RFC && Http ?
 the HTTP protocol was first proposed in RFC 1945 in May 1996, and has since been revised and updated in subsequent RFCs to reflect changes and improvements to the protocol.
 
 
-The http protocol belongs to the Application layer of the OSI model , but to ensure bilding the http protocol we have to build our data transmission protocol, the TCP protocol.
+The http protocol belongs to the Application layer of the OSI model , and even if we implement it, it will not be able to do its job wthout t its  Transport Layer  which is TCP protocol.
+
+TCP implemenation :
+To implement TCP, we have to learn TCP socket programming first .
+
+

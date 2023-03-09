@@ -22,4 +22,13 @@ The http protocol belongs to the Application layer of the OSI model , and even i
 TCP implemenation :
 To implement TCP, we have to learn TCP socket programming first .
 
+What is a socket?
+
+A socket it a mechanism that provides computer applications a way to the Network, it is an end point communication between two or more  processes (or Applications  ) from and to anywhere in the world (e.g, sending an email to a friend) .
+
+It allows messages to be sent and received between applications ,  A good  analogy of creating a socket is that of requesting a telephone line from the phone company.
+
+
+
+
 

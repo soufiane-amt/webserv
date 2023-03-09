@@ -13,5 +13,8 @@ As I mentiend before the RFC is a document that provide specification about a pr
 
 if you are creating a server, you may need to implement a protocol such as HTTP to communicate with other servers and clients. The RFCs that describe these protocols provide detailed  specifications that you can follow to ensure that your server is compliant with the protocol and can interoperate with other servers and clients.
 
+RFC && Http ?
+the HTTP protocol was first proposed in RFC 1945 in May 1996, and has since been revised and updated in subsequent RFCs to reflect changes and improvements to the protocol.
 
 
+The http protocol belongs to the Application layer of the OSI model , but to ensure bilding the http protocol we have to build our data transmission protocol, the TCP protocol.

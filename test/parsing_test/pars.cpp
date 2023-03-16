@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 15:33:58 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:51:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ class clientRequestParser
     void    parseHeader ()
     {
         parseFirstLine (*tokens.begin());
-        for (tokens_t::iterator it = tokens.begin() + 1; it != tokens.end(); it++)
+        for (tokens_t::iterator it = tokens.begin() + 1; it != tokens.end() ; it++)
             parseOtherLines(*it);
     }
 

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 16:24:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 16:25:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef  struct clientRequest
     protocolVersion_t                               protocol;
     general_header                                  g_header;
 
-    general_header::mapped_type& operator [] (std::string key)
+    general_header::mapped_type& operator [] (general_header::key_type key)
     {
         return (g_header[key]);
     }

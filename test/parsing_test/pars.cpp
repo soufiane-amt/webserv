@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 16:19:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 16:24:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class utility
 };
 
 
-struct clientRequest
+typedef  struct clientRequest
 {
     typedef    std::string                          method_t;
     typedef    std::string                          uri_t;
@@ -85,23 +85,21 @@ struct clientRequest
     protocolVersion_t                               protocol;
     general_header                                  g_header;
 
+    general_header::mapped_type& operator [] (std::string key)
+    {
+        return (g_header[key]);
+    }
 }   request_t;
 
 
 class clientRequestParser
 {
     private:
-    typedef    std::map <std::string, std::string>  request_t;
     typedef    std::vector<std::string>             tokens_t;
-    typedef    std::string                          method_t;
-    typedef    std::string                          uri_t;
-    typedef    std::string                          protocolVersion_t;
 
 
     tokens_t                    tokens;
     request_t                   request;
-    method_t                    method
-    uri_t
     
     public:
     

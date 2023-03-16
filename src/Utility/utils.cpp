@@ -6,23 +6,17 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 16:47:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 17:50:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include <vector>
-#include <iostream>
-
-class utility
-{
-    public:
-    static std::vector<std::string> split(std::string str, std::string delimiter);
-};
+#include "utils.hpp"
 
 
-
-
+/* ************************************************************************** */
+                            // utility::split :
+/* ************************************************************************** */
 
 std::vector<std::string> utility::split(std::string str, std::string delimiter)
 {

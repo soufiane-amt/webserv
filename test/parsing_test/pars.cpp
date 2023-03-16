@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 15:30:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:33:58 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,12 @@ class clientRequestParser
             parseOtherLines(*it);
     }
 
+
+    public:
     void    displayRequest ()
     {
-        for (std:: i = 0; i < count; i++)
-        {
-            /* code */
-        }
-        
+        for (request_t::iterator it = request.begin(); it != request.end(); it++)
+            std::cout << it->first << " | " << it->second << std::endl;
     }
 };
 
@@ -146,6 +145,6 @@ int main()
 {
     clientRequestParser test(msg);
     
-    
+    test.displayRequest ();
     return 0;
 }

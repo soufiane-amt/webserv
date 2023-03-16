@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 15:08:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:30:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ struct simpleConfPars
 
 
 std::string msg= "GET / HTTP/1.1\r\n"
-            "Host: 192.241.213.46:6880\n"
+            "Host: 192.241.213.46:6880\r\n"
             "Upgrade-Insecure-Requests: 1\r\n"
             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
             "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8\r\n"
@@ -75,24 +75,69 @@ class utility
 class clientRequestParser
 {
     private:
-    std::map <std::string, std::string> request;
-    std::vector<std::string>             tokens;
+    typedef    std::map <std::string, std::string>  request_t;
+    typedef    std::vector<std::string>             tokens_t;
+
+
+    request_t                   request;
+    tokens_t                    tokens;
 
     public:
     
     clientRequestParser(std::string clientRequestMsg) //if one of the tokens lines has a height of two please declare it as an error
     {
         std::stringstream ss(clientRequestMsg);
-        tokens =utility::split(clientRequestMsg, CRLF);
-        // for (std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); it++)
-        // {
-        //     std::cout << *it << std::endl;
-        // }
+        tokens = utility::split(clientRequestMsg, CRLF);
+        parseHeader();
     }
     
     std::string getValue (std::string key)
     {
         return (request[key]);
+    }
+
+    private:
+    void    parseFirstLine (std::string line)
+    {
+        std::string key;
+        std::string value;
+
+        size_t  pos = tokens[0].find(SP);
+        request["method"] = tokens[0].substr(0, pos);
+        tokens[0].erase(0, pos + 1);
+        pos = tokens[0].find(SP);
+        request["uri"] = tokens[0].substr(0, pos);
+        tokens[0].erase(0, pos + 1);
+        request["version"] = tokens[0];
+    }
+
+
+    
+    void    parseOtherLines (std::string line)
+    {
+        std::string key;
+        std::string value;
+        size_t  pos = line.find(":");
+        key = line.substr(0, pos);
+        line.erase(0, pos + 1);
+        value = line;
+        request[key] = value;
+    }
+    
+    void    parseHeader ()
+    {
+        parseFirstLine (*tokens.begin());
+        for (tokens_t::iterator it = tokens.begin() + 1; it != tokens.end(); it++)
+            parseOtherLines(*it);
+    }
+
+    void    displayRequest ()
+    {
+        for (std:: i = 0; i < count; i++)
+        {
+            /* code */
+        }
+        
     }
 };
 
@@ -100,6 +145,7 @@ class clientRequestParser
 int main()
 {
     clientRequestParser test(msg);
+    
     
     return 0;
 }

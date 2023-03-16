@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 16:26:44 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/16 16:45:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,6 @@ std::string msg= "GET / HTTP/1.1\r\n"
             "Accept-Encoding: gzip, deflate\r\n"
             "Connection: keep-alive\r\n\r\n";
 
-class utility
-{
-    public:
-    static std::vector<std::string> split(std::string str, std::string delimiter) {
-        std::vector<std::string> tokens;
-        size_t pos = 0;
-        std::string token;
-        while ((pos = str.find(delimiter)) != std::string::npos) {
-            token = str.substr(0, pos);
-            tokens.push_back(token);
-            str.erase(0, pos + delimiter.length());
-        }
-        tokens.push_back(str);
-        return tokens;
-    }
-};
 
 
 class clientRequestParser

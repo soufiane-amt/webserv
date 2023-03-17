@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:10:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:21:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ std::string clientRequestParser::getValue (std::string key)
     return (request[key]);
 }
 
-void    clientRequestParser::parseFirstLine (std::string line)
+void    clientRequestParser::parseFirstLine ()
 {
     std::string key;
     std::string value;
@@ -53,7 +53,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
 
 void    clientRequestParser::parseHeader ()
 {
-    parseFirstLine (*tokens.begin());
+    parseFirstLine ();
     for (tokens_t::iterator it = tokens.begin() + 1; it != tokens.end() ; it++)
         parseOtherLines(*it);
 }

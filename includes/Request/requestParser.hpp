@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 13:57:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:21:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ std::string msg= "GET / HTTP/1.1\r\n"
             "Accept-Encoding: gzip, deflate\r\n"
             "Connection: keep-alive\r\n\r\n";
 
-#define CRLF "\r\n";
-#define SP " ";
+#define CRLF "\r\n"
+#define SP " "
 
 
 class clientRequestParser
@@ -50,7 +50,7 @@ class clientRequestParser
     std::string getValue (std::string key);
 
     private:
-    void    parseFirstLine (std::string line);
+    void    parseFirstLine ();
     void    parseOtherLines (std::string line);
     void    parseHeader ();
 

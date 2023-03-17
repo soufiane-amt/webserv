@@ -6,7 +6,7 @@
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/17 14:19:30 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/17 14:23:12 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,10 @@ CC = clang++
 CFLAGS = -Wall -Wextra -Werror
 
 RQS_SRC = requestParser
+
 UTL_SRC = utils
+
+MAIN =  src/webserv.cpp
 
 INC = -I ./includes/Request/ -I ./includes/Utility/
 
@@ -25,7 +28,7 @@ INCLUDES = $(addprefix includes/Request/, $(addsuffix .hpp, $(RQS_SRC))) \
 		   $(addprefix includes/Utility/, $(addsuffix .hpp, $(UTL_SRC)))
 
 SRC = $(addprefix src/Request/, $(addsuffix .cpp, $(RQS_SRC))) \
-	  $(addprefix src/Utility/, $(addsuffix .cpp, $(UTL_SRC)))
+	  $(addprefix src/Utility/, $(addsuffix .cpp, $(UTL_SRC))) $(MAIN)
 
 OBJ = $(SRC:.cpp=.o)
 

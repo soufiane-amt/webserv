@@ -6,11 +6,14 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:21:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:31:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
+
+#ifndef REQUESTPARSER_HPP
+# define REQUESTPARSER_HPP
 
 #include <iostream>
 #include <vector>
@@ -30,8 +33,6 @@ std::string msg= "GET / HTTP/1.1\r\n"
             "Accept-Encoding: gzip, deflate\r\n"
             "Connection: keep-alive\r\n\r\n";
 
-#define CRLF "\r\n"
-#define SP " "
 
 
 class clientRequestParser
@@ -46,7 +47,7 @@ class clientRequestParser
     
     public:
     
-    clientRequestParser(std::string clientRequestMsg); //if one of the tokens lines has a height of two please declare it as an error;
+    clientRequestParser(std::string clientRequestMsg); //if one of the tokens  has more than one line please declare it as an error;
     std::string getValue (std::string key);
 
     private:
@@ -58,3 +59,5 @@ class clientRequestParser
     void    displayRequest ();
 };
 
+
+#endif

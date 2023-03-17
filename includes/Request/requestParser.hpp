@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 18:51:03 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 19:33:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,6 @@ class clientRequestParser
 {
     private:
     typedef    std::vector<std::string>             tokens_t;
-    typedef    std::map <std::string, std::string>  request_t;
-
-
-
 
 
     tokens_t                    _tokens;

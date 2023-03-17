@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/16 18:02:06 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/17 14:12:44 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,24 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror
 
-RQS_PATH = includes/Request/
 
-UTL_PATH = includes/Utility/
+RQS_SRC = requestParser
 
-INC = -I ./includes
+UTL_SRC = utils
 
-includes = 
 
-FILES = webserv
 
-OBJ = $(SRC:.cpp=.o)
+
+INC = -I ./$(RQS_PATH) -I ./$(UTL_PATH)
+
+INCLUDES =  addprefix(includes/Request/, $(RQS))\
+			 addprefix(includes/Utility/, $(UTL))=.hpp
+
+SRC =  addprefix(src/Request/, $(RQS))\
+			 addprefix(src/Utility/, $(UTL))
+
+
+OBJ = $(SRC:=.o)
 
 
 

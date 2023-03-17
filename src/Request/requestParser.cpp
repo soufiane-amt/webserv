@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/16 17:48:56 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:10:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
 
 std::string clientRequestParser::getValue (std::string key)
 {
+
+    
+    
     return (request[key]);
 }
 

@@ -6,7 +6,7 @@
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/17 18:52:27 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/17 18:53:59 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = webserver
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 RQS_SRC = requestParser errorManager
 

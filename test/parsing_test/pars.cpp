@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:30:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:33:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 typedef std::map<std::string, std::string> directive_t;
 typedef std::map<std::string, directive_t> location_t;
-typedef std::map<std::string , std::pair<directive_t, location_t> > server_t;
+typedef std::map<int , std::pair<directive_t, location_t> > server_t;
 
 
 #define CRLF "\r\n"
@@ -44,7 +44,7 @@ struct simpleConfPars
         locations["/images/"]["index"] = "index.html";
         directives["error_page"] = "404 /404.html";
         locations["/404.html"]["root"] = "/var/www/html";
-        server[""] = std::make_pair(directives, locations);
+        server[0] = std::make_pair(directives, locations);
     }
 };
 

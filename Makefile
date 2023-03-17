@@ -6,7 +6,7 @@
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/17 14:23:12 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/17 18:52:27 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = clang++
 
 CFLAGS = -Wall -Wextra -Werror
 
-RQS_SRC = requestParser
+RQS_SRC = requestParser errorManager
 
 UTL_SRC = utils
 

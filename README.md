@@ -32,5 +32,19 @@ It allows messages to be sent and received between applications ,  A good  analo
 
 
 
+/******* Request and Response ********/
+Http protocol plays the role of communication language between the server and client(s) to implement is properly we have to receive a request and prepare and send a response :
+To do that we have to:
+
+-Get the request and parse it ;
+-Check 
 
 
+
+
+
+/*** Random***/
+idempotent Mothods :
+
+Methods that you call as many times as you wnat without changing the server state (data base associated with the server) are called idempotent like GET PUT DELETE
+non-idempotent like post 

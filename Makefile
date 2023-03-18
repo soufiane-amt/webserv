@@ -6,13 +6,13 @@
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/17 18:53:59 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/18 11:20:14 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserver
 
-CC = clang++
+CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 

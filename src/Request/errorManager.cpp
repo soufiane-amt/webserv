@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 19:58:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/18 11:09:26 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ bool     errorManager::isProtocolValid(protocol_t protocol)
 
 bool     errorManager::isURIValid(std::string uri)
 {
-    if (uri[0] == '/')
-        return true;
+
     return false;
 }
 

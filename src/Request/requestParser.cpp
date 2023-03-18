@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 20:25:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/18 10:51:47 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void    clientRequestParser::displayRequest ()
     for (int i = 255; i >= 0; i--)
     {
         if ((_request.begin())->second[0] == i)
+            std::cout << "the char is " << i << std::endl;
+        if ((_request.begin())->second[1] == i)
             std::cout << "the char is " << i << std::endl;
     }
     std::cout << (_request.begin())->first.size () <<std::endl;

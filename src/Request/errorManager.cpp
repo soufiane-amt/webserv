@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/18 11:09:26 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/18 14:49:58 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,17 @@ bool     errorManager::isProtocolValid(protocol_t protocol)
     return false;
 }
 
-bool     errorManager::isURIValid(std::string uri)
-{
+std::pair<bool, std::string> errorManager::isURIValid(const std::string& uri) {
+    static simpleConfPars parser;
+    static location_t server_location = parser.get_server_location(0);
 
-    return false;
+    location_t::iterator it = server_location.find(uri);
+    if (it != server_location.end())
+        return std::make_pair (true, it->second["root"]);
+    size_t pos = uri.find_last_of('/');
+    if (pos != std::string::npos)
+        return isURIValid(uri.substr(0, pos));
+    return std::make_pair (false, "");
 }
 
 bool     errorManager::isRestOfRequestValid(request_t request)

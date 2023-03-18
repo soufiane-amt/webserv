@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/18 11:42:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/18 14:30:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ struct simpleConfPars
         server[0] = std::make_pair(directives, locations);
     }
 
-    location_t::iterator get_server_location (int server_id, std::string URI)
+    location_t get_server_location (int server_id)
     {
-        return (server[server_id].second.find(URI));
+        return (server[server_id].second);
     }
     
     directive_t::iterator get_server_directive (int server_id, std::string directive)

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 11:09:39 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:55:18 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
 
 
-bool     errorManager::isMethodValid(method_t method)
+bool     errorManager::isMethodValid(Method_t Method)
 {
+    std::cout << "Method: " << Method << std::endl;
     for (int i = 0; i < 3; i++)
-        if (method == _validMethods[i])
+        if (Method == _validMethods[i])
             return true;
     return false;
 }
@@ -33,22 +34,21 @@ bool     errorManager::isProtocolValid(protocol_t protocol)
 }
 
 //This function is used to check if the request is valid or not and r
-//eturns the uri if it is valid if not returns an empty string
+//eturns the URI if it is valid if not returns an empty string
 
 
-std::string errorManager::isURIValid(const std::string& uri) {
+std::string errorManager::isURIValid(const std::string& URI) {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
 
-    std::cout << "URI: " << uri << std::endl;
-    location_t::iterator it = server_location.find(uri);
+    location_t::iterator it = server_location.find(URI);
     if (it != server_location.end())
-        return (uri);
-    size_t pos = uri.find_last_of('/');
-    if (uri[0] == '/')
-        return isURIValid(uri.substr(1));
+        return (URI);
+    size_t pos = URI.find_last_of('/');
+    if (URI[0] == '/')
+        return isURIValid(URI.substr(1));
     else if (pos != std::string::npos)
-        return isURIValid(uri.substr(0, pos));
+        return isURIValid(URI.substr(0, pos));
     return ("");
 }
 
@@ -60,13 +60,15 @@ std::string errorManager::isURIValid(const std::string& uri) {
 //     return true;
 // }
 
-bool     errorManager::isRequestValid(request_t request)
+bool     errorManager::isRequestValid(const request_t &request)
 {
-    if (!isMethodValid(request["Method"]))
+    std::cout << request.find ("Method")->second <<" <<<\n";
+    if (!isMethodValid(request.at("Method")))
         return false;
-    if (!isProtocolValid(request["Protocol"]))
+    if (!isProtocolValid(request.at("Protocol")))
         return false;
-    if (isURIValid(request["URI"]).empty())
+    std::cout << "URI: " << request.at("URI") << std::endl;
+    if (isURIValid(request.at("URI")).empty())
         return false;
     // if (!isRestOfRequestValid(request))
     //     return false;

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/18 14:30:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:58:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,21 @@ struct simpleConfPars
 {
     simpleConfPars ()
     {
+
         directive_t directives;
         location_t locations;
         
         directives["listen"] = "80";
         directives["server_name"] = "example.com";
         locations["/"]["root"] = "/var/www/html";
-        locations["/"]["methods"] = "GET HEAD";
+        locations["/"]["Methods"] = "GET HEAD";
         locations["/"]["index"] = "index.html";
         locations["/images/"]["root"] = "/var/www";
         locations["/images/"]["index"] = "index.html";
         directives["error_page"] = "404 /404.html";
         locations["/404.html"]["root"] = "/var/www/html";
-        server[0] = std::make_pair(directives, locations);
+        server.push_back(make_pair(directives, locations));
+        std::cout << "-----" <<  std::endl;
     }
 
     location_t get_server_location (int server_id)

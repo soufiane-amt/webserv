@@ -11,7 +11,7 @@ RFC contains technical specifications about a certain problem and provides solut
 
 Why is RFC important?
 
-As I mentiend before the RFC is a document that provide specification about a protocol It is a type of reference to any developer that includes guidance on best practices and common pitfalls and dangers to avoid when implementing a protocol or standard. By following these recommendations, you can improve the performance, security, and reliability of your software.
+As I mentiend before the RFC is a document that provide specification about a protocol It is a type of reference to any developer that includes guidance on best practices and common pitfalls and dangers to avoid when implementing a protocol or standard. By following these recommendations, you can improve the performance, secURIty, and reliability of your software.
 
 if you are creating a server, you may need to implement a protocol such as HTTP to communicate with other servers and clients. The RFCs that describe these protocols provide detailed  specifications that you can follow to ensure that your server is compliant with the protocol and can interoperate with other servers and clients.
 

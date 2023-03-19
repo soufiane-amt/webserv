@@ -6,11 +6,11 @@
 #    By: samajat <samajat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/16 17:51:11 by samajat           #+#    #+#              #
-#    Updated: 2023/03/18 11:20:14 by samajat          ###   ########.fr        #
+#    Updated: 2023/03/19 11:48:54 by samajat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = webserver
+NAME = webserv
 
 CC = c++
 
@@ -35,10 +35,10 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -g
 
 %.o: %.cpp $(INCLUDES)
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@ -g
 
 clean:
 	rm -f $(OBJ)

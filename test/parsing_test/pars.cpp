@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:33:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:45:06 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ class clientRequestParser
         std::string value;
 
         size_t  pos = tokens[0].find(SP);
-        request["method"] = tokens[0].substr(0, pos);
+        request["Method"] = tokens[0].substr(0, pos);
         tokens[0].erase(0, pos + 1);
         pos = tokens[0].find(SP);
-        request["uri"] = tokens[0].substr(0, pos);
+        request["URI"] = tokens[0].substr(0, pos);
         tokens[0].erase(0, pos + 1);
         request["version"] = tokens[0];
     }

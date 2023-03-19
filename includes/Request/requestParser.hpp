@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 19:33:16 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:31:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class clientRequestParser
     public:
     
     clientRequestParser(std::string clientRequestMsg); //if one of the tokens  has more than one line please declare it as an error;
+    const request_t& getRequest ();
     std::string getValue (std::string key);
 
     private:

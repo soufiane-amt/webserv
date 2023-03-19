@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/18 14:49:58 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:09:39 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,43 @@ bool     errorManager::isProtocolValid(protocol_t protocol)
     return false;
 }
 
-std::pair<bool, std::string> errorManager::isURIValid(const std::string& uri) {
+//This function is used to check if the request is valid or not and r
+//eturns the uri if it is valid if not returns an empty string
+
+
+std::string errorManager::isURIValid(const std::string& uri) {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
 
+    std::cout << "URI: " << uri << std::endl;
     location_t::iterator it = server_location.find(uri);
     if (it != server_location.end())
-        return std::make_pair (true, it->second["root"]);
+        return (uri);
     size_t pos = uri.find_last_of('/');
-    if (pos != std::string::npos)
+    if (uri[0] == '/')
+        return isURIValid(uri.substr(1));
+    else if (pos != std::string::npos)
         return isURIValid(uri.substr(0, pos));
-    return std::make_pair (false, "");
+    return ("");
 }
 
-bool     errorManager::isRestOfRequestValid(request_t request)
-{
-    if (request["Host"].empty())
-        return false;
+// bool     errorManager::isRestOfRequestValid(request_t request)
+// {
+//     if (request["Host"].empty())
+//         return false;
     
+//     return true;
+// }
+
+bool     errorManager::isRequestValid(request_t request)
+{
+    if (!isMethodValid(request["Method"]))
+        return false;
+    if (!isProtocolValid(request["Protocol"]))
+        return false;
+    if (isURIValid(request["URI"]).empty())
+        return false;
+    // if (!isRestOfRequestValid(request))
+    //     return false;
     return true;
 }
-

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/18 14:37:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 11:12:03 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define ERRORMANAGER_HPP
 
 #include "utils.hpp"
+
+
+//All the functions in this class are static as We don't need to create an object of this class
 
 class errorManager
 {
@@ -30,10 +33,10 @@ class errorManager
 
     
     private:
-    bool        isMethodValid(method_t method);
-    bool        isProtocolValid(protocol_t protocol);
-    std::pair<bool, std::string>        isURIValid(const std::string& uri);
-    bool        isRestOfRequestValid(request_t request);
+    static  bool        isMethodValid(method_t method);
+    static  bool        isProtocolValid(protocol_t protocol);
+    static  std::string        isURIValid(const std::string& uri);
+    static  bool        isRestOfRequestValid(request_t request);
 };
 
 

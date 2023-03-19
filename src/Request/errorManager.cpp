@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 19:45:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 20:01:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,18 @@
 
 const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
+const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT","TRACE","CONNECT"};
 
 
-bool     errorManager::isMethodValid(Method_t Method)
+void     errorManager::isMethodValid(Method_t Method)
 {
-    std::cout << "Method: " << Method << std::endl;
     for (int i = 0; i < 3; i++)
         if (Method == _validMethods[i])
-            return true;
-    return false;
+            return ;
+    for (int i = 0; i < 5; i++)
+        if (Method == _notAllowedMethods[i])
+            throw ParsingErrorDetected(METHOD_NOT_ALLOWED) ;
+    throw ParsingErrorDetected(BAD_REQUEST);
 }
 
 void     errorManager::isProtocolValid(protocol_t protocol)

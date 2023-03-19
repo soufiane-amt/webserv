@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 11:55:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 12:00:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,10 @@ std::string errorManager::isURIValid(const std::string& URI) {
 
 bool     errorManager::isRequestValid(const request_t &request)
 {
-    std::cout << request.find ("Method")->second <<" <<<\n";
     if (!isMethodValid(request.at("Method")))
         return false;
     if (!isProtocolValid(request.at("Protocol")))
         return false;
-    std::cout << "URI: " << request.at("URI") << std::endl;
     if (isURIValid(request.at("URI")).empty())
         return false;
     // if (!isRestOfRequestValid(request))

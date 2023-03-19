@@ -6,12 +6,11 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 12:00:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:02:47 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "errorManager.hpp"
-
 
 const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
@@ -29,6 +28,8 @@ bool     errorManager::isMethodValid(Method_t Method)
 bool     errorManager::isProtocolValid(protocol_t protocol)
 {
     if (protocol == _validProtocol)
+        return true;
+    if (protocol.substr( 0, 4) == "HTTP")
         return true;
     return false;
 }

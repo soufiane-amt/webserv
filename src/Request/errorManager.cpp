@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 20:01:09 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 20:09:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void     errorManager::isProtocolValid(protocol_t protocol)
     if (protocol == _validProtocol)
         return ;
     if (protocol.substr( 0, 4) == "HTTP")
-    {
         throw ParsingErrorDetected(HTTP_VERSION_NOT_SUPPORTED);
-    }
     throw ParsingErrorDetected(BAD_REQUEST);
 
 }
@@ -88,14 +86,15 @@ void errorManager::isURIValid(const std::string& URI,location_t server_location)
 //     return true;
 // }
 
-bool     errorManager::isRequestValid(const request_t &request)
+bool     errorManager::isRequestValid(request_t &request)
 {
-    if (!isMethodValid(request.at("Method")))
-        return false;
-    if (!isProtocolValid(request.at("Protocol")))
-        return false;
-    if (isURIValid(request.at("URI")).empty())
-        return false;
+    static simpleConfPars parser;
+    static location_t server_location = parser.get_server_location(0);
+
+    isMethodValid(request.at("Method"));
+    isProtocolValid(request.at("Protocol"));
+    isURIValid(request.at("URI"), server_location);
+    
     // if (!isRestOfRequestValid(request))
     //     return false;
     return true;

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 15:31:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:35:48 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,9 @@ bool ParsingErrorDetected::operator==(const std::string& codeStatus)
     if (_msg == codeStatus)
         return (true);
     return (false);
+}
+
+ParsingErrorDetected::~ParsingErrorDetected()throw()
+{
+    
 }

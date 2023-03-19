@@ -6,25 +6,25 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 15:35:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:37:18 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exception.hpp"
 
 
-ParsingErrorDetected::ParsingErrorDetected(std::string msg) : _msg(msg)
+ParsingErrorDetected::ParsingErrorDetected(std::string msg) : _codeStatus(msg)
 {
 }
 
 const char* ParsingErrorDetected::what() const throw()
 {
-    return (_msg.c_str());
+    return (_codeStatus.c_str());
 }
 
 bool ParsingErrorDetected::operator==(const std::string& codeStatus)
 {
-    if (_msg == codeStatus)
+    if (_codeStatus == codeStatus)
         return (true);
     return (false);
 }

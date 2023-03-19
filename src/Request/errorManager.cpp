@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 15:02:47 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:46:02 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@ bool     errorManager::isMethodValid(Method_t Method)
     return false;
 }
 
-bool     errorManager::isProtocolValid(protocol_t protocol)
+void     errorManager::isProtocolValid(protocol_t protocol)
 {
     if (protocol == _validProtocol)
-        return true;
+        return ;
     if (protocol.substr( 0, 4) == "HTTP")
-        return true;
-    return false;
+    {
+        throw ParsingErrorDetected(HTTP_VERSION_NOT_SUPPORTED);
+    }
+    throw ParsingErrorDetected(BAD_REQUEST);
+
 }
 
 //This function is used to check if the request is valid or not and r

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 17:15:49 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:49:31 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
             throw ParsingErrorDetected(BAD_REQUEST);
     
     line.erase(0, pos + 1);
-    value = line.;
-    for (std::string::iterator it = value.begin(); it != value.end(); it++)
-        if (isspace(*it))
-            throw ParsingErrorDetected(BAD_REQUEST);
+    value = utility::trim(line, SP);
     std::cout << "-------\n";
     _request[key] = value;
 }

@@ -1,4 +1,4 @@
-GET  /  HTTP/1.1 
+GET  /  HTTP/101.1 
 host: localhost 
 Content-Length: 0
 lol: fsdf sdfs

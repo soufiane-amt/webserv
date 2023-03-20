@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 17:49:31 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 18:11:47 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
     _tokens = utility::split(clientRequestMsg, CRLF);
-    for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
-        std::cout << "=>" << *it << std::endl;    
+    // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
+    //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
     
 }
@@ -50,6 +50,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
 {
     std::string key;
     std::string value;
+    
     size_t  pos = line.find(":");
     key = line.substr(0, pos);
     for (std::string::iterator it = key.begin(); it != key.end(); it++)
@@ -58,7 +59,6 @@ void    clientRequestParser::parseOtherLines (std::string line)
     
     line.erase(0, pos + 1);
     value = utility::trim(line, SP);
-    std::cout << "-------\n";
     _request[key] = value;
 }
 

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 17:50:28 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 18:26:33 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 {
     if (protocol == _validProtocol)
         return ;
-    if (protocol.substr( 0, 4) == "HTTP")
+    if (protocol.substr( 0, 5) == "HTTP/" && protocol[5] != '0')
         throw ParsingErrorDetected(HTTP_VERSION_NOT_SUPPORTED);
     throw ParsingErrorDetected(BAD_REQUEST);
 
@@ -78,10 +78,7 @@ bool errorManager::isURIValid(const std::string& URI,location_t server_location,
     if (URI.length() == 1 && URI[0] == '/')
         isURIValid(URI.substr(1), server_location, targetPath);
     else if (pos != std::string::npos)
-    {
-        std::cout << "URI.substr(0, pos): " << URI.substr(0, pos) << std::endl;
         return isURIValid(URI.substr(0, pos), server_location, targetPath);
-    }
     throw ParsingErrorDetected(NOT_FOUND);
     return false;
 }
@@ -95,6 +92,7 @@ bool     errorManager::isRequestValid(request_t &request, std::string &targetPat
     isProtocolValid(request.find("Protocol")->second);
     isURIValid(request.find("URI")->second, server_location, targetPath);
     request_t::iterator it = request.find("host");
+    
     if (it ==  request.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);
     

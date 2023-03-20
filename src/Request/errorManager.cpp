@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 16:07:00 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:07:52 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ bool     errorManager::isRequestValid(request_t &request, std::string &targetPat
     isMethodValid(request.find("Method")->second);
     isProtocolValid(request.find("Protocol")->second);
     isURIValid(request.find("URI")->second, server_location, targetPath);
-    std::cout<< "---isRequestValid---"<<std::endl;
-    std::cout<<"targetPath: "<<targetPath<<std::endl;
     request_t::iterator it = request.find("host");
     if (it ==  request.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);

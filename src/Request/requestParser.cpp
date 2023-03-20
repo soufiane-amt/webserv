@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 11:45:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:49:26 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
     _tokens = utility::split(clientRequestMsg, CRLF);
+    for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
+        std::cout << "=>" << *it << std::endl;    
     parseHeader();
+    
 }
 
 std::string clientRequestParser::getValue (std::string key)
@@ -35,15 +38,12 @@ const request_t& clientRequestParser::getRequest ()
 
 void    clientRequestParser::parseFirstLine ()
 {
-    std::string key;
-    std::string value;
-    size_t  pos = _tokens[0].find(SP);
-    _request["Method"] = _tokens[0].substr(0, pos);
-    _tokens[0].erase(0, pos + 1);
-    pos = _tokens[0].find(SP);
-    _request["URI"] = _tokens[0].substr(0, pos);
-    _tokens[0].erase(0, pos + 1);
-    _request["Protocol"] = _tokens[0];
+    std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
+    if (firstLineParts.size() != 3)
+        throw ParsingErrorDetected(BAD_REQUEST);
+    _request["Method"] = firstLineParts[0];
+    _request["URI"] = firstLineParts[1];
+    _request["Protocol"] = firstLineParts[2];
 }
 
 void    clientRequestParser::parseOtherLines (std::string line)

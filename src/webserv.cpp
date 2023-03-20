@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 16:00:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:43:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ std::string msg= "GET /images/fdsfs HTTP/1.1\r\n"
 int main ()
 {
     clientRequestParser test(msg);
-    std::string _uri ;
-    // test.displayRequest();
-    request_t _request = test.getRequest();
-    std::cout << errorManager::isRequestValid(_request, _uri) << std::endl;
+    // std::string _uri ;
+    test.displayRequest();
+    // request_t _request = test.getRequest();
+    // std::cout << errorManager::isRequestValid(_request, _uri) << std::endl;
 }

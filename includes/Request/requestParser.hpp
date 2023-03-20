@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 11:31:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:46:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <string>
 #include <sstream>
 #include "utils.hpp"
-
+#include "exception.hpp"
 
 
 

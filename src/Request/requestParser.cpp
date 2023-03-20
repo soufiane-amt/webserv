@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 16:49:26 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:52:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@ const request_t& clientRequestParser::getRequest ()
 void    clientRequestParser::parseFirstLine ()
 {
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
+    for (tokens_t::iterator it = firstLineParts.begin(); it != firstLineParts.end(); it++)
+        std::cout << "/=>" << *it << std::endl;    
+    std::cout << "firstLineParts size is " << firstLineParts.size() << std::endl;
     if (firstLineParts.size() != 3)
         throw ParsingErrorDetected(BAD_REQUEST);
+    
+    
     _request["Method"] = firstLineParts[0];
     _request["URI"] = firstLineParts[1];
     _request["Protocol"] = firstLineParts[2];

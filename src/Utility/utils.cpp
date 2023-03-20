@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:29:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:00:08 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ std::vector<std::string> utility::split(std::string str, std::string delimiter)
             token = str.substr(0, pos);
             tokens.push_back(token);
             str.erase(0, pos + delimiter.length());
+            while (str.length() >=delimiter.length() && ( str.substr(0, delimiter.length())) == delimiter)
+                str.erase(0, delimiter.length());      
         }
         tokens.push_back(str);
         return tokens;

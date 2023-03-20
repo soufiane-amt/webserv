@@ -1,6 +1,6 @@
-GET  /  HTTP/0.9
-host: localhost 
-Content-Length: 0
-lol: fsdf sdfs
+GET  /  HTTP/1.1
+hOst: localhost
+
+dsfsdf
 
 

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 18:50:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 20:59:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
+    
     _tokens = utility::split(clientRequestMsg, CRLF);
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
@@ -78,6 +79,8 @@ void    clientRequestParser::displayRequest ()
 {
     for (request_t::iterator it = _request.begin(); it != _request.end(); it++)
         std::cout << it->first << " | " << it->second << std::endl;
+
+    std::cout << "size of the request is " << _request.size() << std::endl;
     // for (int i = 255; i >= 0; i--)
     // {
     //     if ((_request.begin())->second[0] == i)

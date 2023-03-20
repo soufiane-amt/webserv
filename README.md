@@ -48,3 +48,29 @@ idempotent Mothods :
 
 Methods that you call as many times as you wnat without changing the server state (data base associated with the server) are called idempotent like GET PUT DELETE
 non-idempotent like post 
+
+
+
+/*Request Header structure*/
+Request       = Request-Line              ; Section 5.1
+                        *(( general-header        ; Section 4.5
+                         | request-header         ; Section 5.3
+                         | entity-header ) CRLF)  ; Section 7.1
+                        CRLF
+                        [ message-body ]          ; Section 4.3
+Request-Line: This is the first line of an HTTP request message, and it includes the HTTP method, the URL or path of the requested resource, and the HTTP version being used. For example, GET /index.html HTTP/1.1.
+
+general-header: These are headers that can be used in both request and response messages, such as Date, Cache-Control, and Connection.
+
+request-header: These are headers specific to HTTP request messages, such as User-Agent, Host, and Accept.
+
+entity-header: These are headers that describe the content or encoding of the message body, such as Content-Type, Content-Length, and Content-Encoding.
+
+CRLF: This represents a carriage return (\r) followed by a line feed (\n), which is used to indicate the end of a line in HTTP messages.
+
+message-body: This is the optional data that can be included in an HTTP request message, such as form data or file uploads.
+
+So, in summary, the definition you provided describes the structure of an HTTP request message, which includes a request line, a series of headers (which can be general, request-specific, or entity-specific), a blank line (indicated by CRLF), and an optional message body.
+
+
+

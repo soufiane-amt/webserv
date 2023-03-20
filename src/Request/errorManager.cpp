@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 18:40:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 20:31:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,8 @@ bool     errorManager::isRequestValid(request_t &request, std::string &targetPat
     for (std::string::iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw ParsingErrorDetected(BAD_REQUEST);
+    //if the header doesn't end with a CRLF to seperate the body from the header
+    if (request.find("") == request.end())
+        throw ParsingErrorDetected(BAD_REQUEST);
     return true;
 }

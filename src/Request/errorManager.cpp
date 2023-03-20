@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 15:31:16 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:47:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,16 @@ bool errorManager::isURIValid(const std::string& URI,location_t server_location,
     return false;
 }
 
-// bool     errorManager::isRestOfRequestValid(request_t request)
-// {
-//     if (request["Host"].empty())
-//         return false;
-    
-//     return true;
-// }
-
-bool     errorManager::isRequestValid(request_t &request)
+bool     errorManager::isRequestValid(request_t &request, std::string &targetPath)
 {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
-    std::string targetPath;
 
-    isMethodValid(request.at("Method"));
-    isProtocolValid(request.at("Protocol"));
+    isMethodValid(request.find("Method")->second);
+    isProtocolValid(request.find("Protocol")->second);
     isURIValid(request.at("URI"), server_location, targetPath);
     std::cout<< "---isRequestValid---"<<std::endl;
     std::cout<<"targetPath: "<<targetPath<<std::endl;
-    // if (!isRestOfRequestValid(request))
-    //     return false;
+    
     return true;
 }

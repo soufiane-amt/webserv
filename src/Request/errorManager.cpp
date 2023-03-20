@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 18:26:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 18:40:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 {
     if (protocol == _validProtocol)
         return ;
-    if (protocol.substr( 0, 5) == "HTTP/" && protocol[5] != '0')
+    if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
         throw ParsingErrorDetected(HTTP_VERSION_NOT_SUPPORTED);
     throw ParsingErrorDetected(BAD_REQUEST);
 

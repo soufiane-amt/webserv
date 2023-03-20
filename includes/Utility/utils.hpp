@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 19:53:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:36:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 # define UTILS_HPP
 
 
+#include <iostream>
 
 #include <vector>
 #include <map>
 #include <set>
-#include <iostream>
 #include <string>
+#include <iterator>
+#include <algorithm>
+
 #include <exception>
+#include <cctype>
 #include "macros.hpp"
-
-
 
 
 /* ************************************************************************** */
@@ -91,6 +93,14 @@ struct simpleConfPars
 struct utility
 {
     static std::vector<std::string> split(std::string str, std::string delimiter);
+    static std::string              trim(const std::string &str, const std::string &delimiter);
+
+    private:
+    //trim methods :
+    static std::string              left_trim(const std::string &str, const std::string &delimiter);
+    static std::string              right_trim(const std::string &str, const std::string &delimiter);
+    
 };
+
 
 #endif

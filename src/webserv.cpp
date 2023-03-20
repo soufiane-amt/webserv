@@ -6,14 +6,14 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 18:26:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 18:27:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "requestParser.hpp"
 #include "errorManager.hpp"
 
-std::string msg= "GET  /images HTTP/101.1\r\n"
+std::string msg= "GET  /images H\r\n"
             "host: 192.241.213.46:6880\r\n"
             "Upgrade-Insecure-Requests: 1\r\n"
             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 20:09:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:31:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,30 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 
 
 
-void errorManager::isURIValid(const std::string& URI,location_t server_location) {
+bool errorManager::isURIValid(const std::string& URI,location_t server_location, std::string &targetPath) {
     
     if (URI[0] != '/')
         throw ParsingErrorDetected(BAD_REQUEST);
     location_t::iterator it = server_location.find(URI);
 
     if (it != server_location.end())
-        return;
-    if (URI.substr(0, 7) == "http://")
-        isURIValid(URI.substr(7), server_location);
+    {
+        targetPath = URI;
+        return true;
+    }
+    //for http://
+    // if (URI.substr(0, 7) == "http://")
+    //     isURIValid(URI.substr(7), server_location, targetPath);
     size_t pos = URI.find_last_of('/');
     if (URI.length() == 1 && URI[0] == '/')
-        isURIValid(URI.substr(1), server_location);
+        isURIValid(URI.substr(1), server_location, targetPath);
     else if (pos != std::string::npos)
-        isURIValid(URI.substr(0, pos), server_location);
+    {
+        std::cout << "URI.substr(0, pos): " << URI.substr(0, pos) << std::endl;
+        return isURIValid(URI.substr(0, pos), server_location, targetPath);
+    }
     throw ParsingErrorDetected(NOT_FOUND);
+    return false;
 }
 
 // bool     errorManager::isRestOfRequestValid(request_t request)
@@ -90,11 +98,13 @@ bool     errorManager::isRequestValid(request_t &request)
 {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
+    std::string targetPath;
 
     isMethodValid(request.at("Method"));
     isProtocolValid(request.at("Protocol"));
-    isURIValid(request.at("URI"), server_location);
-    
+    isURIValid(request.at("URI"), server_location, targetPath);
+    std::cout<< "---isRequestValid---"<<std::endl;
+    std::cout<<"targetPath: "<<targetPath<<std::endl;
     // if (!isRestOfRequestValid(request))
     //     return false;
     return true;

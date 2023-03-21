@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 13:41:09 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 14:46:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT",
 
 void     errorManager::isMethodValid(Method_t Method)
 {
-    for (int i = 0; i < 3; i++)
-        if (Method == _validMethods[i])
+    for (size_t i = 0; i < _validMethods->size(); i++)
+        if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
-    for (int i = 0; i < 5; i++)
+    
+    for (size_t i = 0; i < _notAllowedMethods->size(); i++)
         if (Method == _notAllowedMethods[i])
             throw ParsingErrorDetected(METHOD_NOT_ALLOWED) ;
     throw ParsingErrorDetected(BAD_REQUEST);
@@ -83,20 +84,21 @@ bool errorManager::isURIValid(const std::string& URI,location_t server_location,
     return false;
 }
 
-bool     errorManager::isRequestValid(header_t &request, std::string &targetPath)
+bool     errorManager::isRequestValid(const http_message_t &request, std::string &targetPath)
 {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
+    const header_t &header = request.first;
 
-    isMethodValid(request.find("Method")->second);
-    isProtocolValid(request.find("Protocol")->second);
-    isURIValid(request.find("URI")->second, server_location, targetPath);
-    header_t::iterator it = request.find("host");
+    isMethodValid(header.find("Method")->second);
+    isProtocolValid(header.find("Protocol")->second);
+    isURIValid(header.find("URI")->second, server_location, targetPath);
+    header_t::const_iterator it = header.find("host");
     
-    if (it ==  request.end() || it->second.empty())
+    if (it ==  header.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);
     
-    for (std::string::iterator iter = it->second.begin(); iter != it->second.end(); iter++)
+    for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw ParsingErrorDetected(BAD_REQUEST);
     //if the header doesn't end with a CRLF to seperate the body from the header

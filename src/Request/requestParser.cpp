@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 13:50:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 14:42:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,6 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_f
     
 }
 
-std::string clientRequestParser::getValue (std::string key)
-{
-    return (_header_fields[key]);
-}
-
 
 const http_message_t& clientRequestParser::getRequest ()
 {
@@ -46,7 +41,7 @@ void    clientRequestParser::parseFirstLine ()
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw ParsingErrorDetected(BAD_REQUEST);
-    _header_fields["Method"] = firstLineParts[0];
+    _header_fields["Method"] = firstLineParts[0]; 
     _header_fields["URI"] = firstLineParts[1];
     _header_fields["Protocol"] = firstLineParts[2];
 }
@@ -82,6 +77,21 @@ void    clientRequestParser::parseHeader ()
         parseOtherLines(*it);
 }
 
+
+bool    clientRequestParser::hasBody ()
+{
+    return (_request.second.size() > 0);
+}
+
+const header_t& clientRequestParser::getHeader()
+{
+    return (_header_fields);
+}
+
+std::string clientRequestParser::getBody()
+{
+    return (_request.second);
+}
 
 void    clientRequestParser::displayRequest ()
 {

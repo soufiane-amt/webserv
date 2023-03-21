@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 11:59:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 12:25:36 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ struct utility
     
     static std::string              trim(const std::string &str, const std::string &delimiter);
     
-    static std::string::iterator    caseInsensitiveSearch(std::string & str1, std::string & str2);
+    static std::string::iterator    caseInsensitiveSearch(std::string & str1, const std::string & str2);
 
     private:
     //trim methods :

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 12:22:35 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 12:25:21 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ bool utility::caseInsensitiveStringCompare(char a, char b)
     return std::toupper(a) == std::toupper(b);
 }
 
-std::string::iterator utility::caseInsensitiveSearch(std::string & str1, std::string & str2)
+std::string::iterator utility::caseInsensitiveSearch(std::string & str1, const std::string & str2)
 {
     return std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), caseInsensitiveStringCompare);
 }

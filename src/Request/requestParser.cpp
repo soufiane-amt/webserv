@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 13:42:50 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:50:06 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
     for (std::string::iterator it = key.begin(); it != key.end(); it++)
         if (isspace(*it))
             throw ParsingErrorDetected(BAD_REQUEST);
-    {//This is to make sure that the key is in lower case if the field is host//host is case insensitive
+    {//This is to make sure that the key is in lower case .  field  host is case insensitive
         std::string::iterator itr = utility::caseInsensitiveSearch(key, "host");
         if (itr != key.end())
             key = "host";

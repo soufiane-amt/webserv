@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 14:46:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 15:28:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ const std::string errorManager::_validProtocol = "HTTP/1.1";
 const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT","TRACE","CONNECT"};
 
 
-void     errorManager::isMethodValid(Method_t Method)
+void     errorManager::isMethodValid(Method_t Method, bool requestHasBody)
 {
+    if (requestHasBody && (Method == "GET" || Method == "DELETE"))
+        throw ParsingErrorDetected(BAD_REQUEST);
     for (size_t i = 0; i < _validMethods->size(); i++)
         if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
@@ -90,7 +92,7 @@ bool     errorManager::isRequestValid(const http_message_t &request, std::string
     static location_t server_location = parser.get_server_location(0);
     const header_t &header = request.first;
 
-    isMethodValid(header.find("Method")->second);
+    isMethodValid(header.find("Method")->second, !request.second.empty());
     isProtocolValid(header.find("Protocol")->second);
     isURIValid(header.find("URI")->second, server_location, targetPath);
     header_t::const_iterator it = header.find("host");

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 21:05:03 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 10:40:46 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 //             "Accept-Encoding: gzip, deflate\r\n"
 //             "Connection: keep-alive\r\n\r\n";
 
-std::string msg= "POST /api/users HTTP/1.1\r\n"
-            "Host: example.com\r\n"
+std::string msg= "POST /images HTTP/1.1\r\n"
+            "host: example.com\r\n"
             "Content-Type: application/json\r\n"
             "Content-Length: 43\r\n\r\n"
             "{\"name\": \"John Doe\", \"email\": \"johndoe@example.com\"}";

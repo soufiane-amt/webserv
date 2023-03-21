@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 16:46:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 10:14:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@
 class clientRequestParser
 {
     private:
-    typedef    std::vector<std::string>             tokens_t;
+    typedef    std::vector<std::string>                        tokens_t;
+    typedef    std::pair<std::string, std::string>             splited_request_t;
 
 
-    tokens_t                    _tokens;
-    request_t                   _request;
+    tokens_t                    _tokens;//This is the vector that will contain the request tokens
+    splited_request_t           _splited_request;//This is the pair that will contain request's header and body
+    
+    request_t                   _request;//This is the map that will contain the request key value pairs
     
     public:
     

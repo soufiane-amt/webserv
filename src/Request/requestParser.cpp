@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 20:59:09 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 10:18:21 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,14 @@
 
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
-    
-    _tokens = utility::split(clientRequestMsg, CRLF);
+    std::vector<std::string>splited_request = utility::split(clientRequestMsg, CRLF CRLF);
+    if (splited_request.size() != 2)
+        throw ParsingErrorDetected(BAD_REQUEST);
+    _splited_request = std::make_pair(splited_request[0], splited_request[1]);
+    std::cout<< "the header is " << _splited_request.first << std::endl;
+    std::cout<< "the body is " << _splited_request.second << std::endl;
+
+    _tokens = utility::split(_splited_request.first, CRLF);
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
     parseHeader();

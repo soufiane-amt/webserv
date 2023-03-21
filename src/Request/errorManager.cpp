@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 15:28:24 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 15:31:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,6 @@ void     errorManager::isProtocolValid(protocol_t protocol)
     throw ParsingErrorDetected(BAD_REQUEST);
 
 }
-
-//This function is used to check if the request is valid or not and r
-//eturns the URI if it is valid if not returns an empty string
-
-
-// std::string errorManager::isURIValid(const std::string& URI) {
-//     static simpleConfPars parser;
-//     static location_t server_location = parser.get_server_location(0);
-
-//     location_t::iterator it = server_location.find(URI);
-//     if (it != server_location.end())
-//         return (URI);
-//     size_t pos = URI.find_last_of('/');
-//     if (URI[0] == '/')
-//         return isURIValid(URI.substr(1));
-//     else if (pos != std::string::npos)
-//         return isURIValid(URI.substr(0, pos));
-//     return ("");
-// }
-
 
 
 bool errorManager::isURIValid(const std::string& URI,location_t server_location, std::string &targetPath) {
@@ -103,8 +83,5 @@ bool     errorManager::isRequestValid(const http_message_t &request, std::string
     for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw ParsingErrorDetected(BAD_REQUEST);
-    //if the header doesn't end with a CRLF to seperate the body from the header
-    // if (request.find("") == request.end())
-    //     throw ParsingErrorDetected(BAD_REQUEST);
     return true;
 }

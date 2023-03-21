@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 14:42:50 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 18:38:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,10 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_f
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
-    
 }
 
 
-const http_message_t& clientRequestParser::getRequest ()
+http_message_t clientRequestParser::getRequest ()
 {
     return (_request);
 }
@@ -98,6 +97,5 @@ void    clientRequestParser::displayRequest ()
     for (header_t::iterator it = _header_fields.begin(); it != _header_fields.end(); it++)
         std::cout << it->first << " | " << it->second << std::endl;
     std::cout << "the body is :" << _request.second << std::endl;
-    std::cout << "size of the request is " << _header_fields.size() << std::endl;    
 }
 

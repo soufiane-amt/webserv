@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 18:38:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 19:55:18 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_f
 }
 
 
-http_message_t clientRequestParser::getRequest ()
+http_message_t& clientRequestParser::getRequest ()
 {
     return (_request);
 }

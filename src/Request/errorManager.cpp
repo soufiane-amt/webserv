@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 18:33:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 19:47:02 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location, 
 
     if (it != server_location.end())
     {
+        targetPath = URI;
         return URI.size();
     }
     size_t pos = URI.find_last_of('/');
@@ -75,7 +76,10 @@ bool     errorManager::isRequestValid(http_message_t &request, std::string &targ
     isProtocolValid(header.find("Protocol")->second);
     targetPathSize = isURIValid(header.find("URI")->second, server_location, targetPath);
     //if URI is valid we Define a directory or a file from where the file should be searched 
-    header.at("URI") = server_location[header.at("URI")]["root"] + header.at("URI").substr(targetPathSize);
+    // std::cout<< "targetPathSize: " << targetPath<< std::endl;
+    // std::cout << "URI: " << server_location[header.at("URI")]["root"] << std::endl;
+    header.at("URI") = server_location.at(targetPath)["root"] + header.at("URI").substr(targetPathSize);
+    std::cout << "targetPath: " << header.at("URI") << std::endl;
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);

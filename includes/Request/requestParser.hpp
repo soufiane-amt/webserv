@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 18:38:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 19:56:03 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class clientRequestParser
     clientRequestParser(std::string clientRequestMsg); //if one of the tokens  has more than one line please declare it as an error;
     
     //Getters
-    http_message_t getRequest ();
+    http_message_t &getRequest ();
     const header_t&             getHeader();
     std::string           getBody();
     // std::string        getMethod();

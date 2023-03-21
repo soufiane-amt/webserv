@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 13:08:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:42:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 
 
 
-clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
+clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_fields (_request.first) //if one of the _tokens lines has a height of two please declare it as an error
 {
-    std::vector<std::string>splited_request = utility::split(clientRequestMsg, CRLF CRLF);
-    if (splited_request.size() != 2)
+    std::vector<std::string>spl_request = utility::split(clientRequestMsg, CRLF CRLF);
+    if (spl_request.size() != 2)
         throw ParsingErrorDetected(BAD_REQUEST);
-    _splited_request = std::make_pair(splited_request[0], splited_request[1]);
 
-    _tokens = utility::split(_splited_request.first, CRLF);
+    _tokens = utility::split(spl_request[0], CRLF);
+    _request.second = spl_request[1];
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
@@ -32,11 +32,11 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
 
 std::string clientRequestParser::getValue (std::string key)
 {
-    return (_request[key]);
+    return (_header_fields[key]);
 }
 
 
-const request_t& clientRequestParser::getRequest ()
+const http_message_t& clientRequestParser::getRequest ()
 {
     return (_request);
 }
@@ -46,9 +46,9 @@ void    clientRequestParser::parseFirstLine ()
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw ParsingErrorDetected(BAD_REQUEST);
-    _request["Method"] = firstLineParts[0];
-    _request["URI"] = firstLineParts[1];
-    _request["Protocol"] = firstLineParts[2];
+    _header_fields["Method"] = firstLineParts[0];
+    _header_fields["URI"] = firstLineParts[1];
+    _header_fields["Protocol"] = firstLineParts[2];
 }
 
 void    clientRequestParser::parseOtherLines (std::string line)
@@ -72,7 +72,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
         if (isspace(*it) && *it != ' ' )
             throw ParsingErrorDetected(BAD_REQUEST);
 
-    _request[key] = value;
+    _header_fields[key] = value;
 }
 
 void    clientRequestParser::parseHeader ()
@@ -85,20 +85,9 @@ void    clientRequestParser::parseHeader ()
 
 void    clientRequestParser::displayRequest ()
 {
-    for (request_t::iterator it = _request.begin(); it != _request.end(); it++)
+    for (header_t::iterator it = _header_fields.begin(); it != _header_fields.end(); it++)
         std::cout << it->first << " | " << it->second << std::endl;
-
-    std::cout << "size of the request is " << _request.size() << std::endl;
-    // for (int i = 255; i >= 0; i--)
-    // {
-    //     if ((_request.begin())->second[0] == i)
-    //         std::cout << "the char is " << i << std::endl;
-    //     if ((_request.begin())->second[1] == i)
-    //         std::cout << "the char is " << i << std::endl;
-    // }
-    // std::cout << (_request.begin())->first.size () <<std::endl;
-    // std::cout << (_request.begin())->second.size () <<std::endl;
-    
-        
+    std::cout << "the body is :" << _request.second << std::endl;
+    std::cout << "size of the request is " << _header_fields.size() << std::endl;    
 }
 

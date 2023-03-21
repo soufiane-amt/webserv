@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 12:25:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:28:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ typedef std::vector< std::pair<directive_t, location_t> > server_t;
 
 
 //Http Request typedefs : 
-typedef    std::map <std::string, std::string>  request_t;
+typedef    std::map <std::string, std::string>  header_t;
+typedef    std::string                          body_t;
+
+typedef    std::pair <header_t, body_t>         http_message_t;
 
 
 

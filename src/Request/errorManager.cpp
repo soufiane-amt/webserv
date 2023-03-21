@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 10:30:54 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:41:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ bool errorManager::isURIValid(const std::string& URI,location_t server_location,
     return false;
 }
 
-bool     errorManager::isRequestValid(request_t &request, std::string &targetPath)
+bool     errorManager::isRequestValid(header_t &request, std::string &targetPath)
 {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
@@ -91,7 +91,7 @@ bool     errorManager::isRequestValid(request_t &request, std::string &targetPat
     isMethodValid(request.find("Method")->second);
     isProtocolValid(request.find("Protocol")->second);
     isURIValid(request.find("URI")->second, server_location, targetPath);
-    request_t::iterator it = request.find("host");
+    header_t::iterator it = request.find("host");
     
     if (it ==  request.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);

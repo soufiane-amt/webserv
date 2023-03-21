@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 13:03:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:05:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main ()
     clientRequestParser test(msg);
     std::string _uri ;
 
-    // test.displayRequest();
+    test.displayRequest();
     request_t _request = test.getRequest();
     std::cout << errorManager::isRequestValid(_request, _uri) << std::endl;
 }

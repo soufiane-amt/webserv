@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/20 17:35:13 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/21 11:59:28 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,22 @@ std::string utility::right_trim(const std::string &s, const std::string &delimit
 }
 
 
+/* ************************************************************************** */
+                            // utility::case insensitive search :
+/* ************************************************************************** */
 
 std::string utility::trim(const std::string &s, const std::string &delimiter) {
     return right_trim(left_trim(s, delimiter), delimiter);
+}
+
+
+
+bool utility::caseInsensitiveStringCompare(char a, char b)
+{
+    return std::toupper(a) == std::toupper(b);
+}
+
+std::string::iterator utility::caseInsensitiveSearch(std::string & str1, std::string & str2)
+{
+    return std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), caseInsensitiveStringCompare);
 }

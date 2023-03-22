@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 19:47:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:01:23 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,20 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 }
 
 
-int errorManager::isURIValid(const std::string& URI,location_t server_location, std::string &targetPath) {
+int errorManager::isURIValid(const std::string& URI,location_t server_location) {
     
     if (URI[0] != '/')
         throw ParsingErrorDetected(BAD_REQUEST);
     location_t::iterator it = server_location.find(URI);
 
+    std::cout << "size: " << URI.size() << std::endl;
     if (it != server_location.end())
-    {
-        targetPath = URI;
         return URI.size();
-    }
     size_t pos = URI.find_last_of('/');
-    if (URI.length() == 1 && URI[0] == '/')
-        isURIValid(URI.substr(1), server_location, targetPath);
+    if (!pos )
+        return 1;
     else if (pos != std::string::npos)
-        return isURIValid(URI.substr(0, pos), server_location, targetPath);
+        return isURIValid(URI.substr(0, pos), server_location);
     throw ParsingErrorDetected(NOT_FOUND);
     return -1;
 }
@@ -65,25 +63,34 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location, 
     // if (URI.substr(0, 7) == "http://")
     //     isURIValid(URI.substr(7), server_location, targetPath);
 
-bool     errorManager::isRequestValid(http_message_t &request, std::string &targetPath)
+
+//This function is performed when we check if the URI is valid and we need to define the final 
+//directory or a file from where the file should be searched
+
+void     defineFinalUri (header_t& header, int targetPathSize, location_t server_location)
+{
+    std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
+    if (targetPathSize == 1 && header.at("URI").size() > 1)
+        root += "/";
+    header.at("URI") = root + header.at("URI").substr(targetPathSize);
+}
+
+bool     errorManager::isRequestValid(http_message_t &request)
 {
     static simpleConfPars parser;
     static location_t server_location = parser.get_server_location(0);
     header_t &header = request.first;
-    int   targetPathSize;
 
     isMethodValid(header.find("Method")->second, !request.second.empty());
     isProtocolValid(header.find("Protocol")->second);
-    targetPathSize = isURIValid(header.find("URI")->second, server_location, targetPath);
-    //if URI is valid we Define a directory or a file from where the file should be searched 
-    // std::cout<< "targetPathSize: " << targetPath<< std::endl;
-    // std::cout << "URI: " << server_location[header.at("URI")]["root"] << std::endl;
-    header.at("URI") = server_location.at(targetPath)["root"] + header.at("URI").substr(targetPathSize);
-    std::cout << "targetPath: " << header.at("URI") << std::endl;
+    
+    int   targetPathSize = isURIValid(header.find("URI")->second, server_location);
+    defineFinalUri(header, targetPathSize, server_location);
+    
+
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
         throw ParsingErrorDetected(BAD_REQUEST);
-    
     for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw ParsingErrorDetected(BAD_REQUEST);

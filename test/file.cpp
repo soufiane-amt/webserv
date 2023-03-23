@@ -6,23 +6,23 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:47:23 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:14:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:53:33 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include <ctime>
-
+#include<fstream>
 int main()
 {
-    // get current time
-    std::time_t t = std::time(nullptr);
+    std::ifstream file("test/file.cpp");
+    std::string line;
 
-    // convert time to string in letter format
-    std::string date = std::asctime(std::localtime(&t));
-
-    // print date
-    std::cout << "Today is " << date;
+    if (file.is_open())
+    {
+        while (getline(file, line))
+             line + "\n";
+        file.close();
+    }
 
     return 0;
 }

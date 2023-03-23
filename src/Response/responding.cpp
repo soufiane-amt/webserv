@@ -6,14 +6,18 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:21:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:38:19 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "responding.hpp"
+#include <string>
+#include <istream>
 
-responsePreparation::responsePreparation(const http_message_t& request, const  statusCode_t& statusCode):_response(""), _statusCode(statusCode)
+
+responsePreparation::responsePreparation(const http_message_t& request, const  statusCode_t& statusCode):_response(""), 
+                                                                                                            _statusCode(statusCode), _request(request)
 {
     prepare_statusLine();
     prepare_other_headers();
@@ -41,10 +45,22 @@ void responsePreparation::prepare_other_headers()
     _response += CRLF;
 }
 
-void responsePreparation::prepare_body()
+void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
 {
-    
     _response += CRLF;
-    _response += "<html><body><h1>404 Not Found</h1></body></html>";
-    _response += CRLF;
+    _response += get_file_content(_request.first["URI"]);
+}
+
+std::string responsePreparation::get_file_content(const std::string& uri)
+{
+    std::ifstream file(uri);
+    std::string content;
+    std::string line;
+    if (file.is_open())
+    {
+        // while (getline(file, line))
+        //     content += line + "\n";
+        file.close();
+    }
+    return content;
 }

@@ -6,14 +6,15 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 13:40:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 18:19:36 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "requestParser.hpp"
+#include "responding.hpp"
 #include "errorManager.hpp"
 
-std::string msg= "GET / HTTP/1.1\r\n"
+std::string msg= "GET /index.html HTTP/1.1\r\n"
             "host: 192.241.213.46:6880\r\n"
             "Upgrade-Insecure-Requests: 1\r\n"
             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
@@ -40,6 +41,17 @@ int main ()
     clientRequestParser test(msg);
     http_message_t &_request = test.getRequest();
 
-    std::cout << errorManager::isRequestValid(_request) << std::endl;
-    test.displayRequest();
+    try
+    {
+        errorManager::isRequestValid(_request);
+        responsePreparation response(_request, OK);
+        std::cout << response.get_response();
+    }
+    catch(const StatusCode& e)
+    {
+        responsePreparation response(_request, std::string(e.what()));
+        std::cout << response.get_response();
+    }
+    
+
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:32:11 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 18:11:55 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ class responsePreparation
         typedef std::string     statusCode_t;
     
         http_message_t          _request;
-        response_t              _response;
         statusCode_t            _statusCode;
+        response_t              _response;
 
     public:
         responsePreparation(const http_message_t& request, const  statusCode_t& );

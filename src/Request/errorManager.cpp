@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 13:40:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 18:15:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
         throw StatusCode(BAD_REQUEST);
     location_t::iterator it = server_location.find(URI);
 
-    std::cout << "size: " << URI.size() << std::endl;
     if (it != server_location.end())
         return URI.size();
     size_t pos = URI.find_last_of('/');

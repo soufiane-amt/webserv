@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:19:08 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 18:22:46 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,7 @@ std::string::iterator utility::caseInsensitiveSearch(std::string & str1, const s
 std::string utility::get_date()
 {
     std::time_t t = std::time(nullptr);
-    return (std::asctime(std::localtime(&t)));
+    std::string date = std::asctime(std::localtime(&t));
+    date.resize(date.size() - 1);
+    return (date);
 }

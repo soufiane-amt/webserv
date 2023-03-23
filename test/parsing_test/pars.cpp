@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 18:21:57 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:30:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/20 18:02:28 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ struct simpleConfPars
         server[""] = std::make_pair(directives, locations);
     }
 };
+
 
 
 std::string msg= "GET / HTTP/1.1\r\n"

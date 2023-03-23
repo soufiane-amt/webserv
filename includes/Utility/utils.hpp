@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 18:22:31 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:18:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 #include <exception>
 #include <cctype>
+#include <ctime>
 #include "macros.hpp"
 
 
@@ -61,13 +62,13 @@ struct simpleConfPars
     
     directives["listen"] = "80";
     directives["server_name"] = "example.com";
-    locations["/"]["root"] = "/var/www/html";
+    locations["/"]["root"] = "/Users/samajat/Desktop/webserv/test";
     locations["/"]["Methods"] = "GET HEAD";
     locations["/"]["index"] = "index.html";
-    locations["/images"]["root"] = "/var/www";
+    locations["/images"]["root"] = "/Users/samajat/Desktop/webserv/test";
     locations["/images"]["index"] = "index.html";
     directives["error_page"] = "404 /404.html";
-    locations["/404.html"]["root"] = "/var/www/html";
+    locations["/404.html"]["root"] = "/Users/samajat/Desktop/webserv/test";
     server.push_back(make_pair(directives, locations));
     }
 
@@ -101,6 +102,7 @@ struct utility
     
     static std::string::iterator    caseInsensitiveSearch(std::string & str1, const std::string & str2);
 
+    static std::string              get_date();
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

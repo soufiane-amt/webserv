@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 12:25:21 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:19:08 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,15 @@ bool utility::caseInsensitiveStringCompare(char a, char b)
 std::string::iterator utility::caseInsensitiveSearch(std::string & str1, const std::string & str2)
 {
     return std::search(str1.begin(), str1.end(), str2.begin(), str2.end(), caseInsensitiveStringCompare);
+}
+
+
+/* ************************************************************************** */
+                            // utility::get_date :
+/* ************************************************************************** */
+
+std::string utility::get_date()
+{
+    std::time_t t = std::time(nullptr);
+    return (std::asctime(std::localtime(&t)));
 }

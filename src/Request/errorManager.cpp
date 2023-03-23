@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 13:13:56 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 13:40:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void     defineFinalUri (header_t& header, int targetPathSize, location_t server
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
     header.at("URI") = root + header.at("URI").substr(targetPathSize);
-    std::cout << "====>: " << header.at("URI") << std::endl;
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
 }
@@ -85,8 +84,8 @@ void     defineFinalUri (header_t& header, int targetPathSize, location_t server
 bool     errorManager::isRequestValid(http_message_t &request)
 {
     static simpleConfPars parser;
-    static location_t server_location = parser.get_server_location(0);
-    header_t &header = request.first;
+    static location_t     server_location = parser.get_server_location(0);
+    header_t              &header         = request.first;
 
     isMethodValid(header.find("Method")->second, !request.second.empty());
     isProtocolValid(header.find("Protocol")->second);

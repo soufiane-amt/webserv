@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 11:46:31 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:08:44 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,21 @@
 class responsePreparation
 {
     private:
-        typedef std::string     ultimateResponse_t;
+        typedef std::string     response_t;
         typedef std::string     statusCode_t;
     
-        ultimateResponse_t      _response;
+        response_t      _response;
         statusCode_t            _statusCode;
 
     public:
-        responsePreparation(const  StatusCode& e = StatusCode(OK));
+        responsePreparation(const http_message_t& request, const  statusCode_t& );
+        
+        response_t         get_response() const;
+    private:
+        void    prepare_statusLine();
+        void    prepare_other_headers();
+        void    prepare_body();
+    
 };
 
 #endif

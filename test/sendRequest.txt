@@ -1,4 +1,4 @@
 GET /  HTTP/1.1
-Ost: localhost
-Accept-Ranges: bytes
+host: localhost
+Accept: text/lol
 

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 19:55:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 11:47:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_f
 {
     std::vector<std::string>spl_request = utility::split(clientRequestMsg, CRLF CRLF);
     if (spl_request.size() != 2)
-        throw ParsingErrorDetected(BAD_REQUEST);
+        throw StatusCode(BAD_REQUEST);
 
     _tokens = utility::split(spl_request[0], CRLF);
     _request.second = spl_request[1];
@@ -39,7 +39,7 @@ void    clientRequestParser::parseFirstLine ()
 {
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
-        throw ParsingErrorDetected(BAD_REQUEST);
+        throw StatusCode(BAD_REQUEST);
     _header_fields["Method"] = firstLineParts[0]; 
     _header_fields["URI"] = firstLineParts[1];
     _header_fields["Protocol"] = firstLineParts[2];
@@ -54,7 +54,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
     key = line.substr(0, pos);
     for (std::string::iterator it = key.begin(); it != key.end(); it++)
         if (isspace(*it))
-            throw ParsingErrorDetected(BAD_REQUEST);
+            throw StatusCode(BAD_REQUEST);
     {//This is to make sure that the key is in lower case .  field  host is case insensitive
         std::string::iterator itr = utility::caseInsensitiveSearch(key, "host");
         if (itr != key.end())
@@ -64,7 +64,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
     value = utility::trim(line, SP);
     for (std::string::iterator it = value.begin(); it != value.end(); it++)
         if (isspace(*it) && *it != ' ' )
-            throw ParsingErrorDetected(BAD_REQUEST);
+            throw StatusCode(BAD_REQUEST);
 
     _header_fields[key] = value;
 }

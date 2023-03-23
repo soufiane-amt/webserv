@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/22 13:01:23 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 13:13:56 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT",
 
 void     errorManager::isMethodValid(Method_t Method, bool requestHasBody)
 {
-    if (requestHasBody && (Method == "GET" || Method == "DELETE"))
-        throw ParsingErrorDetected(BAD_REQUEST);
+    if ((!requestHasBody && Method == "POST") || 
+           (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
+        throw StatusCode(BAD_REQUEST);
+
     for (size_t i = 0; i < _validMethods->size(); i++)
         if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
     
     for (size_t i = 0; i < _notAllowedMethods->size(); i++)
         if (Method == _notAllowedMethods[i])
-            throw ParsingErrorDetected(METHOD_NOT_ALLOWED) ;
-    throw ParsingErrorDetected(BAD_REQUEST);
+            throw StatusCode(METHOD_NOT_ALLOWED) ;
+    throw StatusCode(BAD_REQUEST);
 }
 
 void     errorManager::isProtocolValid(protocol_t protocol)
@@ -37,15 +39,15 @@ void     errorManager::isProtocolValid(protocol_t protocol)
     if (protocol == _validProtocol)
         return ;
     if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
-        throw ParsingErrorDetected(HTTP_VERSION_NOT_SUPPORTED);
-    throw ParsingErrorDetected(BAD_REQUEST);
+        throw StatusCode(HTTP_VERSION_NOT_SUPPORTED);
+    throw StatusCode(BAD_REQUEST);
 }
 
 
 int errorManager::isURIValid(const std::string& URI,location_t server_location) {
     
     if (URI[0] != '/')
-        throw ParsingErrorDetected(BAD_REQUEST);
+        throw StatusCode(BAD_REQUEST);
     location_t::iterator it = server_location.find(URI);
 
     std::cout << "size: " << URI.size() << std::endl;
@@ -56,7 +58,7 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
         return 1;
     else if (pos != std::string::npos)
         return isURIValid(URI.substr(0, pos), server_location);
-    throw ParsingErrorDetected(NOT_FOUND);
+    throw StatusCode(NOT_FOUND);
     return -1;
 }
     //for http://
@@ -69,10 +71,15 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
 
 void     defineFinalUri (header_t& header, int targetPathSize, location_t server_location)
 {
+    struct stat sb;
+    
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
     header.at("URI") = root + header.at("URI").substr(targetPathSize);
+    std::cout << "====>: " << header.at("URI") << std::endl;
+    if (stat(header.at("URI").c_str(), &sb) == -1)
+        throw StatusCode(NOT_FOUND);
 }
 
 bool     errorManager::isRequestValid(http_message_t &request)
@@ -90,9 +97,9 @@ bool     errorManager::isRequestValid(http_message_t &request)
 
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
-        throw ParsingErrorDetected(BAD_REQUEST);
+        throw StatusCode(BAD_REQUEST);
     for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
-            throw ParsingErrorDetected(BAD_REQUEST);
+            throw StatusCode(BAD_REQUEST);
     return true;
 }

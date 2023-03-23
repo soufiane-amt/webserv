@@ -1,3 +1,4 @@
 GET /  HTTP/1.1
-hOst: localhost
+Ost: localhost
+Accept-Ranges: bytes
 

@@ -63,6 +63,7 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "set": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "fstream": "cpp"
     }
 }

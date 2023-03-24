@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 13:18:57 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 20:37:47 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
     
     if (URI[0] != '/')
         throw StatusCode(BAD_REQUEST);
+    if (URI.size() > MAX_URI_SIZE)
+        throw StatusCode(URI_TOO_LONG);
     location_t::iterator it = server_location.find(URI);
 
     if (it != server_location.end())
@@ -83,7 +85,7 @@ void     defineFinalUri (header_t& header, int targetPathSize, location_t server
 bool     errorManager::isRequestValid(http_message_t &request)
 {
     static simpleConfPars parser;
-    static location_t     server_location = parser.get_server_location(0);
+    static location_t     server_location = parser.get_server_locations(0);
     header_t              &header         = request.first;
 
     isMethodValid(header.find("Method")->second, !request.second.empty());
@@ -99,5 +101,10 @@ bool     errorManager::isRequestValid(http_message_t &request)
     for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw StatusCode(BAD_REQUEST);
+
+    directive_t::iterator d_it = server_location.find(header["URI"])->second.find("max_body_size");
+    
+    if (d_it != server_location.end() && request.second.size() > atoi((d_it->second).c_str()))
+        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
     return true;
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 14:04:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 14:05:42 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,19 @@ void    tempServer ()
 
 int main ()
 {
-    // tempServer();
-    clientRequestParser test(msg);
-    http_message_t &_request = test.getRequest();
+    tempServer();
+    // clientRequestParser test(msg);
+    // http_message_t &_request = test.getRequest();
 
-    try
-    {
-        errorManager::isRequestValid(_request);
-        responsePreparation response(_request, OK);
-        std::cout << response.get_response();
-    }
-    catch(const StatusCode& e)
-    {
-        responsePreparation response(_request, std::string(e.what()));
-        std::cout << response.get_response();
-    }
+    // try
+    // {
+    //     errorManager::isRequestValid(_request);
+    //     responsePreparation response(_request, OK);
+    //     std::cout << response.get_response();
+    // }
+    // catch(const StatusCode& e)
+    // {
+    //     responsePreparation response(_request, std::string(e.what()));
+    //     std::cout << response.get_response();
+    // }
 }

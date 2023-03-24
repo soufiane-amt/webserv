@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:04:50 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/19 15:15:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 17:01:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,7 @@
 /* ************************************************************************** */
 
 
-# define MAX_REQUEST_SIZE 1000000
-# define MAX_HEADER_SIZE 1000000
-# define MAX_BODY_SIZE 1000000
-# define MAX_URI_SIZE 1000000
-# define MAX_METHOD_SIZE 1000000
-# define MAX_PROTOCOL_SIZE 1000000
-# define MAX_KEY_SIZE 1000000
-# define MAX_VALUE_SIZE 1000000
-# define MAX_STATUS_CODE_SIZE 1000000
-# define MAX_STATUS_MESSAGE_SIZE 1000000
-# define MAX_VERSION_SIZE 1000000
+# define MAX_URI_SIZE 2048
 
 
 /* ************************************************************************** */
@@ -65,7 +55,8 @@
 #define NOT_FOUND "404 Not Found"
 #define METHOD_NOT_ALLOWED "405 Method Not Allowed"
 #define REQUEST_TIMEOUT "408 Request Timeout"
-
+#define REQUEST_ENTITY_TOO_LARGE "413 Request Entity Too Large"
+#define URI_TOO_LONG "414 Request-URI Too Long"
 #define INTERNAL_SERVER_ERROR "500 Internal Server Error"
 #define NOT_IMPLEMENTED "501 Not Implemented"
 #define BAD_GATEWAY "502 Bad Gateway"

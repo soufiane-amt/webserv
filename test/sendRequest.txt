@@ -1,4 +1,4 @@
-GET /  HTTP/1.1
+GET /sdfkllfd)dsf HTTP/1.1
 host: localhost
 Accept: text/lol
 User-Agent: dssdfds

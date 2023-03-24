@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 12:46:22 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 21:18:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,35 @@ struct simpleConfPars
     server.push_back(make_pair(directives, locations));
     }
 
-    location_t get_server_location (int server_id)
+    location_t get_server_locations (int server_id)
     {
         return (server[server_id].second);
     }
     
-    directive_t::iterator get_server_directive (int server_id, std::string directive)
+    directive_t::iterator get_server_directives (int server_id, std::string directive)
     {
         return (server[server_id].first.find(directive));
     }
 
+    std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string    uri, std::string directive_key)
+    {
+        location_t::iterator it = server[server_id].second.find(uri);
+        if (it != server[server_id].second.end())
+        {
+            directive_t::iterator it2 = it->second.find(directive_key);
+            if (it2 == it->second.end())
+            {
+                directive_t::iterator d_itr =  server[server_id].first.find(directive_key);
+                if (d_itr == server[server_id].first.end())
+                    return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
+                else
+                    return (std::pair<bool, directive_t::iterator>(true, d_itr));
+            }
+            else
+                return (std::pair<bool, directive_t::iterator>(true, it2));
+        }
+        return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
+    }
     private:
     server_t server;
     

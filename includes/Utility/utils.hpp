@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 21:09:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 12:46:22 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ struct utility
     static std::string::iterator    caseInsensitiveSearch(std::string & str1, const std::string & str2);
 
     static std::string              get_date();
+
+
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 11:47:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 14:02:21 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,31 @@ http_message_t& clientRequestParser::getRequest ()
     return (_request);
 }
 
+void    clientRequestParser::check_the_absoluteURI ()
+{
+    std::string &URI = _header_fields["URI"];
+    if (URI.substr(0, 7) == "http://")
+        URI.erase (0, 7);
+    else
+        return;
+    size_t  pos = URI.find_first_of('/');
+    if (pos != std::string::npos)
+    {
+        _header_fields["host"] = URI.substr(0, pos);
+         URI.erase(0, pos);
+        return;
+    }
+    throw StatusCode(BAD_REQUEST);
+}
+
 void    clientRequestParser::parseFirstLine ()
 {
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw StatusCode(BAD_REQUEST);
-    _header_fields["Method"] = firstLineParts[0]; 
+    _header_fields["Method"] = firstLineParts[0];
     _header_fields["URI"] = firstLineParts[1];
+    check_the_absoluteURI ();
     _header_fields["Protocol"] = firstLineParts[2];
 }
 
@@ -66,7 +84,8 @@ void    clientRequestParser::parseOtherLines (std::string line)
         if (isspace(*it) && *it != ' ' )
             throw StatusCode(BAD_REQUEST);
 
-    _header_fields[key] = value;
+    if (_header_fields.find(key) == _header_fields.end())//in case the host is already there
+        _header_fields[key] = value;
 }
 
 void    clientRequestParser::parseHeader ()

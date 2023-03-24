@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/21 19:56:03 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:44:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class clientRequestParser
     void    parseFirstLine ();
     void    parseOtherLines (std::string line);
     void    parseHeader ();
+    void    check_the_absoluteURI ();
 
     public:
     void    displayRequest ();

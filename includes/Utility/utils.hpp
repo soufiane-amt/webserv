@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 21:18:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 22:01:12 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ struct simpleConfPars
     
     directives["listen"] = "80";
     directives["server_name"] = "example.com";
+    directives["max_body_size"] = "-1";
     locations["/"]["root"] = "/Users/samajat/Desktop/webserv/files";
     locations["/"]["Methods"] = "GET HEAD";
     locations["/"]["index"] = "index.html";
@@ -82,7 +83,7 @@ struct simpleConfPars
         return (server[server_id].first.find(directive));
     }
 
-    std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string    uri, std::string directive_key)
+    std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string uri, std::string directive_key)
     {
         location_t::iterator it = server[server_id].second.find(uri);
         if (it != server[server_id].second.end())

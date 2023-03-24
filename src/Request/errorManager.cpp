@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 20:37:47 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/24 22:07:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,13 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isProtocolValid(header.find("Protocol")->second);
     
     int   targetPathSize = isURIValid(header.find("URI")->second, server_location);
-    defineFinalUri(header, targetPathSize, server_location);
+    std::pair <bool, directive_t::iterator> it2 = parser.get_directive(0, header["URI"], "max_body_size");
     
+    std::cout << "header[\"URI\"] "  << it2.first <<  header["URI"] << (static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str())) << std::endl;
+    if (it2.first && static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str()))
+        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
+    
+    defineFinalUri(header, targetPathSize, server_location);
 
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
@@ -102,9 +107,5 @@ bool     errorManager::isRequestValid(http_message_t &request)
         if (isspace(*iter))
             throw StatusCode(BAD_REQUEST);
 
-    directive_t::iterator d_it = server_location.find(header["URI"])->second.find("max_body_size");
-    
-    if (d_it != server_location.end() && request.second.size() > atoi((d_it->second).c_str()))
-        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
     return true;
 }

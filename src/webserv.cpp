@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 18:19:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 20:40:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,17 @@ std::string msg= "GET /index.html HTTP/1.1\r\n"
 //     std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 //     return str;
 // }
-int main ()
+/*temp server headers*/
+#include <stdio.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <string.h>
+#define PORT 12345
+
+
+std::string    request_response(std::string msg)
 {
     clientRequestParser test(msg);
     http_message_t &_request = test.getRequest();
@@ -45,13 +55,83 @@ int main ()
     {
         errorManager::isRequestValid(_request);
         responsePreparation response(_request, OK);
-        std::cout << response.get_response();
+        return response.get_response();
     }
     catch(const StatusCode& e)
     {
         responsePreparation response(_request, std::string(e.what()));
-        std::cout << response.get_response();
+        return response.get_response();
+    }
+    return "";
+
+}
+
+void    tempServer ()
+{
+    int server_fd, new_socket; long valread;
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+    
+    
+    // Creating socket file descriptor
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    {
+        perror("In socket");
+        exit(EXIT_FAILURE);
     }
     
 
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons( PORT );
+    
+    memset(address.sin_zero, '\0', sizeof address.sin_zero);
+    
+    
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
+    {
+        perror("In bind");
+        exit(EXIT_FAILURE);
+    }
+    if (listen(server_fd, 10) < 0)
+    {
+        perror("In listen");
+        exit(EXIT_FAILURE);
+    }
+    while(1)
+    {
+        printf("\n+++++++ Waiting for new connection ++++++++\n\n");
+        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
+        {
+            perror("In accept");
+            exit(EXIT_FAILURE);
+        }
+        
+        char buffer[30000] = {0};
+        valread = read( new_socket , buffer, 30000);
+        printf("%s\n",buffer );
+        
+        write(new_socket , request_response(buffer).c_str() , request_response(buffer).length());
+        printf("------------------Hello message sent-------------------\n");
+        close(new_socket);
+    }
+}
+
+int main ()
+{
+    tempServer();
+    // clientRequestParser test(msg);
+    // http_message_t &_request = test.getRequest();
+
+    // try
+    // {
+    //     errorManager::isRequestValid(_request);
+    //     responsePreparation response(_request, OK);
+    //     std::cout << response.get_response();
+    // }
+    // catch(const StatusCode& e)
+    // {
+    //     responsePreparation response(_request, std::string(e.what()));
+    //     std::cout << response.get_response();
+    // }
 }

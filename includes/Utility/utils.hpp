@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:18:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 21:09:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ struct simpleConfPars
     
     directives["listen"] = "80";
     directives["server_name"] = "example.com";
-    locations["/"]["root"] = "/Users/samajat/Desktop/webserv/test";
+    locations["/"]["root"] = "/Users/samajat/Desktop/webserv/files";
     locations["/"]["Methods"] = "GET HEAD";
     locations["/"]["index"] = "index.html";
-    locations["/images"]["root"] = "/Users/samajat/Desktop/webserv/test";
+    locations["/images"]["root"] = "/Users/samajat/Desktop/webserv/files";
     locations["/images"]["index"] = "index.html";
     directives["error_page"] = "404 /404.html";
-    locations["/404.html"]["root"] = "/Users/samajat/Desktop/webserv/test";
+    locations["/404.html"]["root"] = "/Users/samajat/Desktop/webserv/files";
     server.push_back(make_pair(directives, locations));
     }
 

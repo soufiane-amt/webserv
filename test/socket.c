@@ -1,4 +1,3 @@
-// Server side C program to demonstrate Socket programming
 #include <stdio.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -6,14 +5,14 @@
 #include <netinet/in.h>
 #include <string.h>
 
-#define PORT 443
+#define PORT 8080
 int main(int argc, char const *argv[])
 {
     int server_fd, new_socket; long valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     
-    char *hello = "Hello from server";
+    char *hello = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 1234\r\nServer: Apache/2.4.7 (Ubuntu)\r\nDate: Wed, 23 Mar 2023 00:00:00 GMT\r\n\r\n<html><head><title>Example</title></head><body><h1>Hello, world!</h1></body></html>";
     
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)

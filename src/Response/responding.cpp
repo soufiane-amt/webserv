@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 17:53:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/23 20:06:20 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@
 
 responsePreparation::responsePreparation(const http_message_t& request, const  statusCode_t& statusCode):_request(request), _statusCode(statusCode), _response("")
 {
-    prepare_statusLine();
-    prepare_other_headers();
-    prepare_body();
+    if (_request.first["Method"] == "GET")
+        exceute_get();
+    else if (_request.first["Method"] == "POST")
+        exceute_post();
+    else if (_request.first["Method"] == "DELETE")
+        exceute_delete();
+    // else
+    //     throw (exception("Method not implemented")
 }
 
 responsePreparation::response_t responsePreparation::get_response() const
@@ -63,4 +68,25 @@ std::string responsePreparation::get_file_content(const std::string& uri)
         file.close();
     }
     return content;
+}
+
+// void responsePreparation::prepare_content_length()
+// {
+//     _response += "Content-Length: " + std::to_string(_response.length());
+//     _response += CRLF;
+// }
+
+void    responsePreparation::exceute_get()
+{
+    prepare_statusLine();
+    prepare_other_headers();
+    prepare_body();
+}
+
+void    responsePreparation::exceute_post()
+{
+}
+
+void    responsePreparation::exceute_delete()
+{
 }

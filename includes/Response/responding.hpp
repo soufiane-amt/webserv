@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 15:12:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 15:35:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class responsePreparation
         response_t              _response;
 
     public:
-        responsePreparation(const http_message_t& request, const  StatusCode& );
+        responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
         
         response_t         get_response() const;
         

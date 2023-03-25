@@ -6,12 +6,13 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 15:23:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 16:41:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exception.hpp"
 #include "utils.hpp"
+#include <fstream>
 
 ParsingErrorDetected::ParsingErrorDetected(std::string msg) : _codeStatus(msg)
 {
@@ -55,7 +56,7 @@ bool StatusCode::operator==(const std::string& status_code)
     return (false);
 }
 
-bool StatusCode::is_error_status()
+bool StatusCode::is_error_status() const
 {
     if (_status_code[0] == '4' || _status_code[0] == '5')
         return (true);
@@ -63,14 +64,14 @@ bool StatusCode::is_error_status()
 }
 
 
-std::string StatusCode::get_status_code()
+std::string StatusCode::get_status_code() const
 {
     return (_status_code);
 }
 
 std::string StatusCode::get_associated_page() const
 {
-    return (utility::get_file_content("../error_pages/" + _status_code.substr(3) + "_sc" + ".html"));
+    return (utility::get_file_content("error_pages/" + _status_code.substr(0,3) + "_sc" + ".html"));
 }
 
 StatusCode::~StatusCode()throw()

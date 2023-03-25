@@ -6,12 +6,13 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 18:22:46 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 15:07:44 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "utils.hpp"
+#include <fstream>
 
 
 
@@ -88,4 +89,23 @@ std::string utility::get_date()
     std::string date = std::asctime(std::localtime(&t));
     date.resize(date.size() - 1);
     return (date);
+}
+
+/* ************************************************************************** */
+                            // utility::get_file_content :
+/* ************************************************************************** */
+
+std::string utility::get_file_content(const std::string& uri)
+{
+    std::ifstream file(uri);
+    std::string content;
+    std::string line;
+
+    if (file.is_open())
+    {
+        while (getline(file, line))
+            content += line + "\n";
+        file.close();
+    }
+    return content;
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 22:01:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 15:07:07 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ struct utility
 
     static std::string              get_date();
 
+    static std::string              get_file_content(const std::string& uri);
 
     private:
     //trim methods :

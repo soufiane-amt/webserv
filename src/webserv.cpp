@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 22:00:49 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 13:09:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ std::string msg= "GET / HTTP/1.1\r\n"
             "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8\r\n"
             "Accept-Language: en-us\r\n"
             "Accept-Encoding: gzip, deflate\r\n"
-            "Connection: keep-alive\r\n\r\n";
+            "Connection: keep-alive\r\n\r\ndgh";
 
 // std::string msg= "POST /sdfdsf/fdsf HTTP/1.1\r\n"
 //             "Host: example.com\r\n"
@@ -119,19 +119,27 @@ void    tempServer ()
 
 int main ()
 {
-    tempServer();
-    // clientRequestParser test(msg);
-    // http_message_t &_request = test.getRequest();
-
     // try
     // {
-    //     errorManager::isRequestValid(_request);
-    //     responsePreparation response(_request, OK);
-    //     std::cout << response.get_response();
+    //     tempServer();
     // }
-    // catch(const StatusCode& e)
+    // catch(const std::exception& e)
     // {
-    //     responsePreparation response(_request, std::string(e.what()));
-    //     std::cout << response.get_response();
+    //     std::cerr << e.what() << '\n';
     // }
+    
+    clientRequestParser test(msg);
+    http_message_t &_request = test.getRequest();
+
+    try
+    {
+        errorManager::isRequestValid(_request);
+        responsePreparation response(_request, OK);
+        std::cout << response.get_response();
+    }
+    catch(const StatusCode& e)
+    {
+        responsePreparation response(_request, std::string(e.what()));
+        std::cout << response.get_response();
+    }
 }

@@ -6,19 +6,20 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 20:06:20 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 15:10:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "responding.hpp"
 #include <string>
-#include <fstream>
 
 
-responsePreparation::responsePreparation(const http_message_t& request, const  statusCode_t& statusCode):_request(request), _statusCode(statusCode), _response("")
+responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode), _response("")
 {
-    if (_request.first["Method"] == "GET")
+    if(_statusCode.is_error_status())
+        sendError();
+    else if (_request.first["Method"] == "GET")
         exceute_get();
     else if (_request.first["Method"] == "POST")
         exceute_post();
@@ -35,7 +36,7 @@ responsePreparation::response_t responsePreparation::get_response() const
 
 void responsePreparation::prepare_statusLine()
 {
-    _response += "HTTP/1.1 " + _statusCode;
+    _response += "HTTP/1.1 " + std::string(_statusCode.what());
     _response += CRLF;
 }
 
@@ -51,24 +52,18 @@ void responsePreparation::prepare_other_headers()
 
 void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
 {
-    _response += CRLF;
-    _response += get_file_content(_request.first["URI"]);
-}
-
-std::string responsePreparation::get_file_content(const std::string& uri)
-{
-    std::ifstream file(uri);
-    std::string content;
-    std::string line;
-
-    if (file.is_open())
+    if (_statusCode.is_error_status())
     {
-        while (getline(file, line))
-            content += line + "\n";
-        file.close();
+        _response += "Content-Length: " + std::to_string(_statusCode.get_error_page().length());
+        _response += CRLF;
+        _response += CRLF;
+        _response += _statusCode.get_error_page();
+        return;
     }
-    return content;
+    _response += CRLF;
+    _response += utility::get_file_content(_request.first["URI"]);
 }
+
 
 // void responsePreparation::prepare_content_length()
 // {
@@ -89,4 +84,12 @@ void    responsePreparation::exceute_post()
 
 void    responsePreparation::exceute_delete()
 {
+}
+
+
+void   responsePreparation::sendError()
+{
+    prepare_statusLine();
+    prepare_other_headers();
+    prepare_body();
 }

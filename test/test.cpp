@@ -1,12 +1,21 @@
-#include <iostream>
+#include <stdio.h>
+#include <dirent.h>
 
-int  main ()
-{
-    std::cout << " 2   3";
-    for (size_t i = 0; i < 100000000; i++)
-    {
-        /* code */
+int main() {
+    DIR *dir;
+    struct dirent *entry;
+    
+    dir = opendir("/");
+    if (dir == NULL) {
+        perror("opendir");
+        return 1;
     }
     
-    std::cout << "\r1 \n";
+    while ((entry = readdir(dir)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+    
+    closedir(dir);
+    
+    return 0;
 }

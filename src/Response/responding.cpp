@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 15:52:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 16:57:12 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
         exceute_post();
     else if (_request.first["Method"] == "DELETE")
         exceute_delete();
-    // else
-    //     throw (exception("Method not implemented")
 }
 
 responsePreparation::response_t responsePreparation::get_response() const
@@ -52,19 +50,21 @@ void responsePreparation::prepare_other_headers()
 
 void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
 {
+    std::string appropriate_page ;
     if (_statusCode.is_error_status())
     {
-        std::string appropriate_page = _statusCode.get_associated_page();
+        appropriate_page = _statusCode.get_associated_page();
         _response += "Content-Length: " + std::to_string(appropriate_page.length());
         _response += CRLF;
         _response += CRLF;
-        std::cout << appropriate_page << std::endl;
         _response += appropriate_page;
         return;
     }
+    appropriate_page = utility::get_file_content(_request.first["URI"]);
+    _response += "Content-Length: " + std::to_string(appropriate_page.length());
     _response += CRLF;
-    std::cout << _request.first["URI"] << std::endl;
-    _response += utility::get_file_content(_request.first["URI"]);
+    _response += CRLF;
+    _response += appropriate_page;
 }
 
 

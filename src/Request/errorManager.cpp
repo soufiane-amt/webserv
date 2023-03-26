@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 13:07:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/25 17:22:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void     errorManager::isMethodValid(Method_t Method, bool requestHasBody)
             throw StatusCode(METHOD_NOT_ALLOWED) ;
     throw StatusCode(BAD_REQUEST);
 }
+
+
 
 void     errorManager::isProtocolValid(protocol_t protocol)
 {
@@ -62,10 +64,6 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
     throw StatusCode(NOT_FOUND);
     return -1;
 }
-    //for http://
-    // if (URI.substr(0, 7) == "http://")
-    //     isURIValid(URI.substr(7), server_location, targetPath);
-
 
 //This function is performed when we check if the URI is valid and we need to define the final 
 //directory or a file from where the file should be searched

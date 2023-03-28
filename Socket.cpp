@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 08:01:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 09:51:58 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,23 @@ void    mySocket::recvReq(int sockfd, void *buf, int len, int flags)
 {
     this->recvRes = recv(sockfd, buf, len, flags);
     mySocket::testSysCall(this->recvRes);
+}
+
+void    mySocket::retrieveClientAdd(void)
+{
+    this->sockName = getsockname(getAcceptFd(), (struct sockaddr *)&this->incomingStruct, &this->incomingAddSize);
+    mySocket::testSysCall(this->sockName);
+}
+
+void    mySocket::printLogs(void)
+{
+
+    //I know this is forbidden, this is just a test
+
+    //print IP Addresses and Request headers
+    struct sockaddr_in* s;
+    
+    // Get the IP address of the incoming connection
+    s = (struct sockaddr_in*)&this->incomingStruct;
+    std::cout << inet_ntoa(s->sin_addr) << std::endl;
 }

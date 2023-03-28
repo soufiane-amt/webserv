@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 07:41:13 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 09:16:20 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <netdb.h>  
 #include <string.h>
 #include <unistd.h>
+
+#include <arpa/inet.h>
 
 # define HTTP_PORT "80"
 # define BACKLOG 100
@@ -42,6 +44,7 @@ class mySocket
         int acceptSockFd;
         int sendRes;
         int recvRes;
+        int sockName;
         
     public:
         mySocket();
@@ -54,6 +57,9 @@ class mySocket
         void    sendReq(int sockfd, const void *buf, int len, int flags);
         void    recvReq(int sockfd, void *buf, int len, int flags);
 
+        //still not clear about this part
+        void    printLogs(void);
+        void     retrieveClientAdd(void);
         //getter functions
         int                 getSockFd(void) const;
         int                 getBindValue(void) const;

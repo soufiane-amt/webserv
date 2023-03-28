@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 02:57:55 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 05:25:11 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@
 #include <netdb.h>  
 #include <string.h>
 
-//domaine: ip_version
-//service: SOCK_STREAM
-//protocol: TCP
+#define HTTP_PORT "80"
+/* getaddrinfo => socket => bind => lsiten*/
 class mySocket
 {
     private:
@@ -35,6 +34,8 @@ class mySocket
         mySocket();
         ~mySocket();
         void    testSysCall(int fd);
+        void    rerunServ(void);
+        void    listenRequest();
 
         //getter functions
         int                 getSockFd() const;

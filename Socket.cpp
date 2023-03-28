@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 05:25:17 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 05:50:23 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ mySocket::mySocket()
     }
     //create socket
     this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
-    testSysCall(getSockFd());
+    mySocket::testSysCall(getSockFd());
     
     //bind (though it should be outside the constructor)
     this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
-    testSysCall(getBindValue());
+    mySocket::testSysCall(getBindValue());
 }
 
 mySocket::~mySocket()
@@ -54,7 +54,7 @@ void    mySocket::rerunServ(void)
     int enable = 1;
     
     int check = setsockopt(getSockFd(), SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
-    testSysCall(check);
+    mySocket::testSysCall(check);
 }
 
 int mySocket::getSockFd() const
@@ -65,4 +65,17 @@ int mySocket::getSockFd() const
 int mySocket::getBindValue() const
 {
     return (this->bindRes);
+}
+
+void    mySocket::listenRequest(void)
+{
+    int check = listen(getSockFd(), BACKLOG);
+    mySocket::testSysCall(check);
+}
+
+void    mySocket::acceptConnection(void)
+{
+    this->incomingAddSize = sizeof(this->incomingStruct);
+    this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->incomingStruct, &this->incomingAddSize);
+    mySocket::testSysCall(this->acceptSockFd);
 }

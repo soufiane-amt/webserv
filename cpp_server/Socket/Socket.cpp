@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 01:46:55 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 03:02:06 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ mySocket::mySocket()
     memset(&this->hints, 0, sizeof(this->hints)); //empty the struct
     this->hints.ai_family = AF_UNSPEC; //IPv4 or IPv6
     this->hints.ai_socktype = SOCK_STREAM; //TCP sockets
-    this->hints.ai_flags = AI_PASSIVE; // indicates that the address is intended for a listening socket
+    this->hints.ai_flags = AI_PASSIVE; // indicates that the address is intended for a listening socket,bind to the IP of the host it’s running
 
     if (int val = getaddrinfo(NULL, "80", &this->hints, &this->servinfo))
     {
@@ -28,11 +28,11 @@ mySocket::mySocket()
     }
     //create socket
     this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
-    testSysCall(this->sockfd);
+    testSysCall(getSockFd());
     
     //bind (though it should be outside the constructor)
-    this->bindRes = bind(getSockFd(), (struct sockaddr *)&(getAddress()), sizeof(getAddress()));
-    testSysCall(this->bindRes);
+    this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
+    testSysCall(getBindValue());
 }
 
 mySocket::~mySocket()
@@ -47,11 +47,6 @@ void    mySocket::testSysCall(int fd)
         perror("Network Failure.");
         exit(EXIT_FAILURE);
     }
-}
-
-struct sockaddr_in mySocket::getAddress()  const
-{
-    return (this->address);
 }
 
 int mySocket::getSockFd() const

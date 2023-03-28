@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 01:43:17 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 02:57:55 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ class mySocket
         void    testSysCall(int fd);
 
         //getter functions
-        struct sockaddr_in  getAddress() const;
         int                 getSockFd() const;
         int                 getBindValue() const;
 };

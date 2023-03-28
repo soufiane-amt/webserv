@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/27 07:42:59 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 01:43:17 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>  
+#include <string.h>
 
 //domaine: ip_version
 //service: SOCK_STREAM
@@ -25,11 +27,13 @@
 class mySocket
 {
     private:
-        struct sockaddr_in  address;
+        struct addrinfo hints; //get info about the host network
+        struct addrinfo *servinfo; //will point to the result 
         int sockfd;
-        int connection;
+        int bindRes;
     public:
-        mySocket(int domain, int serviceType, int protocol, int port, u_long interface); 
+        mySocket();
+        ~mySocket();
         void    testSysCall(int fd);
 
         //getter functions

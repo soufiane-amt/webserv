@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 09:16:20 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:29:45 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 class mySocket
 {
     private:
+        struct addrinfo *tmp;
         struct addrinfo hints; //get info about the host network
         struct addrinfo *servinfo; //will point to the result 
         struct sockaddr_storage incomingStruct; //get info about incoming connections

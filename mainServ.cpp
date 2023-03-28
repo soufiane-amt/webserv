@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 09:57:11 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:17:29 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int main(void)
     "<html>hello, world</html>\r\n";
     
     mySocket sock;
-    
-    sock.rerunServ();
+
     sock.listenRequest();
     //usually this will be a fork, create children proccess to handle each connection
     //or this will be in a poll()

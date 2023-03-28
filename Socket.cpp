@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 09:51:58 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:37:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,32 @@ mySocket::mySocket()
         std::cout << "getaddrinfo error: " << err << std::endl;
         exit(EXIT_FAILURE);
     }
-    //create socket
-    this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
-    mySocket::testSysCall(getSockFd());
-    std::cout << "Socket created succesfully." << std::endl;
+
+    //loop through all the res in the linked list and bind to the first you can
     
-    //bind (though it should be outside the constructor)
-    this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
-    mySocket::testSysCall(getBindValue());
-    std::cout << "Socket succesfully bound to address." << std::endl;
+    for (this->tmp = this->servinfo; this->tmp != NULL; this->tmp = this->tmp->ai_next)
+    {
+        //create socket
+        this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
+        if (this->sockfd == -1)
+        {
+            perror("Webserv: Socket!");
+            continue;
+        }
+        std::cout << "Socket created succesfully." << std::endl;
+        
+        mySocket::rerunServ();
+        
+        this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
+        if (this->bindRes == -1)
+        {
+            close(this->sockfd);
+            perror("Webserv: Bind!");
+            continue;
+        }
+        std::cout << "Socket succesfully bound to address." << std::endl;
+        
+    }
 }
 
 mySocket::~mySocket()

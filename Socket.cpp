@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 05:50:23 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/28 08:01:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ mySocket::mySocket()
     //create socket
     this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
     mySocket::testSysCall(getSockFd());
+    std::cout << "Socket created succesfully." << std::endl;
     
     //bind (though it should be outside the constructor)
     this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
     mySocket::testSysCall(getBindValue());
+    std::cout << "Socket succesfully bound to address." << std::endl;
 }
 
 mySocket::~mySocket()
@@ -57,20 +59,26 @@ void    mySocket::rerunServ(void)
     mySocket::testSysCall(check);
 }
 
-int mySocket::getSockFd() const
+int mySocket::getSockFd(void) const
 {
     return (this->sockfd);    
 }
 
-int mySocket::getBindValue() const
+int mySocket::getBindValue(void) const
 {
     return (this->bindRes);
+}
+
+int mySocket::getAcceptFd(void) const
+{
+    return (this->acceptSockFd);
 }
 
 void    mySocket::listenRequest(void)
 {
     int check = listen(getSockFd(), BACKLOG);
     mySocket::testSysCall(check);
+    std::cout << "Server listening for connections ... " << std::endl;
 }
 
 void    mySocket::acceptConnection(void)
@@ -78,4 +86,22 @@ void    mySocket::acceptConnection(void)
     this->incomingAddSize = sizeof(this->incomingStruct);
     this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->incomingStruct, &this->incomingAddSize);
     mySocket::testSysCall(this->acceptSockFd);
+}
+
+void    mySocket::closeConnection(void)
+{
+    close(this->acceptSockFd);
+    close(this->sockfd);
+}
+
+void    mySocket::sendReq(int sockfd, const void *buf, int len, int flags)
+{
+    this->sendRes = send(sockfd, buf, len, flags);
+    mySocket::testSysCall(this->sendRes);
+}
+
+void    mySocket::recvReq(int sockfd, void *buf, int len, int flags)
+{
+    this->recvRes = recv(sockfd, buf, len, flags);
+    mySocket::testSysCall(this->recvRes);
 }

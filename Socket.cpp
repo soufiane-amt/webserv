@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 11:37:03 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/29 06:41:23 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,35 @@
 
 mySocket::mySocket()
 {
-    //define address structure
-    memset(&this->hints, 0, sizeof(this->hints)); //empty the struct
-    this->hints.ai_family = AF_UNSPEC; //IPv4 or IPv6
-    this->hints.ai_socktype = SOCK_STREAM; //TCP sockets
-    this->hints.ai_flags = AI_PASSIVE; // indicates that the address is intended for a listening socket,bind to the IP of the host it’s running
-
-    if (int val = getaddrinfo(NULL, HTTP_PORT, &this->hints, &this->servinfo))
-    {
-        std::string err = gai_strerror(val);
-        std::cout << "getaddrinfo error: " << err << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    //loop through all the res in the linked list and bind to the first you can
+    std::cout << "Socket default constructor and initializer." << std::endl;
+    //init len of structs
+    this->webservAddrlen = sizeof(this->webservAddr);
     
-    for (this->tmp = this->servinfo; this->tmp != NULL; this->tmp = this->tmp->ai_next)
-    {
-        //create socket
-        this->sockfd = socket(this->servinfo->ai_family, this->servinfo->ai_socktype, this->servinfo->ai_protocol);
-        if (this->sockfd == -1)
-        {
-            perror("Webserv: Socket!");
-            continue;
-        }
-        std::cout << "Socket created succesfully." << std::endl;
-        
-        mySocket::rerunServ();
-        
-        this->bindRes = bind(getSockFd(), this->servinfo->ai_addr, this->servinfo->ai_addrlen);
-        if (this->bindRes == -1)
-        {
-            close(this->sockfd);
-            perror("Webserv: Bind!");
-            continue;
-        }
-        std::cout << "Socket succesfully bound to address." << std::endl;
-        
-    }
+    //define and init address structure of webserv
+    memset(&this->webservAddr, 0, sizeof(this->webservAddr)); //empty the struct
+    this->webservAddr.sin_family = AF_INET; //IPv4
+    this->webservAddr.sin_port = htons(HTTP_PORT); //convert port to network byte order(short)
+    this->webservAddr.sin_addr.s_addr = htonl(INADDR_ANY); // convert IP@ to network byte order (long) /any network interface available on the hos 
+
+    //create socket
+    this->sockfd = socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
+    mySocket::testSysCall(mySocket::getAcceptFd());
+    std::cout << "Socket created succesfully." << std::endl;
+    
+    //fix bind: socket already in use error
+    mySocket::rerunServ();
+    
+    //bind socket to the address
+    this->bindRes = bind(getSockFd(), (struct sockaddr *)&this->webservAddr, this->webservAddrlen);
+    mySocket::testSysCall(mySocket::getBindValue());
+    std::cout << "Socket succesfully bound to address." << std::endl;
+
 }
 
 mySocket::~mySocket()
 {
-    freeaddrinfo(this->servinfo);
+    std::cout << "Socket default deconstructor." << std::endl;
+    mySocket::closeConnection();
 }
 
 void    mySocket::testSysCall(int fd)
@@ -91,6 +77,16 @@ int mySocket::getAcceptFd(void) const
     return (this->acceptSockFd);
 }
 
+int mySocket::getSockName(void) const
+{
+    return (this->sockName);
+}
+
+const char*   mySocket::getBuffer(void) const
+{
+    return (buffer);
+}
+
 void    mySocket::listenRequest(void)
 {
     int check = listen(getSockFd(), BACKLOG);
@@ -100,9 +96,10 @@ void    mySocket::listenRequest(void)
 
 void    mySocket::acceptConnection(void)
 {
-    this->incomingAddSize = sizeof(this->incomingStruct);
-    this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->incomingStruct, &this->incomingAddSize);
-    mySocket::testSysCall(this->acceptSockFd);
+    this->clientAddrlen = sizeof(this->clientAddr);
+    this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
+    //commenting to test the prototype buildong
+    // mySocket::testSysCall(this->acceptSockFd);
 }
 
 void    mySocket::closeConnection(void)
@@ -125,19 +122,26 @@ void    mySocket::recvReq(int sockfd, void *buf, int len, int flags)
 
 void    mySocket::retrieveClientAdd(void)
 {
-    this->sockName = getsockname(getAcceptFd(), (struct sockaddr *)&this->incomingStruct, &this->incomingAddSize);
-    mySocket::testSysCall(this->sockName);
+    this->sockName = getsockname(getAcceptFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
+
+    //commenting for prototype sake
+    // mySocket::testSysCall(this->sockName);
+}
+
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
 void    mySocket::printLogs(void)
 {
 
-    //I know this is forbidden, this is just a test
-
-    //print IP Addresses and Request headers
-    struct sockaddr_in* s;
-    
-    // Get the IP address of the incoming connection
-    s = (struct sockaddr_in*)&this->incomingStruct;
-    std::cout << inet_ntoa(s->sin_addr) << std::endl;
+    char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];
+        sscanf(this->buffer, "%s %s %s", method, uri, version);
+        printf("[%s:%u] %s %s %s\n", inet_ntoa(this->clientAddr.sin_addr),
+               ntohs(this->clientAddr.sin_port), method, version, uri);
 }

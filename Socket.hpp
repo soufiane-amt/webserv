@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 11:29:45 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/29 06:41:19 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 #include <arpa/inet.h>
 
-# define HTTP_PORT "80"
+# define HTTP_PORT 80
 # define BACKLOG 100
 
 //temp buff size
@@ -34,11 +34,12 @@
 class mySocket
 {
     private:
-        struct addrinfo *tmp;
-        struct addrinfo hints; //get info about the host network
-        struct addrinfo *servinfo; //will point to the result 
-        struct sockaddr_storage incomingStruct; //get info about incoming connections
-        socklen_t incomingAddSize;
+        //server/client addresses info
+        struct sockaddr_in  webservAddr;
+        int                 webservAddrlen;
+        struct sockaddr_in  clientAddr;
+        int                 clientAddrlen;
+        
         
         int sockfd;
         int bindRes;
@@ -46,6 +47,7 @@ class mySocket
         int sendRes;
         int recvRes;
         int sockName;
+        char    buffer[BUFFER_SIZE];
         
     public:
         mySocket();
@@ -61,10 +63,13 @@ class mySocket
         //still not clear about this part
         void    printLogs(void);
         void     retrieveClientAdd(void);
+        
         //getter functions
         int                 getSockFd(void) const;
         int                 getBindValue(void) const;
         int                 getAcceptFd(void) const;
+        int                 getSockName(void) const;
+        const char                *getBuffer(void) const;
 };
 
 #endif

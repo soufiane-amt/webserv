@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/28 11:17:29 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/29 06:42:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int main(void)
 {
-    char buffer[BUFFER_SIZE];
     char resp[] = "HTTP/1.1 200 OK\r\n"
     "Server: webserver-cpp\r\n"
     "Content-type: text/html\r\n\r\n"
@@ -28,24 +27,34 @@ int main(void)
     while (1)
     {
         sock.acceptConnection();
+        if (sock.getAcceptFd() < 0)
+        {
+            perror("Webserv (accept)");
+            continue;
+        }
         std::cout << "Connection accepted!" << std::endl;
 
         //get client address (that's the idea)
         sock.retrieveClientAdd();
+        if (sock.getSockName() < 0)
+        {
+            perror("Webserv (getsockname)");
+            continue;
+        }
         
         //recv from the browser
-        sock.recvReq(sock.getAcceptFd(), buffer, BUFFER_SIZE, 0);
+        sock.recvReq(sock.getAcceptFd(), (void *)sock.getBuffer(), BUFFER_SIZE, 0);
         
         //print_logs
-        char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];
-        sscanf(buffer, "%s %s %s", method, uri, version);
         sock.printLogs();
+
+        
 
         // this msg from the browser is then sent to the parser for HTTP Message Parsing
 
         // generate message in http rules from the webserv to the browser
         sock.sendReq(sock.getAcceptFd(), resp, strlen(resp), 0);
     }
-    sock.closeConnection();    
+    //calling destructor will close all connections
     return (0);
 }

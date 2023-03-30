@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/23 13:09:46 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/30 21:18:39 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ class errorManager
     static  void        isMethodValid(Method_t Method, bool requestHasBody);
     static  void        isProtocolValid(protocol_t protocol);
     static  int         isURIValid(const std::string& URI,location_t server_location);
+    // static  int         isHostValid(const std::string& URI,location_t server_location);
+    static  bool        isLocationRedirected(const std::string& URI,location_t server_location);
 };
 
 

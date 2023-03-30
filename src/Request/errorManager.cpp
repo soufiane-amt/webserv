@@ -6,12 +6,14 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 17:22:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/30 21:20:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "errorManager.hpp"
 #include <string>
+
+simpleConfPars parser;
 
 const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
@@ -46,6 +48,23 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 }
 
 
+bool     errorManager::isLocationRedirected(const std::string& URI,location_t server_location)
+{
+    location_t::iterator it = server_location.find(URI);
+    if (it != server_location.end())
+    {
+        if (it->second.find("redirection") != it->second.end())
+        {
+            std::string redirection = it->second["redirection"];
+            if (redirection[0] == '/')
+                redirection = redirection.substr(1);
+            throw StatusCode(REDIRECT, redirection);
+        }
+        return true;
+    }
+    return false;
+}
+
 int errorManager::isURIValid(const std::string& URI,location_t server_location) {
     
     if (URI[0] != '/')
@@ -72,6 +91,8 @@ void     defineFinalUri (header_t& header, int targetPathSize, location_t server
 {
     struct stat sb;
     
+    //check redirections
+    
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
@@ -82,8 +103,7 @@ void     defineFinalUri (header_t& header, int targetPathSize, location_t server
 
 bool     errorManager::isRequestValid(http_message_t &request)
 {
-    static simpleConfPars parser;
-    static location_t     server_location = parser.get_server_locations(0);
+    location_t     server_location = parser.get_server_locations(0);
     header_t              &header         = request.first;
 
     isMethodValid(header.find("Method")->second, !request.second.empty());
@@ -98,6 +118,7 @@ bool     errorManager::isRequestValid(http_message_t &request)
     
     defineFinalUri(header, targetPathSize, server_location);
 
+    //put it in its own function
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
         throw StatusCode(BAD_REQUEST);

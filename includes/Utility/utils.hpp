@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 15:07:07 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/30 20:44:29 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ struct simpleConfPars
     directives["listen"] = "80";
     directives["server_name"] = "example.com";
     directives["max_body_size"] = "-1";
-    locations["/"]["root"] = "/Users/samajat/Desktop/webserv/files";
-    locations["/"]["Methods"] = "GET HEAD";
+    locations["/"]["root"] = "./www";
+    // locations["/"]["Methods"] = "GET HEAD";
     locations["/"]["index"] = "index.html";
-    locations["/images"]["root"] = "/Users/samajat/Desktop/webserv/files";
-    locations["/images"]["index"] = "index.html";
-    directives["error_page"] = "404 /404.html";
-    locations["/404.html"]["root"] = "/Users/samajat/Desktop/webserv/files";
+    locations["/images"]["root"] = "./www/error_pages";
+    // locations["/images"]["index"] = "index.html";
+    // directives["error_page"] = "404 /404.html";
+    // locations["/404.html"]["root"] = "./www/error_pages";
     server.push_back(make_pair(directives, locations));
     }
 
@@ -107,6 +107,7 @@ struct simpleConfPars
     
 };
 
+extern simpleConfPars parser;
 
 
 

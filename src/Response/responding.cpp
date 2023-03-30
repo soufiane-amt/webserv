@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 16:57:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/30 20:47:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void responsePreparation::prepare_other_headers()
     _response += CRLF;
 }
 
-void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
+void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri is a file
 {
     std::string appropriate_page ;
     if (_statusCode.is_error_status())
@@ -78,7 +78,7 @@ void    responsePreparation::exceute_get()
 {
     prepare_statusLine();
     prepare_other_headers();
-    prepare_body();
+    prepare_rest();
 }
 
 void    responsePreparation::exceute_post()
@@ -94,5 +94,5 @@ void   responsePreparation::sendError()
 {
     prepare_statusLine();
     prepare_other_headers();
-    prepare_body();
+    prepare_rest();
 }

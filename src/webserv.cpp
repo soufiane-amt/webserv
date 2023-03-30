@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 16:37:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/30 20:14:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void    tempServer ()
         char buffer[30000] = {0};
         valread = read( new_socket , buffer, 30000);
         printf("%s\n",buffer );
-        
+        std::cout << request_response(buffer).c_str() << std::endl;
         write(new_socket , request_response(buffer).c_str() , request_response(buffer).length());
         printf("------------------Hello message sent-------------------\n");
         close(new_socket);

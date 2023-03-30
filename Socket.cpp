@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/29 06:41:23 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/30 06:51:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ mySocket::mySocket()
     //create socket
     this->sockfd = socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
     mySocket::testSysCall(mySocket::getAcceptFd());
+
+    //set the socket to be non-blocking
+    fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
+    
     std::cout << "Socket created succesfully." << std::endl;
     
     //fix bind: socket already in use error

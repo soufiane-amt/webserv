@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/29 06:41:19 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/30 06:08:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 #include <netinet/tcp.h>
 #include <netdb.h>  
 #include <string.h>
+#include <cstring>
 #include <unistd.h>
-
+#include <fcntl.h>
 #include <arpa/inet.h>
 
 # define HTTP_PORT 80

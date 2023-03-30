@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/29 06:42:39 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/29 06:50:28 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int main(void)
     mySocket sock;
 
     sock.listenRequest();
-    //usually this will be a fork, create children proccess to handle each connection
-    //or this will be in a poll()
+    //this will be in a poll()
     while (1)
     {
         sock.acceptConnection();
@@ -47,9 +46,7 @@ int main(void)
         
         //print_logs
         sock.printLogs();
-
         
-
         // this msg from the browser is then sent to the parser for HTTP Message Parsing
 
         // generate message in http rules from the webserv to the browser

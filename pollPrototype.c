@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   pollPrototype.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 08:39:31 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/30 08:41:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 06:36:09 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(void)
 {
     struct pollfd pfds[1]; // More if you want to monitor more
 
+    memset(&pfds, 0, sizeof(pfds)); //init struct
     pfds[0].fd = 0;          // Standard input
     pfds[0].events = POLLIN; // Tell me when ready to read
 

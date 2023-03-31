@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/30 06:08:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 06:44:16 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
+#include <poll.h>
+#include <vector>
 
 # define HTTP_PORT 80
 # define BACKLOG 100
@@ -49,6 +51,8 @@ class mySocket
         int recvRes;
         int sockName;
         char    buffer[BUFFER_SIZE];
+
+        std::vector<pollfd> _pollfds;
         
     public:
         mySocket();
@@ -71,6 +75,9 @@ class mySocket
         int                 getAcceptFd(void) const;
         int                 getSockName(void) const;
         const char                *getBuffer(void) const;
+
+        //setters
+        void    pushFd(int sockfd, int event);
 };
 
 #endif

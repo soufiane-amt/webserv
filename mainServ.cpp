@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 09:28:36 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 21:44:43 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int main(void)
     "Content-type: text/html\r\n\r\n"
     "<html>hello, world</html>\r\n";
     
-    //create socket and bind it
+    //create socket object and bind it
     mySocket sock;
     
-    //create poll struct 
+    //create poll object 
     polling pl;
 
     //push the socket fd to poll()
@@ -46,7 +46,7 @@ int main(void)
 
             // generate message in http rules from the webserv to the browser
             sock.sendReq(sock.getAcceptFd(), resp, strlen(resp), 0);
-            }
+        }
     }
     
     //calling destructor will close all connections

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 09:28:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:11:46 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ nfds_t  polling::getSize(void) const
 }
 
 void    polling::handlePoll(mySocket &sock)
-{
-    char buf[BUFFER_SIZE];
-    
+{   
+    //check if there a request on the sockfd
     if (this->_pollfds[0].revents & POLLIN)
     {
         //accept connections
@@ -68,23 +67,24 @@ void    polling::handlePoll(mySocket &sock)
             polling::pushFd(sock.getAcceptFd(), POLLIN);
             std::cout << "Connection accepted!" << std::endl;
         }
-         //get client address (that's the idea)
-            sock.retrieveClientAdd();
-            if (sock.getSockName() < 0)
-            {
-                perror("Webserv (getsockname)");
-                //exit or continue in this loop
-            }
+        //get client address (that's the idea)
+        sock.retrieveClientAdd();
+        if (sock.getSockName() < 0)
+        {
+            perror("Webserv (getsockname)");
+            //exit or continue in this loop
+        }
     }
 
     //start from 1, skip listening socket
     for (unsigned int i = 1; i < getSize() ; i++)
     {
+        std::cout << "HERE" << std::endl;
         //check which FD triggered the event
-        if (this->_pollfds[i].revents & POLLIN)
+        if (this->_pollfds[i].events & POLLIN)
         {
             //recv from the client 
-            int num = recv(this->_pollfds[i].fd, buf, BUFFER_SIZE, 0);
+            int num = recv(this->_pollfds[i].fd, (void *)sock.getBuffer(), BUFFER_SIZE, 0);
             std::cout << "i read" << std::endl;
             (void)num;
         }   

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/30 06:51:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 05:45:42 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ mySocket::mySocket()
     mySocket::testSysCall(mySocket::getAcceptFd());
 
     //set the socket to be non-blocking
-    fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
+    // fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
     
     std::cout << "Socket created succesfully." << std::endl;
     
@@ -115,6 +115,8 @@ void    mySocket::closeConnection(void)
 void    mySocket::sendReq(int sockfd, const void *buf, int len, int flags)
 {
     this->sendRes = send(sockfd, buf, len, flags);
+    //close sockfd of the connection
+    close(sockfd);
     mySocket::testSysCall(this->sendRes);
 }
 
@@ -127,9 +129,6 @@ void    mySocket::recvReq(int sockfd, void *buf, int len, int flags)
 void    mySocket::retrieveClientAdd(void)
 {
     this->sockName = getsockname(getAcceptFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
-
-    //commenting for prototype sake
-    // mySocket::testSysCall(this->sockName);
 }
 
 void *get_in_addr(struct sockaddr *sa)

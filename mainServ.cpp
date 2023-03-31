@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/29 06:50:28 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 05:44:08 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,16 @@ int main(void)
     "Content-type: text/html\r\n\r\n"
     "<html>hello, world</html>\r\n";
     
+    //create socket and bind it
     mySocket sock;
 
+    //listen for connections 
     sock.listenRequest();
+    
     //this will be in a poll()
     while (1)
     {
+        //accept connections 
         sock.acceptConnection();
         if (sock.getAcceptFd() < 0)
         {

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:10:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:27:36 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ bool     errorManager::isLocationRedirected(const std::string& URI,location_t se
         if (it_red != it->second.end())
         {
             StatusCode redirection = utility::redirector_proccessor(it_red->second);
-            std::cout << "======= > " << redirection.what() << std::endl;
             throw redirection;
         }
         return false;
@@ -120,6 +119,8 @@ bool     errorManager::isRequestValid(http_message_t &request)
     
     int   targetPathSize = isURIValid(header.find("URI")->second, server_location);
     
+
+    //THis the max+body+size shit of which I'll take care later
     // std::pair <bool, directive_t::iterator> it2 = parser.get_directive(0, header["URI"], "max_body_size");
     // std::cout << "header[\"URI\"] "  << it2.first <<  header["URI"] << (static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str())) << std::endl;
     // if (it2.first && static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str()))

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:45:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 23:10:03 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,25 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
     catch(const StatusCode& e)
     {   throw e;    }
     
-    
+    std::string location_uri  = header.at("URI");
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
     header.at("URI") = root + header.at("URI").substr(targetPathSize);
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
+    if (S_ISDIR(sb.st_mode))
+    {
+        location_t::iterator it_loc = server_location.find(location_uri);
+        directive_t::iterator it_ind = it_loc->second.find("index");
+        directive_t::iterator it_auto = it_loc->second.find("autoindex");
+        if (it_loc->second.end() != it_ind)
+            header.at("URI") += it_ind->second;
+        else if (it_loc->second.end() != it_auto)
+            header.at("URI") += it_auto->second;
+        else
+            throw StatusCode(NOT_FOUND);
+    }
 }
 
 

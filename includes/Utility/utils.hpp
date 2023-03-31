@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:08:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:57:21 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ struct simpleConfPars
     locations["/"]["root"] = "./www";
     // locations["/"]["Methods"] = "GET HEAD";
     locations["/"]["index"] = "index.html";
-    locations["/"]["return"] = "301 http://www.google.com";
+    locations["/"]["return"] = "302 https://www.youtube.com/";
     locations["/images"]["root"] = "./www/error_pages";
     // locations["/images"]["index"] = "index.html";
     // directives["error_page"] = "404 /404.html";

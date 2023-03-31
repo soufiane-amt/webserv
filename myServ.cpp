@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 08:55:41 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 09:28:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ nfds_t  polling::getSize(void) const
 
 void    polling::handlePoll(mySocket &sock)
 {
+    char buf[BUFFER_SIZE];
+    
     if (this->_pollfds[0].revents & POLLIN)
     {
         //accept connections
@@ -55,7 +57,7 @@ void    polling::handlePoll(mySocket &sock)
         if (sock.getAcceptFd() < 0)
         {
             perror("Webserv (accept)");
-            //case of exit or not 
+            //case of exit or not /continue in the loop
         }
         else
         {
@@ -66,5 +68,25 @@ void    polling::handlePoll(mySocket &sock)
             polling::pushFd(sock.getAcceptFd(), POLLIN);
             std::cout << "Connection accepted!" << std::endl;
         }
+         //get client address (that's the idea)
+            sock.retrieveClientAdd();
+            if (sock.getSockName() < 0)
+            {
+                perror("Webserv (getsockname)");
+                //exit or continue in this loop
+            }
+    }
+
+    //start from 1, skip listening socket
+    for (unsigned int i = 1; i < getSize() ; i++)
+    {
+        //check which FD triggered the event
+        if (this->_pollfds[i].revents & POLLIN)
+        {
+            //recv from the client 
+            int num = recv(this->_pollfds[i].fd, buf, BUFFER_SIZE, 0);
+            std::cout << "i read" << std::endl;
+            (void)num;
+        }   
     }
 }

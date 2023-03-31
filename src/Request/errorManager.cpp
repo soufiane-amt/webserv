@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 16:44:57 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:10:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,16 @@ bool     errorManager::isLocationRedirected(const std::string& URI,location_t se
         directive_t::iterator it_red = it->second.find("return");
         if (it_red != it->second.end())
         {
-            std::pair<StatusCode, std::string> redirection = utility::redirector_proccessor(it_red->second);
-            throw StatusCode(redirection->first);
+            StatusCode redirection = utility::redirector_proccessor(it_red->second);
+            std::cout << "======= > " << redirection.what() << std::endl;
+            throw redirection;
         }
         return false;
     }
     return false;
 }
 
-int errorManager::isURIValid(const std::string& URI,location_t server_location) {
+int errorManager::isURIValid(const std::string& URI, location_t server_location) {
     
     if (URI[0] != '/')
         throw StatusCode(BAD_REQUEST);
@@ -86,11 +87,20 @@ int errorManager::isURIValid(const std::string& URI,location_t server_location) 
 //This function is performed when we check if the URI is valid and we need to define the final 
 //directory or a file from where the file should be searched
 
-void     defineFinalUri (header_t& header, int targetPathSize, location_t server_location)
+void     errorManager::defineFinalUri (header_t& header, int targetPathSize, location_t server_location)
 {
     struct stat sb;
     
     //check redirections
+    try
+    {
+        isLocationRedirected(header["URI"], server_location);
+    }
+    catch(const StatusCode& e)
+    {
+        throw e;
+    }
+    
     
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
     if (targetPathSize == 1 && header.at("URI").size() > 1)

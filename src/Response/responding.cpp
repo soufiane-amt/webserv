@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/30 20:47:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:22:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ responsePreparation::response_t responsePreparation::get_response() const
 
 void responsePreparation::prepare_statusLine()
 {
+    // if ()
     _response += "HTTP/1.1 " + std::string(_statusCode.what());
     _response += CRLF;
 }
@@ -46,6 +47,12 @@ void responsePreparation::prepare_other_headers()
     _response += CRLF;
     _response += "Content-Type: text/html";
     _response += CRLF;
+    if (_statusCode.get_redir_location() != "")
+    {
+        _response += "Location: " + _statusCode.get_redir_location();
+        _response += CRLF;
+        _response += CRLF;
+    }
 }
 
 void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri is a file
@@ -78,7 +85,8 @@ void    responsePreparation::exceute_get()
 {
     prepare_statusLine();
     prepare_other_headers();
-    prepare_rest();
+    if (_statusCode.get_redir_location() == "")
+        prepare_rest();
 }
 
 void    responsePreparation::exceute_post()

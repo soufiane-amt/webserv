@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 17:04:42 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:05:39 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,16 @@ class StatusCode : public std::exception
     private:
         std::string _status_code;
         std::string _redir_location;
-    
+
     public:
         StatusCode(std::string msg);
+        StatusCode(std::string msg, std::string redir_location);
         virtual const char* what() const throw();
         bool operator==(const std::string& rhs);
         bool is_error_status() const;
         std::string get_status_code() const;
         std::string get_associated_page() const;
+        std::string get_redir_location() const;
         virtual ~StatusCode()throw();
 };
 

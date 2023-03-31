@@ -6,11 +6,11 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 06:46:20 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 06:55:05 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Socket.hpp"
+#include "myServ.hpp"
 
 mySocket::mySocket()
 {
@@ -89,15 +89,6 @@ int mySocket::getSockName(void) const
 const char*   mySocket::getBuffer(void) const
 {
     return (buffer);
-}
-
-void    mySocket::pushFd(int sockfd, int event)
-{
-    struct pollfd tmp;
-
-    tmp.fd = sockfd;
-    tmp.events = event;
-    this->_pollfds.push_back(tmp);
 }
 
 void    mySocket::listenRequest(void)

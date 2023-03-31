@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 06:44:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 06:53:06 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 
 //temp buff size
 # define BUFFER_SIZE 1024
-/* getaddrinfo => socket => bind => listen => accept*/
 class mySocket
 {
     private:
@@ -52,7 +51,6 @@ class mySocket
         int sockName;
         char    buffer[BUFFER_SIZE];
 
-        std::vector<pollfd> _pollfds;
         
     public:
         mySocket();
@@ -77,7 +75,6 @@ class mySocket
         const char                *getBuffer(void) const;
 
         //setters
-        void    pushFd(int sockfd, int event);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/30 20:14:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:37:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "responding.hpp"
 #include "errorManager.hpp"
 
-std::string msg= "GET /index.html HTTP/1.1\r\n"
-            "host: 192.241.213.46:6880\r\n"
+std::string msg= "GET / HTTP/1.1\r\n"
+            // "host: 192.241.213.46:6880\r\n"
             "Upgrade-Insecure-Requests: 1\r\n"
             "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
             "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8\r\n"
@@ -119,27 +119,27 @@ void    tempServer ()
 
 int main ()
 {
-    try
-    {
-        tempServer();
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    
-    // clientRequestParser test(msg);
-    // http_message_t &_request = test.getRequest();
-
     // try
     // {
-    //     errorManager::isRequestValid(_request);
-    //     responsePreparation response(_request);
-    //     std::cout << response.get_response();
+    //     tempServer();
     // }
-    // catch(const StatusCode& e)
+    // catch(const std::exception& e)
     // {
-    //     responsePreparation response(_request, e);
-    //     std::cout << response.get_response();
+    //     std::cerr << e.what() << '\n';
     // }
+    
+    clientRequestParser test(msg);
+    http_message_t &_request = test.getRequest();
+
+    try
+    {
+        errorManager::isRequestValid(_request);
+        responsePreparation response(_request);
+        std::cout << response.get_response();
+    }
+    catch(const StatusCode& e)
+    {
+        responsePreparation response(_request, e);
+        std::cout << response.get_response();
+    }
 }

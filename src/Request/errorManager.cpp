@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:27:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:45:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,9 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
     
     //check redirections
     try
-    {
-        isLocationRedirected(header["URI"], server_location);
-    }
+    {   isLocationRedirected(header["URI"], server_location);   }
     catch(const StatusCode& e)
-    {
-        throw e;
-    }
+    {   throw e;    }
     
     
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
@@ -109,6 +105,17 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
         throw StatusCode(NOT_FOUND);
 }
 
+
+void   errorManager::isHostValid(const header_t& header)
+{
+    header_t::const_iterator it = header.find("host");
+    if (it ==  header.end() || it->second.empty())
+        throw StatusCode(BAD_REQUEST);
+    for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
+        if (isspace(*iter))
+            throw StatusCode(BAD_REQUEST);
+}
+
 bool     errorManager::isRequestValid(http_message_t &request)
 {
     location_t     server_location = parser.get_server_locations(0);
@@ -116,8 +123,9 @@ bool     errorManager::isRequestValid(http_message_t &request)
 
     isMethodValid(header.find("Method")->second, !request.second.empty());
     isProtocolValid(header.find("Protocol")->second);
-    
+    isHostValid(header);
     int   targetPathSize = isURIValid(header.find("URI")->second, server_location);
+    defineFinalUri(header, targetPathSize, server_location);
     
 
     //THis the max+body+size shit of which I'll take care later
@@ -126,15 +134,7 @@ bool     errorManager::isRequestValid(http_message_t &request)
     // if (it2.first && static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str()))
     //     throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
     
-    defineFinalUri(header, targetPathSize, server_location);
 
-    //put it in its own function
-    header_t::const_iterator it = header.find("host");
-    if (it ==  header.end() || it->second.empty())
-        throw StatusCode(BAD_REQUEST);
-    for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
-        if (isspace(*iter))
-            throw StatusCode(BAD_REQUEST);
 
     return true;
 }

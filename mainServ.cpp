@@ -6,11 +6,11 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 05:44:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 07:05:15 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Socket.hpp"
+#include "myServ.hpp"
 
 int main(void)
 {
@@ -21,6 +21,9 @@ int main(void)
     
     //create socket and bind it
     mySocket sock;
+    
+    //create poll struct 
+    polling pl;
 
     //listen for connections 
     sock.listenRequest();

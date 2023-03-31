@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 06:54:32 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 07:14:07 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 #include "Socket.hpp"
 
-class   myServ
+class   polling
 {
     private:
         std::vector<pollfd> _pollfds;
     public:
-        myServ(void);
-        ~myServ(void);
+        polling(void);
+        ~polling(void);
+        
+        int     callPoll(struct pollfd *fds, nfds_t nfds, int timeout);
         void    pushFd(int sockfd, int event);
 };
 

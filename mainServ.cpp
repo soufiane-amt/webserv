@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 07:05:15 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 07:49:33 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,19 @@ int main(void)
     //create poll struct 
     polling pl;
 
+    //push the socket fd to poll()
+    pl.pushFd(sock.getSockFd(), POLLIN);
+    
     //listen for connections 
     sock.listenRequest();
     
-    //this will be in a poll()
     while (1)
     {
+        //waiting for events using poll()
+        if (pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1) > 0)
+        {
+            
+        }
         //accept connections 
         sock.acceptConnection();
         if (sock.getAcceptFd() < 0)

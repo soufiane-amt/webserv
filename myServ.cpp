@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 07:13:56 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 07:48:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,14 @@ void    polling::pushFd(int sockfd, int event)
 int polling::callPoll(struct pollfd *fds, nfds_t nfds, int timeout)
 {
     return (poll(fds, nfds, timeout));
+}
+
+const struct pollfd    *polling::getPollfdAddrs(void) const
+{
+    return (&_pollfds[0]);
+}
+
+nfds_t  polling::getSize(void) const
+{
+    return (this->_pollfds.size());
 }

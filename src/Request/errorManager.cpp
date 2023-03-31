@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 23:10:03 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 23:26:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,14 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
         location_t::iterator it_loc = server_location.find(location_uri);
         directive_t::iterator it_ind = it_loc->second.find("index");
         directive_t::iterator it_auto = it_loc->second.find("autoindex");
+            //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_loc->second.end() != it_ind)
-            header.at("URI") += it_ind->second;
+        { 
+            header.at("URI") += "/" + it_ind->second;
+            std::cout << header.at("URI") <<std::endl;
+        }
         else if (it_loc->second.end() != it_auto)
-            header.at("URI") += it_auto->second;
+            header.at("URI") += "/" + it_auto->second;
         else
             throw StatusCode(NOT_FOUND);
     }

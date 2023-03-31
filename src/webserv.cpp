@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:53:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 23:27:02 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ std::string msg= "GET / HTTP/1.1\r\n"
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+// #define PORT 4004
 #define PORT 1234
 
 

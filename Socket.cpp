@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 06:55:05 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 08:59:38 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ mySocket::mySocket()
     mySocket::testSysCall(mySocket::getAcceptFd());
 
     //set the socket to be non-blocking
-    // fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
+    fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
     
     std::cout << "Socket created succesfully." << std::endl;
     

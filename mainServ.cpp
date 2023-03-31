@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 07:49:33 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 09:04:00 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,10 @@ int main(void)
         //waiting for events using poll()
         if (pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1) > 0)
         {
-            
-        }
-        //accept connections 
-        sock.acceptConnection();
-        if (sock.getAcceptFd() < 0)
-        {
-            perror("Webserv (accept)");
-            continue;
-        }
-        std::cout << "Connection accepted!" << std::endl;
+            //handle I/O events
+            pl.handlePoll(sock);
 
-        //get client address (that's the idea)
+             //get client address (that's the idea)
         sock.retrieveClientAdd();
         if (sock.getSockName() < 0)
         {
@@ -65,6 +57,7 @@ int main(void)
 
         // generate message in http rules from the webserv to the browser
         sock.sendReq(sock.getAcceptFd(), resp, strlen(resp), 0);
+        }
     }
     //calling destructor will close all connections
     return (0);

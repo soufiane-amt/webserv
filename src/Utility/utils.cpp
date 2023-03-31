@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 16:11:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 16:13:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,26 @@ std::string utility::get_file_content(const std::string& uri)
         file.close();
     }
     return content;
+}
+
+
+/* ************************************************************************** */
+                            // utility::get_status_code :
+/* ************************************************************************** */
+
+std::pair <status_code, std::string> get_status_code(const std::string& redirector)
+{
+    std::vector<std::string> tokens = utility::split(redirector, " ");
+    
+    
+    if (tokens[0] == "200")
+        return std::make_pair(status_code::OK, "OK");
+    if (tokens[0] == "201")
+        return std::make_pair(status_code::CREATED, "Created");
+    if (tokens[0] == "202")
+        return std::make_pair(status_code::ACCEPTED, "Accepted");
+    if (tokens[0] == "204")
+        return std::make_pair(status_code::NO_CONTENT, "No Content");
+    
+
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/30 20:44:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 14:17:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #include <cctype>
 #include <ctime>
 #include "macros.hpp"
-
+#include "exceptions.hpp"
 
 /* ************************************************************************** */
                             // Typedefs :
@@ -126,6 +126,10 @@ struct utility
     static std::string              get_date();
 
     static std::string              get_file_content(const std::string& uri);
+    
+    static std::pair <status_code, std::string> get_status_code(const std::string& redirector);
+
+
 
     private:
     //trim methods :

@@ -1,21 +1,22 @@
-#include <stdio.h>
-#include <dirent.h>
+#include <iostream>
 
+#define foo(x), "x"
 int main() {
-    DIR *dir;
-    struct dirent *entry;
+    std::cout << foo(1) << std::endl;
+    // DIR *dir;
+    // struct dirent *entry;
     
-    dir = opendir("/");
-    if (dir == NULL) {
-        perror("opendir");
-        return 1;
-    }
+    // dir = opendir("/");
+    // if (dir == NULL) {
+    //     perror("opendir");
+    //     return 1;
+    // }
     
-    while ((entry = readdir(dir)) != NULL) {
-        printf("%s\n", entry->d_name);
-    }
+    // while ((entry = readdir(dir)) != NULL) {
+    //     printf("%s\n", entry->d_name);
+    // }
     
-    closedir(dir);
+    // closedir(dir);
     
     return 0;
 }

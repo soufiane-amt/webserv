@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/30 21:20:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 14:12:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,15 @@ bool     errorManager::isLocationRedirected(const std::string& URI,location_t se
     location_t::iterator it = server_location.find(URI);
     if (it != server_location.end())
     {
-        if (it->second.find("redirection") != it->second.end())
+        directive_t::iterator it_red = it->second.find("return");
+        if (it_red != it->second.end())
         {
-            std::string redirection = it->second["redirection"];
-            if (redirection[0] == '/')
-                redirection = redirection.substr(1);
-            throw StatusCode(REDIRECT, redirection);
+            std::string redirection = it_red->second;
+                if (redirection[0] == '/')
+                    redirection = redirection.substr(1);
+            throw StatusCode();
         }
-        return true;
+        return false;
     }
     return false;
 }

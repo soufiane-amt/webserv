@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 15:23:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 17:04:42 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class StatusCode : public std::exception
 {
     private:
         std::string _status_code;
+        std::string _redir_location;
+    
     public:
         StatusCode(std::string msg);
         virtual const char* what() const throw();

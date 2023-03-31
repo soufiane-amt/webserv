@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 16:27:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 16:28:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ std::string utility::get_file_content(const std::string& uri)
                             // utility::get_status_code :
 /* ************************************************************************** */
 
-std::pair <status_code, std::string> get_status_code(const std::string& redirector)
+std::pair <status_code, std::string> redirector_proccessor(const std::string& redirector)
 {
     std::vector<std::string> tokens = utility::split(redirector, " ");
     
@@ -201,6 +201,4 @@ std::pair <status_code, std::string> get_status_code(const std::string& redirect
     if (token[0] == "505")
         return (std::make_pair(status_code(HTTP_VERSION_NOT_SUPPORTED), tokens[1]));
     return (std::make_pair(status_code(HTTP_VERSION_NOT_SUPPORTED), tokens[1]));
-         
-
 }

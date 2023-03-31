@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 14:17:24 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 16:29:28 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,17 +117,17 @@ extern simpleConfPars parser;
 
 struct utility
 {
-    static std::vector<std::string> split(std::string str, std::string delimiter);
-    
-    static std::string              trim(const std::string &str, const std::string &delimiter);
-    
-    static std::string::iterator    caseInsensitiveSearch(std::string & str1, const std::string & str2);
+    static std::vector<std::string>             split(std::string str, std::string delimiter);
 
-    static std::string              get_date();
+    static std::string                          trim(const std::string &str, const std::string &delimiter);
 
-    static std::string              get_file_content(const std::string& uri);
+    static std::string::iterator                caseInsensitiveSearch(std::string & str1, const std::string & str2);
+
+    static std::string                          get_date();
+
+    static std::string                          get_file_content(const std::string& uri);
     
-    static std::pair <status_code, std::string> get_status_code(const std::string& redirector);
+    static std::pair <status_code, std::string> redirector_proccessor(const std::string& redirector);
 
 
 

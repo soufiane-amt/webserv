@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/25 16:41:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/03/31 17:06:07 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ ParsingErrorDetected::~ParsingErrorDetected()throw()
 
 
 
-StatusCode::StatusCode(std::string msg) : _status_code(msg)
+StatusCode::StatusCode(std::string msg) : _status_code(msg), _redir_location("")
+{
+}
+
+StatusCode::StatusCode(std::string msg, std::string redir_location) : _status_code(msg), _redir_location(redir_location)
 {
 }
 

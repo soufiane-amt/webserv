@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 13:51:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 15:04:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,13 @@ int errorManager::isURIValid(const std::string& URI, location_t server_location)
 //This function is performed when we check if the URI is valid and we need to define the final 
 //directory or a file from where the file should be searched
 
+
+std::string     get_appropriate_root (header_t& header, int targetPathSize, location_t server_location)
+{
+    directive_t::iterator root_it =  server_location[header.at("URI").substr(0, targetPathSize)].find("root");
+    return (root);
+}
+
 void     errorManager::defineFinalUri (header_t& header, int targetPathSize, location_t server_location)
 {
     struct stat sb;
@@ -98,6 +105,7 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
     
     std::string location_uri  = header.at("URI");
     std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
+    std::cout << "root: " << (server_location[header.at("URI").substr(0, targetPathSize)].find("root") == server_location[header.at("URI").substr(0, targetPathSize)].end())<< std::endl;
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
     header.at("URI") = root + header.at("URI").substr(targetPathSize);
@@ -117,10 +125,7 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
         else if (it_loc->second.end() != it_auto)
             header.at("URI") += "/" + it_auto->second;
         else
-        {
-            std::cout << header.at("URI") << std::endl;
             throw StatusCode(NOT_FOUND);
-        }
     }
 }
 

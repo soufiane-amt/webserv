@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 14:01:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 14:35:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ std::string msg= "GET / HTTP/1.1\r\n"
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
-#define PORT 4004
-// #define PORT 1234
+// #define PORT 4004
+#define PORT 1234
 
 
 std::string    request_response(std::string msg)
@@ -67,7 +67,7 @@ std::string    request_response(std::string msg)
 
 }
 
-void    tempServer ()
+void    tempServer (int port)
 {
     int server_fd, new_socket; long valread;
     struct sockaddr_in address;
@@ -84,7 +84,7 @@ void    tempServer ()
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons( PORT );
+    address.sin_port = htons( port );
     
     memset(address.sin_zero, '\0', sizeof address.sin_zero);
     
@@ -118,11 +118,17 @@ void    tempServer ()
     }
 }
 
-int main ()
+int main (int argc, char **argv)
 {
+    (void)argc;
+    if (argc != 2)
+    {
+        std::cout << "Usage: ./webserv [port]" << std::endl;
+        return 0;
+    }
     try
     {
-        tempServer();
+        tempServer(atoi(argv[1]));
     }
     catch(const std::exception& e)
     {

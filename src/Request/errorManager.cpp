@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 22:07:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:12:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
             if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
                 throw StatusCode(NOT_FOUND);
         }
-        else if (it_loc->second.end() == it_auto)
+        else if (it_loc->second.end() == it_auto)//off
             throw StatusCode(NOT_FOUND);
     }
 }

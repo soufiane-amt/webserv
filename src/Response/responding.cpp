@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 13:59:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 17:56:28 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ void responsePreparation::prepare_other_headers()
     }
 }
 
+// std::string     list_directory(std::string path)
+// {
+                
+// }
 void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri is a file
 {
     std::string appropriate_page ;
@@ -68,7 +72,10 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
         return;
     }
     if (_statusCode.get_redir_location() == "")
-        appropriate_page = utility::get_file_content(_request.first["URI"]);
+    {
+        // location_t::const_iterator it = parser.get_server_locations(0)[]
+        // appropriate_page = utility::get_file_content(_request.first["URI"]);
+    }
     _response += "Content-Length: " + std::to_string(appropriate_page.length());
     _response += CRLF;
     _response += CRLF;

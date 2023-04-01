@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 15:50:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 18:00:06 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
     header["URI"] = root + header["URI"].substr(targetPathSize);
+    std::cout <<  "====>" << header["URI"] << std::endl;
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))
@@ -126,13 +127,20 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
             //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_loc->second.end() != it_ind)
         { 
-            header.at("URI") += "/" + it_ind->second;
+            if (header.at("URI").back() != '/' && it_ind->second.front() != '/')
+                header.at("URI") += "/";
+            else if (header.at("URI").back() == '/' && it_ind->second.front() == '/')
+                header.at("URI").pop_back();
+            header.at("URI") +=  it_ind->second;
             std::cout << header.at("URI") <<std::endl;
         }
         else if (it_loc->second.end() != it_auto)
             header.at("URI") += "/" + it_auto->second;
+        
         else
             throw StatusCode(NOT_FOUND);
+        // if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
+        //     throw StatusCode(LISTING_NOT_ALLOWED);
     }
 }
 

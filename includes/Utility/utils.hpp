@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 15:46:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 16:38:22 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ struct simpleConfPars
     directives["max_body_size"] = "-1";
     directives["root"] = "./www";
     
-    // locations["/"]["root"] = "./www";
+    locations["/"]["root"] = "./";
     locations["/"]["Methods"] = "GET HEAD";
         locations["/"]["index"] = "index.html";
         // locations["/"]["autoindex"] = "off";

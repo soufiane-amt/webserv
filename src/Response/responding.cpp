@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 17:56:28 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 19:43:49 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ responsePreparation::response_t responsePreparation::get_response() const
 
 void responsePreparation::prepare_statusLine()
 {
-    // if ()
     _response += "HTTP/1.1 " + std::string(_statusCode.what());
     _response += CRLF;
 }

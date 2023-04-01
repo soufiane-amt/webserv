@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 18:00:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 20:32:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void     errorManager::isLocationRedirected(const std::string& URI,location_t se
     }
 }
 
-int errorManager::isURIValid(const std::string& URI, location_t server_location) {
+std::string errorManager::isURIValid(const std::string& URI, location_t server_location) {
     
     if (URI[0] != '/')
         throw StatusCode(BAD_REQUEST);
@@ -71,14 +71,14 @@ int errorManager::isURIValid(const std::string& URI, location_t server_location)
     location_t::iterator it = server_location.find(URI);
 
     if (it != server_location.end())
-        return URI.size();
+        return URI.substr(0, URI.size());
     size_t pos = URI.find_last_of('/');
     if (!pos )
-        return 1;
+        return "/";
     else if (pos != std::string::npos)
         return isURIValid(URI.substr(0, pos), server_location);
     throw StatusCode(NOT_FOUND);
-    return -1;
+    return "";
 }
 
 //This function is performed when we check if the URI is valid and we need to define the final 
@@ -163,8 +163,9 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isMethodValid(header.find("Method")->second, !request.second.empty());
     isProtocolValid(header.find("Protocol")->second);
     isHostValid(header);
-    int   targetPathSize = isURIValid(header.find("URI")->second, server_location);
-    defineFinalUri(header, targetPathSize, server_location);
+    std::string   targetLocation = isURIValid(header.find("URI")->second, server_location);
+    std::cout << "targetLocation " << targetLocation << std::endl;
+    // defineFinalUri(header, targetPathSize, server_location);
     
 
     //THis the max+body+size shit of which I'll take care later

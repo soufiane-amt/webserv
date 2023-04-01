@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 23:11:46 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:29:16 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ nfds_t  polling::getSize(void) const
     return (this->_pollfds.size());
 }
 
-void    polling::handlePoll(mySocket &sock)
+void    polling::handlePoll(mySocket &sock, char *resp)
 {   
     //check if there a request on the sockfd
     if (this->_pollfds[0].revents & POLLIN)
@@ -84,9 +84,18 @@ void    polling::handlePoll(mySocket &sock)
         if (this->_pollfds[i].events & POLLIN)
         {
             //recv from the client 
-            int num = recv(this->_pollfds[i].fd, (void *)sock.getBuffer(), BUFFER_SIZE, 0);
+            int num = recv(this->_pollfds[i].fd, (void *)sock.getBuffer(), BUFFER_SIZE, MSG_DONTWAIT);
             std::cout << "i read" << std::endl;
             (void)num;
         }   
     }
+    
+    //print logs of the request
+    sock.printLogs();
+
+    // this msg from the browser is then sent to the parser for HTTP Message Parsing
+
+    // generate message in http rules from the webserv to the browser
+    sock.sendReq(sock.getAcceptFd(), resp, strlen(resp), 0);
+    
 }

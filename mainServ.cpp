@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 21:44:43 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:21:35 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,7 @@ int main(void)
         if (pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1) > 0)
         {
             //handle I/O events
-            pl.handlePoll(sock);
-        
-            //print_logs
-            sock.printLogs();
-        
-            // this msg from the browser is then sent to the parser for HTTP Message Parsing
-
-            // generate message in http rules from the webserv to the browser
-            sock.sendReq(sock.getAcceptFd(), resp, strlen(resp), 0);
+            pl.handlePoll(sock, resp);        
         }
     }
     

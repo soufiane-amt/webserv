@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 08:52:47 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:22:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class   polling
         
         int     callPoll(struct pollfd *fds, nfds_t nfds, int timeout);
         void    pushFd(int sockfd, int event);
-        void    handlePoll(mySocket &sock);
+        void    handlePoll(mySocket &sock, char *event);
         
         //getters
         nfds_t  getSize(void) const;

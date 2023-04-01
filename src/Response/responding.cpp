@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:14:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:37:44 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
         _response += appropriate_page;
         return;
     }
-    if (_statusCode.get_redir_location() == "")
-    {
-        // location_t::const_iterator it = parser.get_server_locations(0)[]
-        // appropriate_page = utility::get_file_content(_request.header["URI"]);
-    }
+
+    if (parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
+        appropriate_page = utility::list_directory(_request.header["URI"]);
+    else if (_statusCode.get_redir_location() == "")
+        appropriate_page = utility::get_file_content(_request.header["URI"]);
     _response += "Content-Length: " + std::to_string(appropriate_page.length());
     _response += CRLF;
     _response += CRLF;

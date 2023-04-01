@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:13:49 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:21:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isHostValid(header);
     std::string   targetLocation = isURIValid(header.find("URI")->second, server_location);
     std::cout << "targetLocation " << targetLocation << std::endl;
+    request.targeted_Location = targetLocation;
     defineFinalUri(header, targetLocation, server_location);
     
 

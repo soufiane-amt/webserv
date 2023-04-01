@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 16:38:22 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:11:32 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,14 @@ typedef std::vector< std::pair<directive_t, location_t> > server_t;
 typedef    std::map <std::string, std::string>  header_t;
 typedef    std::string                          body_t;
 
-typedef    std::pair <header_t, body_t>         http_message_t;
 
 
-
+struct http_message_t
+{
+    header_t        header;
+    body_t          body;
+    std::string     targeted_Location;
+};
 
 
 

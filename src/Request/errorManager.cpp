@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 20:41:14 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:13:49 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,18 @@ std::string     search_root (const std::string &targetLocat, location_t server_l
     return (root);
 }
 
-void     errorManager::defineFinalUri (header_t& header, std::string targetLocat, location_t server_location)
+void     errorManager::defineFinalUri (header_t& header, const std::string& targetLocat, location_t server_location)
 {
     struct stat sb;
     
     //check redirections
-    isLocationRedirected(header["URI"], server_location);
+    isLocationRedirected(targetLocat, server_location);
     
     std::string location_uri  = header.at("URI");
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)
         root += "/";
-    header["URI"] = root + targetLocat;
-    std::cout <<  "====>" << header["URI"] << std::endl;
+    header["URI"] = root + header.at("URI").substr(targetLocat.size());
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))
@@ -124,7 +123,7 @@ void     errorManager::defineFinalUri (header_t& header, std::string targetLocat
         location_t::iterator it_loc = server_location.find(location_uri);
         directive_t::iterator it_ind = it_loc->second.find("index");
         directive_t::iterator it_auto = it_loc->second.find("autoindex");
-            //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
+        //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_loc->second.end() != it_ind)
         { 
             if (header.at("URI").back() != '/' && it_ind->second.front() != '/')
@@ -136,7 +135,6 @@ void     errorManager::defineFinalUri (header_t& header, std::string targetLocat
         }
         else if (it_loc->second.end() != it_auto)
             header.at("URI") += "/" + it_auto->second;
-        
         else
             throw StatusCode(NOT_FOUND);
         // if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
@@ -158,9 +156,9 @@ void   errorManager::isHostValid(const header_t& header)
 bool     errorManager::isRequestValid(http_message_t &request)
 {
     location_t     server_location = parser.get_server_locations(0);
-    header_t              &header         = request.first;
+    header_t              &header         = request.header;
 
-    isMethodValid(header.find("Method")->second, !request.second.empty());
+    isMethodValid(header.find("Method")->second, !request.body.empty());
     isProtocolValid(header.find("Protocol")->second);
     isHostValid(header);
     std::string   targetLocation = isURIValid(header.find("URI")->second, server_location);
@@ -170,8 +168,8 @@ bool     errorManager::isRequestValid(http_message_t &request)
 
     //THis the max+body+size shit of which I'll take care later
     // std::pair <bool, directive_t::iterator> it2 = parser.get_directive(0, header["URI"], "max_body_size");
-    // std::cout << "header[\"URI\"] "  << it2.first <<  header["URI"] << (static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str())) << std::endl;
-    // if (it2.first && static_cast<int>(request.second.size()) > atoi((it2.second->second).c_str()))
+    // std::cout << "header[\"URI\"] "  << it2.first <<  header["URI"] << (static_cast<int>(request.body.size()) > atoi((it2.second->second).c_str())) << std::endl;
+    // if (it2.first && static_cast<int>(request.body.size()) > atoi((it2.second->second).c_str()))
     //     throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
     
 

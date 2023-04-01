@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/24 15:56:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:15:00 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 
 
 
-clientRequestParser::clientRequestParser(std::string clientRequestMsg):_header_fields (_request.first) //if one of the _tokens lines has a height of two please declare it as an error
+clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
     std::vector<std::string>spl_request = utility::split(clientRequestMsg, CRLF CRLF);
     if (spl_request.size() != 2)
         throw StatusCode(BAD_REQUEST);
 
     _tokens = utility::split(spl_request[0], CRLF);
-    _request.second = spl_request[1];
+    _request.body = spl_request[1];
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
@@ -37,7 +37,7 @@ http_message_t& clientRequestParser::getRequest ()
 
 void    clientRequestParser::check_the_absoluteURI ()
 {
-    std::string &URI = _header_fields["URI"];
+    std::string &URI = _request.header["URI"];
     if (URI.substr(0, 7) == "http://")
         URI.erase (0, 7);
     else
@@ -45,7 +45,7 @@ void    clientRequestParser::check_the_absoluteURI ()
     size_t  pos = URI.find_first_of('/');
     if (pos != std::string::npos)
     {
-        _header_fields["host"] = URI.substr(0, pos);
+        _request.header["host"] = URI.substr(0, pos);
          URI.erase(0, pos);
         return;
     }
@@ -57,10 +57,10 @@ void    clientRequestParser::parseFirstLine ()
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw StatusCode(BAD_REQUEST);
-    _header_fields["Method"] = firstLineParts[0];
-    _header_fields["URI"] = firstLineParts[1];
+    _request.header["Method"] = firstLineParts[0];
+    _request.header["URI"] = firstLineParts[1];
     check_the_absoluteURI ();
-    _header_fields["Protocol"] = firstLineParts[2];
+    _request.header["Protocol"] = firstLineParts[2];
 }
 
 void    clientRequestParser::parseOtherLines (std::string line)
@@ -84,8 +84,8 @@ void    clientRequestParser::parseOtherLines (std::string line)
         if (isspace(*it) && *it != ' ' )
             throw StatusCode(BAD_REQUEST);
 
-    if (_header_fields.find(key) == _header_fields.end())//in case the host is already there
-        _header_fields[key] = value;
+    if (_request.header.find(key) == _request.header.end())//in case the host is already there
+        _request.header[key] = value;
 }
 
 void    clientRequestParser::parseHeader ()
@@ -98,23 +98,23 @@ void    clientRequestParser::parseHeader ()
 
 bool    clientRequestParser::hasBody ()
 {
-    return (_request.second.size() > 0);
+    return (_request.body.size() > 0);
 }
 
 const header_t& clientRequestParser::getHeader()
 {
-    return (_header_fields);
+    return (_request.header);
 }
 
 std::string clientRequestParser::getBody()
 {
-    return (_request.second);
+    return (_request.body);
 }
 
 void    clientRequestParser::displayRequest ()
 {
-    for (header_t::iterator it = _header_fields.begin(); it != _header_fields.end(); it++)
+    for (header_t::iterator it = _request.header.begin(); it != _request.header.end(); it++)
         std::cout << it->first << " | " << it->second << std::endl;
-    std::cout << "the body is :" << _request.second << std::endl;
+    std::cout << "the body is :" << _request.body << std::endl;
 }
 

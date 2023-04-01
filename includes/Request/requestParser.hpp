@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:33:27 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:15:19 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ class clientRequestParser
     http_message_t              _request;//This is the pair that will contain request's header and body
     tokens_t                    _tokens;//This is the vector that will contain the request tokens
     
-    header_t&                   _header_fields;//This is the map that will contain the request key value pairs
     
     public:
     

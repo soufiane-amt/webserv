@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 19:43:49 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:14:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
 {
     if(_statusCode.is_error_status())
         sendError();
-    else if (_request.first["Method"] == "GET")
+    else if (_request.header["Method"] == "GET")
         exceute_get();
-    else if (_request.first["Method"] == "POST")
+    else if (_request.header["Method"] == "POST")
         exceute_post();
-    else if (_request.first["Method"] == "DELETE")
+    else if (_request.header["Method"] == "DELETE")
         exceute_delete();
 }
 
@@ -73,7 +73,7 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
     if (_statusCode.get_redir_location() == "")
     {
         // location_t::const_iterator it = parser.get_server_locations(0)[]
-        // appropriate_page = utility::get_file_content(_request.first["URI"]);
+        // appropriate_page = utility::get_file_content(_request.header["URI"]);
     }
     _response += "Content-Length: " + std::to_string(appropriate_page.length());
     _response += CRLF;

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:11:32 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:45:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ struct utility
     
     static StatusCode                           redirector_proccessor(const std::string& redirector);
 
-
+    static std::string                          list_directory(std::string directory);
 
     private:
     //trim methods :

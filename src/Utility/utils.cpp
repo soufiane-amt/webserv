@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:23:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 21:49:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,4 +201,41 @@ StatusCode utility::redirector_proccessor(const std::string& redirector)
     if (tokens[0] == "505")
         return (StatusCode(HTTP_VERSION_NOT_SUPPORTED, tokens[1]));
     return (StatusCode(HTTP_VERSION_NOT_SUPPORTED, tokens[1]));
+}
+
+
+/* ************************************************************************** */
+                            // utility::directory_listing :
+/* ************************************************************************** */
+
+std::string     utility::list_directory(std::string directory)
+{
+    DIR *dir;
+    struct dirent *ent;
+    std::string listing_file;
+    
+    // Open the current directory
+    dir = opendir(".");
+        return "";
+    // Output the HTML header
+    listing_file += "<html><head><title>Directory Listing</title></head><body>" << endl;
+    listing_file += "<h1>Directory Listing</h1><hr>" << endl;
+    
+    // Output the list of files and directories in the directory as links
+    while ((ent = readdir(dir)) != NULL) {
+        if (ent->d_type == DT_DIR) {
+            // Output a link for a directory
+            listing_file += "<a href=\"" << ent->d_name << "/\">" << ent->d_name << "/</a><br>" << endl;
+        } else {
+            // Output a link for a file
+            listing_file += "<a href=\"" << ent->d_name << "\">" << ent->d_name << "</a><br>" << endl;
+        }
+    }
+    
+    // Output the HTML footer
+    listing_file += "<hr></body></html>" << endl;
+    
+    // Close the directory
+    closedir(dir);
+    return listing_file;
 }

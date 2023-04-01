@@ -1,0 +1,39 @@
+in infinite loop
+{
+    declare poll()
+    loop through connexions
+    {
+        //check if sm1 is ready to read 
+        if(pfds[i].revents & POLLIN)
+        {
+            //check new connexion
+            if (original socket is ready to read)
+            {
+                call accept 
+                get newsockfd
+                add new sockfd to pollfd
+            }
+            else //not the original sockfd, regular client
+            {
+                cout = read from that pollfd[i]
+                store sender_fd = pollfd[i]
+                if cout <= 0 meaning error or connection is closed
+                {
+                    if cout == 0
+                        connection closed
+                    else 
+                        perror(recv)
+                    close(pollfd[i]);
+                    delete pollfd from vector of pollfds
+                }
+                //got data from client
+                else
+                {
+                    send data to that specific sender
+                    if fail
+                        perror(send);
+                }
+            }
+        }
+    }
+}

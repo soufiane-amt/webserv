@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 23:21:35 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/01 01:23:24 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,14 @@ int main(void)
     while (1)
     {
         //waiting for events using poll()
-        if (pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1) > 0)
+        int poll_count = pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1);
+        
+        if (poll_count  == -1)
+        {
+            perror("poll");
+            exit(EXIT_FAILURE);
+        }
+        else
         {
             //handle I/O events
             pl.handlePoll(sock, resp);        

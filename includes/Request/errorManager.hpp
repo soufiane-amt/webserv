@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:43:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 15:49:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class errorManager
     static  void        isProtocolValid(protocol_t protocol);
     static  int         isURIValid(const std::string& URI,location_t server_location);
     static  void        isHostValid(const header_t& header);
-    static  bool        isLocationRedirected(const std::string& URI,location_t server_location);
+    static  void        isLocationRedirected(const std::string& URI,location_t server_location);
 
     static void         defineFinalUri (header_t& header, int targetPathSize, location_t server_location);
 };

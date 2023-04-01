@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 15:04:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 15:50:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 }
 
 
-bool     errorManager::isLocationRedirected(const std::string& URI,location_t server_location)
+void     errorManager::isLocationRedirected(const std::string& URI,location_t server_location)
 {
     location_t::iterator it = server_location.find(URI);
     if (it != server_location.end())
@@ -59,9 +59,7 @@ bool     errorManager::isLocationRedirected(const std::string& URI,location_t se
             StatusCode redirection = utility::redirector_proccessor(it_red->second);
             throw redirection;
         }
-        return false;
     }
-    return false;
 }
 
 int errorManager::isURIValid(const std::string& URI, location_t server_location) {
@@ -87,9 +85,22 @@ int errorManager::isURIValid(const std::string& URI, location_t server_location)
 //directory or a file from where the file should be searched
 
 
-std::string     get_appropriate_root (header_t& header, int targetPathSize, location_t server_location)
+std::string     search_root (header_t& header, int targetPathSize, location_t server_location)
 {
-    directive_t::iterator root_it =  server_location[header.at("URI").substr(0, targetPathSize)].find("root");
+    directive_t           location_dirts = server_location[header.at("URI").substr(0, targetPathSize)];
+    directive_t::iterator root_it ;
+    std::string           root = "";
+    
+    root_it =  location_dirts.find("root");
+    if (root_it == location_dirts.end())
+    {
+        directive_t::iterator serv_it = parser.get_server_directives(0, "root");
+        if (serv_it == location_dirts.end())
+            throw StatusCode(NOT_FOUND);
+        root = serv_it->second;
+    }
+    else
+        root = root_it->second;
     return (root);
 }
 
@@ -98,17 +109,13 @@ void     errorManager::defineFinalUri (header_t& header, int targetPathSize, loc
     struct stat sb;
     
     //check redirections
-    try
-    {   isLocationRedirected(header["URI"], server_location);   }
-    catch(const StatusCode& e)
-    {   throw e;    }
+    isLocationRedirected(header["URI"], server_location);
     
     std::string location_uri  = header.at("URI");
-    std::string root =  server_location[header.at("URI").substr(0, targetPathSize)]["root"];
-    std::cout << "root: " << (server_location[header.at("URI").substr(0, targetPathSize)].find("root") == server_location[header.at("URI").substr(0, targetPathSize)].end())<< std::endl;
+    std::string root =  search_root(header, targetPathSize, server_location);
     if (targetPathSize == 1 && header.at("URI").size() > 1)
         root += "/";
-    header.at("URI") = root + header.at("URI").substr(targetPathSize);
+    header["URI"] = root + header["URI"].substr(targetPathSize);
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))

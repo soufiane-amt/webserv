@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:44:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:08:06 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
         return;
     }
     //check for a directory
-    if (parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
+    struct stat sb;
+
+
+    if (stat(_request.header.at("URI").c_str(), &sb) == -1 && S_ISDIR(sb.st_mode) && 
+                        parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
         appropriate_page = utility::list_directory(_request.header["URI"]);
     else if (_statusCode.get_redir_location() == "")
         appropriate_page = utility::get_file_content(_request.header["URI"]);

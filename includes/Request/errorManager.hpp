@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 20:42:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:07:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include "utils.hpp"
 #include "exception.hpp"
-#include <sys/stat.h>
 
 //All the functions in this class are static as We don't need to create an object of this class
 

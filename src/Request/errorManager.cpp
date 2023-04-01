@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:21:50 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:07:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,14 +131,11 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
             else if (header.at("URI").back() == '/' && it_ind->second.front() == '/')
                 header.at("URI").pop_back();
             header.at("URI") +=  it_ind->second;
-            std::cout << header.at("URI") <<std::endl;
+            if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
+                throw StatusCode(NOT_FOUND);
         }
-        else if (it_loc->second.end() != it_auto)
-            header.at("URI") += "/" + it_auto->second;
-        else
+        else if (it_loc->second.end() == it_auto)
             throw StatusCode(NOT_FOUND);
-        // if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
-        //     throw StatusCode(LISTING_NOT_ALLOWED);
     }
 }
 

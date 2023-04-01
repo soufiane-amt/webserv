@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:49:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:11:20 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,25 +215,25 @@ std::string     utility::list_directory(std::string directory)
     std::string listing_file;
     
     // Open the current directory
-    dir = opendir(".");
+    dir = opendir(directory.c_str());
         return "";
     // Output the HTML header
-    listing_file += "<html><head><title>Directory Listing</title></head><body>" << endl;
-    listing_file += "<h1>Directory Listing</h1><hr>" << endl;
+    listing_file += "<html><head><title>Directory Listing</title></head><body>\n";
+    listing_file += "<h1>Directory Listing</h1><hr>\n";
     
     // Output the list of files and directories in the directory as links
     while ((ent = readdir(dir)) != NULL) {
         if (ent->d_type == DT_DIR) {
             // Output a link for a directory
-            listing_file += "<a href=\"" << ent->d_name << "/\">" << ent->d_name << "/</a><br>" << endl;
+            listing_file += "<a href=\"" + std::string(ent->d_name) + "/\">" + std::string(ent->d_name) + "/</a><br>\n";
         } else {
             // Output a link for a file
-            listing_file += "<a href=\"" << ent->d_name << "\">" << ent->d_name << "</a><br>" << endl;
+            listing_file += "<a href=\"" + std::string(ent->d_name) + "\">" + std::string(ent->d_name) + "</a><br>\n";
         }
     }
     
     // Output the HTML footer
-    listing_file += "<hr></body></html>" << endl;
+    listing_file += "<hr></body></html>\n";
     
     // Close the directory
     closedir(dir);

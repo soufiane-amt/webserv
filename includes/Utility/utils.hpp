@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:45:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/01 22:10:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 #include <ctime>
 #include "macros.hpp"
 #include "exception.hpp"
+#include <sys/stat.h>
+#include <dirent.h>
 
 /* ************************************************************************** */
                             // Typedefs :

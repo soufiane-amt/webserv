@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 22:12:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 13:26:48 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,16 +111,16 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     //check redirections
     isLocationRedirected(targetLocat, server_location);
     
-    std::string location_uri  = header.at("URI");
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)
         root += "/";
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
+    std::cout << "------>target: " << targetLocat << std::endl;
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))
     {
-        location_t::iterator it_loc = server_location.find(location_uri);
+        location_t::iterator it_loc = server_location.find(targetLocat);
         directive_t::iterator it_ind = it_loc->second.find("index");
         directive_t::iterator it_auto = it_loc->second.find("autoindex");
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution

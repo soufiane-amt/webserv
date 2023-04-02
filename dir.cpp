@@ -9,7 +9,7 @@ int main() {
     struct dirent *ent;
     
     // Open the current directory
-    dir = opendir(".");
+    dir = opendir("./www");
     if (dir == NULL) {
         cout << "Failed to open directory" << endl;
         return 1;

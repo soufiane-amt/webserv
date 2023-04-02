@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 22:17:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 12:36:33 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
     if (stat(_request.header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode) && 
                         parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
                         {
-                            
+                            std::cout << "+++>"<< _request.header["URI"]<< std::endl;
                             appropriate_page = utility::list_directory(_request.header["URI"]);
                             std::cout << "HAHWA"<< appropriate_page << std::endl;
                         }

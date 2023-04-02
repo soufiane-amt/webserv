@@ -74,3 +74,14 @@ So, in summary, the definition you provided describes the structure of an HTTP r
 
 
 
+
+
+Autoindex:
+I have found out a little detail about autoindex, however very important if the location defined in config file 
+has autoindex on anything typed in the search bar after that location will support autoindexing .e.g
+location /
+{
+    autoindex on;
+}
+----> localhost:8080/  <<---this will display a list of files in the repo
+----> localhost:8080/An/Other/Folder/  <<---this will display a list of files in the repo as long as the path is valid 

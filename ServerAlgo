@@ -32,6 +32,7 @@ in infinite loop
                     send data to that specific sender
                     if fail
                         perror(send);
+                    close connetions
                 }
             }
         }

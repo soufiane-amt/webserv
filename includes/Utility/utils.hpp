@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 15:40:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 21:23:19 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ struct simpleConfPars
         // locations["/"]["index"] = "index.html";
         locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 https://www.youtube.com/";
+
+    locations["/random"]["root"] = "./www/random";
+    // locations["/random"]["index"] = "page.html";
+    locations["/random"]["autoindex"] = "on";
+    
     locations["/images"]["root"] = "./www/error_pages";
     // locations["/images"]["index"] = "400_sc.html";
     locations["/images"]["autoindex"] = "on";

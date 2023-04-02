@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 16:05:54 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 21:58:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,16 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     isLocationRedirected(targetLocat, server_location);
     
     std::string root =  search_root(targetLocat, server_location);
-    if (targetLocat.size() == 1 && header.at("URI").size() > 1)
+    if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
-    if (!utility::directory_file_exist((root + header.at("URI"))) )
+    std::cout << "======>" << root +  header.at("URI") << std::endl;
+    if (header.at("URI") != targetLocat && !utility::directory_file_exist((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
-
+    std::cout << "<<<<>>>>>>>>" << std::endl;
+    std::cout << "|||||||||>" << header.at("URI") << std::endl;
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
+    std::cout << "|||||||||>" << header.at("URI") << std::endl;
+
     if (!utility::directory_file_exist(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))

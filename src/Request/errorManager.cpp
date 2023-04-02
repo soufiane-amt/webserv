@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 16:04:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 16:05:54 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,11 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)
         root += "/";
-    if (stat((root + header.at("URI")).c_str(), &sb) == -1)
+    if (!utility::directory_file_exist((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
 
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
-    if (stat(header.at("URI").c_str(), &sb) == -1)
+    if (!utility::directory_file_exist(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))
     {

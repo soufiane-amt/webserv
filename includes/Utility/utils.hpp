@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 22:14:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 15:40:15 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ struct simpleConfPars
         locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 https://www.youtube.com/";
     locations["/images"]["root"] = "./www/error_pages";
-    // locations["/images"]["index"] = "index.html";
+    // locations["/images"]["index"] = "400_sc.html";
+    locations["/images"]["autoindex"] = "on";
     // directives["error_page"] = "404 /404.html";
     // locations["/404.html"]["root"] = "./www/error_pages";
     server.push_back(make_pair(directives, locations));
@@ -139,8 +140,9 @@ struct utility
     
     static StatusCode                           redirector_proccessor(const std::string& redirector);
 
-    static std::string                          list_directory(std::string directory);
+    static std::string                          list_directory(const std::string& directory);
 
+    static bool                                 directory_file_exist(const std::string& path);
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

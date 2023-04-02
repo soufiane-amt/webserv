@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 12:41:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 15:39:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ StatusCode utility::redirector_proccessor(const std::string& redirector)
                             // utility::directory_listing :
 /* ************************************************************************** */
 
-std::string     utility::list_directory(std::string directory)
+std::string     utility::list_directory(const std::string& directory)
 {
     DIR *dir;
     struct dirent *ent;
@@ -240,4 +240,16 @@ std::string     utility::list_directory(std::string directory)
     // Close the directory
     closedir(dir);
     return listing_file;
+}
+
+/* ************************************************************************** */
+                            // utility::directory_file_exist :
+/* ************************************************************************** */
+
+bool        utility::directory_file_exist(const std::string& path)
+{
+    struct stat info;
+    if (stat(path.c_str(), &info) == 0)
+        return true;
+    return false;
 }

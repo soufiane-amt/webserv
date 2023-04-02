@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 13:26:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/02 16:04:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
 
     if (it != server_location.end())
         return URI.substr(0, URI.size());
+    std::cout << "|||||||||||||||||||||||\n";
     size_t pos = URI.find_last_of('/');
     if (!pos )
         return "/";
@@ -114,8 +115,10 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)
         root += "/";
+    if (stat((root + header.at("URI")).c_str(), &sb) == -1)
+        throw StatusCode(NOT_FOUND);
+
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
-    std::cout << "------>target: " << targetLocat << std::endl;
     if (stat(header.at("URI").c_str(), &sb) == -1)
         throw StatusCode(NOT_FOUND);
     if (S_ISDIR(sb.st_mode))

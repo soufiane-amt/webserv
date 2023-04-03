@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/03 03:01:49 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/03 06:01:05 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,18 @@ int     polling::sendAll(int fd, char *buff, int *len)
     return (check == -1 ? -1 : 0); //-1 on failure, 0 on success
 }
 
+// int     polling::recAll(int fd, char *buff, int *len)
+// {
+//     std::string store;
+//     int recd = 0;
+
+//     //BUFFER_SIZE should be set the in the object and it should be the size of the message sent
+//     while (recd < BUFFER_SIZE)
+//     {
+//         int rest = 
+//     }
+// }
+
 void    polling::handlePoll(mySocket &sock, char *resp)
 {
     for (unsigned int i = 0; i < this->_pollfds.size() ; i++)
@@ -129,6 +141,7 @@ void    polling::handlePoll(mySocket &sock, char *resp)
                     if (test == -1)
                     {
                         perror("send");
+                        std::cout << "We only sent: " << tmpLen << " because of the error!" << std::endl;
                     }
                     polling::closeConnections(pfd.fd);
                 }

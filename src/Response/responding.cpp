@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 12:36:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/03 14:17:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
                         {
                             std::cout << "+++>"<< _request.header["URI"]<< std::endl;
                             appropriate_page = utility::list_directory(_request.header["URI"]);
-                            std::cout << "HAHWA"<< appropriate_page << std::endl;
                         }
     else if (_statusCode.get_redir_location() == "")
         appropriate_page = utility::get_file_content(_request.header["URI"]);

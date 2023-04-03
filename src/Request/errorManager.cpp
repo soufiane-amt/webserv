@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 21:58:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/03 15:46:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
 
     if (it != server_location.end())
         return URI.substr(0, URI.size());
-    std::cout << "|||||||||||||||||||||||\n";
     size_t pos = URI.find_last_of('/');
     if (!pos )
         return "/";
@@ -105,27 +104,34 @@ std::string     search_root (const std::string &targetLocat, location_t server_l
     return (root);
 }
 
+
+// bool is_tageted_uri_defined_location(const std::string& targetLocat, location_t server_location)
+// {
+//     location_t::iterator it = server_location.find(targetLocat);
+//     if (it != server_location.end())
+//         return true;
+//     return false;
+// }
+
 void     errorManager::defineFinalUri (header_t& header, const std::string& targetLocat, location_t server_location)
 {
     struct stat sb;
     
     //check redirections
     isLocationRedirected(targetLocat, server_location);
-    
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
-    std::cout << "======>" << root +  header.at("URI") << std::endl;
-    if (header.at("URI") != targetLocat && !utility::directory_file_exist((root + header.at("URI"))) )
+    if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::directory_file_exist((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
-    std::cout << "<<<<>>>>>>>>" << std::endl;
-    std::cout << "|||||||||>" << header.at("URI") << std::endl;
+    // std::cout << "----------defineFinalUri---------------" << root +header.at("URI") << std::endl;
+    // std::cout << "----------defineFinalUri---------------" << header.at("URI").substr(targetLocat.size()) << std::endl;
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
-    std::cout << "|||||||||>" << header.at("URI") << std::endl;
-
+    std::cout << utility::directory_file_exist(header.at("URI")) <<"----------defineFinalUri---------------" << header.at("URI") << std::endl;
     if (!utility::directory_file_exist(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
-    if (S_ISDIR(sb.st_mode))
+    std::cout << "----------defineFinalUri---------------" << header.at("URI") << std::endl;
+    if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
     {
         location_t::iterator it_loc = server_location.find(targetLocat);
         directive_t::iterator it_ind = it_loc->second.find("index");
@@ -143,6 +149,8 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         }
         else if (it_loc->second.end() == it_auto)//off
             throw StatusCode(NOT_FOUND);
+        std::cout << "::::::::>header.at(\"URI\"): " << header.at("URI") << std::endl;
+
     }
 }
 

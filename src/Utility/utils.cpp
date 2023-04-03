@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/02 15:39:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/03 16:30:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ std::string     utility::list_directory(const std::string& directory)
 bool        utility::directory_file_exist(const std::string& path)
 {
     struct stat info;
-    if (stat(path.c_str(), &info) == 0)
-        return true;
-    return false;
+    if (stat(path.c_str(), &info) == -1)
+        return false;
+    return true;
 }

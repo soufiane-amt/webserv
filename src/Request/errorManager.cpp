@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 17:03:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 17:05:00 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
                 header.at("URI").pop_back();
             header.at("URI") +=  it_ind->second;
             std::cout << "after" << header.at("URI")   << std::endl;
-            if (utility::check_file_or_directory(header["URI"]) == DIRECTORY)
+            if (utility::check_file_or_directory(header["URI"]) == S_DIRECTORY)
                 throw StatusCode(NOT_FOUND);
         }
         else if (it_loc->second.end() == it_auto || (it_loc->second.end() != it_auto && it_auto->second == "off"))

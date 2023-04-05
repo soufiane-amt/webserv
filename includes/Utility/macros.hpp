@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:04:50 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 16:57:42 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 17:04:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 #define URI_ERROR "www/error_pages/"
 
-#define DIRECTORY 100
-#define FILE      200
+#define S_DIRECTORY 100
+#define S_FILE      200
 
 /* ************************************************************************** */
                             // MAXIMUM SIZE OF EACH FIELD :

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 16:49:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:59:18 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,15 @@ struct simpleConfPars
     locations["/"]["Methods"] = "GET HEAD";
         // locations["/"]["index"] = "index.html";
         locations["/"]["autoindex"] = "on";
-    // locations["/"]["return"] = "302 https://www.youtube.com/";
+    locations["/"]["return"] = "302 https://www.youtube.com/";
 
     locations["/random"]["root"] = "./www/random/";
     locations["/random"]["index"] = "page.html";
     locations["/random"]["autoindex"] = "on";
     
-    locations["/images"]["root"] = "./www/images";
-    // locations["/images"]["index"] = "super.jpg";
-    locations["/images"]["autoindex"] = "on";
+    // locations["/lol"]["root"] = "./www/images";
+    // // locations["/images"]["index"] = "super.jpg";
+    // locations["/images"]["autoindex"] = "on";
     
     // directives["error_page"] = "404 /404.html";
     // locations["/404.html"]["root"] = "./www/error_pages";
@@ -148,7 +148,7 @@ struct utility
 
     static std::string                          list_directory(const std::string& directory);
 
-    static bool                                 directory_file_exist(const std::string& path);
+    static int                                  check_file_or_directory(const std::string& path);
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

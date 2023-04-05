@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 15:39:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:59:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,13 +243,15 @@ std::string     utility::list_directory(const std::string& directory)
 }
 
 /* ************************************************************************** */
-                            // utility::directory_file_exist :
+                            // utility::check_file_or_directory :
 /* ************************************************************************** */
 
-bool        utility::directory_file_exist(const std::string& path)
+int        utility::check_file_or_directory(const std::string& path)
 {
     struct stat info;
-    if (stat(path.c_str(), &info) == -1)
-        return false;
-    return true;
+    if (stat(path.c_str(), &info) && S_ISDIR(info.st_mode))
+        return DIRECTORY;
+    else if (stat(path.c_str(), &info) && !S_ISDIR(info.st_mode))
+        return FILE;
+    return false;
 }

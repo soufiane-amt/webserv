@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/03 16:42:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:49:33 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,13 @@ struct simpleConfPars
     // locations["/"]["return"] = "302 https://www.youtube.com/";
 
     locations["/random"]["root"] = "./www/random/";
-    // locations["/random"]["index"] = "page.html";
+    locations["/random"]["index"] = "page.html";
     locations["/random"]["autoindex"] = "on";
     
-    locations["/images"]["root"] = "./www/error_pages";
-    // locations["/images"]["index"] = "400_sc.html";
+    locations["/images"]["root"] = "./www/images";
+    // locations["/images"]["index"] = "super.jpg";
     locations["/images"]["autoindex"] = "on";
+    
     // directives["error_page"] = "404 /404.html";
     // locations["/404.html"]["root"] = "./www/error_pages";
     server.push_back(make_pair(directives, locations));

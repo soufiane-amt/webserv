@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/03 16:40:50 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:43:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,19 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
 {
     struct stat sb;
     
+
     //check redirections
     isLocationRedirected(targetLocat, server_location);
     std::string root =  search_root(targetLocat, server_location);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
+    // if (header.at("URI").back() == '/')
+    //     header["URI"];
     if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::directory_file_exist((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
-    // std::cout << "----------defineFinalUri---------------" << root +header.at("URI") << std::endl;
-    // std::cout << "----------defineFinalUri---------------" << header.at("URI").substr(targetLocat.size()) << std::endl;
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
-    std::cout << utility::directory_file_exist(header.at("URI")) <<"----------defineFinalUri---------------" << header.at("URI") << std::endl;
     if (!utility::directory_file_exist(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
-    std::cout << "----------defineFinalUri---------------" << header.at("URI") << std::endl;
     if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
     {
         location_t::iterator it_loc = server_location.find(targetLocat);
@@ -139,20 +138,18 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_loc->second.end() != it_ind)
         { 
+            std::cout << "before" << header.at("URI")   << std::endl;
             if (header.at("URI").back() != '/' && it_ind->second.front() != '/')
                 header.at("URI") += "/";
             else if (header.at("URI").back() == '/' && it_ind->second.front() == '/')
                 header.at("URI").pop_back();
             header.at("URI") +=  it_ind->second;
+            std::cout << "after" << header.at("URI")   << std::endl;
             if (stat(header.at("URI").c_str(), &sb) == -1 ||  S_ISDIR(sb.st_mode))
                 throw StatusCode(NOT_FOUND);
         }
-        else if (it_loc->second.end() == it_auto)//off
+        else if (it_loc->second.end() == it_auto || (it_loc->second.end() != it_auto && it_auto->second == "off"))
             throw StatusCode(NOT_FOUND);
-        else if (it_loc->second.end() != it_auto && it_auto->second == "off")
-            throw StatusCode(NOT_FOUND);
-        std::cout << "::::::::>header.at(\"URI\"): " << header.at("URI") << std::endl;
-
     }
 }
 

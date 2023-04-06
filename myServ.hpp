@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/03 02:57:57 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:52:41 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class   polling
         void    handlePoll(mySocket &sock, char *event);
         int     closeConnections(int fd);
         int     sendAll(int fd, char *buf, int *len);
-        int     recAll(int fd, char *buf, int *len);
+        int     recvAll(int fd, char *buf, int len);
         
         //getters
         nfds_t  getSize(void) const;

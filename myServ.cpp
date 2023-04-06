@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/03 06:01:05 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:53:34 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,31 @@ int     polling::sendAll(int fd, char *buff, int *len)
     return (check == -1 ? -1 : 0); //-1 on failure, 0 on success
 }
 
-// int     polling::recAll(int fd, char *buff, int *len)
-// {
-//     std::string store;
-//     int recd = 0;
+int     polling::recvAll(int fd, char *buff, int len)
+{
+    // std::string store;
+    int cnt = 0;
+    int rc = 0;
 
-//     //BUFFER_SIZE should be set the in the object and it should be the size of the message sent
-//     while (recd < BUFFER_SIZE)
-//     {
-//         int rest = 
-//     }
-// }
+    cnt = len;
+    while (cnt > 0)
+    {
+        rc = recv(fd, buff, cnt, 0);
+        if (rc == -1)
+            break;
+        if (rc == 0)
+            return (len - cnt);
+        buff += rc;
+        cnt -= rc;
+    }
+    return (len);
+
+    //BUFFER_SIZE should be set the in the object and it should be the size of the message sent
+    // while (recd < BUFFER_SIZE)
+    // {
+        // int rest = 
+    // }
+}
 
 void    polling::handlePoll(mySocket &sock, char *resp)
 {
@@ -115,7 +129,7 @@ void    polling::handlePoll(mySocket &sock, char *resp)
             }
             else //just regular client
             {
-                int count = recv(pfd.fd, (void *)sock.getBuffer(), BUFFER_SIZE, 0);
+                int count = polling::recvAll(pfd.fd, (char *)sock.getBuffer(), BUFFER_SIZE);
                 //request need to go through the parser
 
                 //error or connection closed 
@@ -137,8 +151,8 @@ void    polling::handlePoll(mySocket &sock, char *resp)
                     //send a response/generate HTTP response
                     int tmpLen = strlen(resp);
                     //check the len of the resp is it the same
-                    int test = polling::sendAll(pfd.fd, resp, &tmpLen);
-                    if (test == -1)
+                    int test2 = polling::sendAll(pfd.fd, resp, &tmpLen);
+                    if (test2 == -1)
                     {
                         perror("send");
                         std::cout << "We only sent: " << tmpLen << " because of the error!" << std::endl;

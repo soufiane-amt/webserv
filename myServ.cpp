@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/06 01:53:34 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/06 01:58:49 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int     polling::sendAll(int fd, char *buff, int *len)
     return (check == -1 ? -1 : 0); //-1 on failure, 0 on success
 }
 
+
+//from tcp/ip programming fig 2.27
 int     polling::recvAll(int fd, char *buff, int len)
 {
     // std::string store;

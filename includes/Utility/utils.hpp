@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 16:19:14 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 17:12:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,12 @@ struct simpleConfPars
     directives["listen"] = "80";
     directives["server_name"] = "example.com";
     directives["max_body_size"] = "-1";
-    directives["root"] = "./www";
+    // directives["root"] = "./www";
+        // locations["/"]["index"] = "index.html";
     
-    locations["/"]["root"] = "./www";
+    // locations["/"]["root"] = "./www";
     locations["/"]["Methods"] = "GET HEAD";
-        locations["/"]["index"] = "index.html";
+        // locations["/"]["index"] = "index.html";
     locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 https://www.youtube.com/";
 

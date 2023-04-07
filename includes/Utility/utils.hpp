@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 17:06:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 16:19:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ struct simpleConfPars
     
     locations["/"]["root"] = "./www";
     locations["/"]["Methods"] = "GET HEAD";
-        // locations["/"]["index"] = "index.html";
+        locations["/"]["index"] = "index.html";
     locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 https://www.youtube.com/";
 
@@ -95,10 +95,11 @@ struct simpleConfPars
         return (server[server_id].second);
     }
     
-    directive_t::iterator get_server_directives (int server_id, std::string directive)
+    std::string get_server_directives (int server_id, std::string directive)
     {
-        return (server[server_id].first.find(directive));
+        return (server[server_id].first.at(directive));
     }
+    
 
     std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string uri, std::string directive_key)
     {

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 21:19:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 16:55:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,52 @@ std::string     search_root (const std::string &targetLocat, location_t server_l
 }
 
 
-directive_t::const_iterator     search_directive (const std::string &directive, const directive_t& location_dirts)
-{
-    directive_t::const_iterator dir_it ;
+// directive_t::iterator     search_directive (std::string &directive,  directive_t& location_dirts)
+// {
+//     directive_t::iterator dir_it ;
     
-    dir_it =  location_dirts.find(directive);
-    if (dir_it == location_dirts.end())
+//     std::cout << "directive: " << directive << std::endl;
+//     for ( directive_t::const_iterator i = location_dirts.begin(); i != location_dirts.end(); i++)
+//         std::cout << i->first << " |--|  " << i->second << std::endl;
+//     // std::cout << "----" << directive << location_dirts.find("root")->second<< std::endl;
+//     dir_it =  location_dirts.find(directive);
+    
+//     std::cout << ">>>" << dir_it->first << " --  " << dir_it->second << std::endl;
+//     if (dir_it == location_dirts.end())
+//     {
+//         try
+//         {
+//             ::iterator serv_it;
+//             serv_it->first = directive;
+//             serv_it->second = parser.get_server_directives(0, directive);
+//             return serv_it;
+//         }
+//         catch(const std::exception& e)
+//         {
+//             throw StatusCode(NOT_FOUND);
+//         }
+//     }
+//     return (dir_it);
+// }
+std::string     search_directive (std::string &directive,  directive_t& location_dirts)
+{
+    std::string dir_value = "";
+    try
     {
-        directive_t::const_iterator serv_it = parser.get_server_directives(0, directive);
-        if (serv_it == location_dirts.end())
-            throw StatusCode(NOT_FOUND);
-        return serv_it;
+        dir_value = location_dirts.at (directive);
     }
-    return (dir_it);
+    catch(const std::exception& e)
+    {
+        try
+        {
+            dir_value = parser.get_server_directives (0, directive);
+        }
+        catch(const std::exception& e)
+        {
+            throw StatusCode(NOT_FOUND);
+        }
+    }
+    return (dir_value);
 }
 
 
@@ -136,7 +169,8 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
 
     //check redirections
     isLocationRedirected(targetLocat, server_location);
-    std::string root =  search_directive("root", server_location[targetLocat])->second;
+    std::string root =  search_directive("root", server_location[targetLocat]);
+    std::cout << "root: " << root << std::endl;
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
     // if (header.at("URI").back() == '/')
@@ -148,12 +182,17 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         throw StatusCode(NOT_FOUND);
     if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
     {
-        location_t::iterator it_loc = server_location.find(targetLocat);
+        location_t::const_iterator it_loc = server_location.find(targetLocat);
         directive_t::const_iterator it_ind = search_directive("index", server_location[targetLocat]);
         directive_t::const_iterator it_auto = search_directive("autoindex", server_location[targetLocat]);
+        std::cout << "===> " << it_ind->first << std::endl;
+        std::cout << "===> " << it_auto->first << std::endl;
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
+        // std::cout << (it_loc->second.end() != it_ind) << std::endl;
+        // std::cout << it_loc->second.end().data() << std::endl;
+        // std::cout << it_ind. << std::endl;
         if (it_loc->second.end() != it_ind)
-        { 
+        {
             std::cout << "before" << header.at("URI")   << std::endl;
             if (header.at("URI").back() != '/' && it_ind->second.front() != '/')
                 header.at("URI") += "/";

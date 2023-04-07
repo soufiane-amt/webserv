@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 19:48:25 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 22:01:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 
 simpleConfPars parser;
 
-const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
-const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT","TRACE","CONNECT"};
-
+const std::string errorManager::_Methods[8] = {"GET", "POST", "DELETE", "OPTIONS","HEAD","PUT","TRACE","CONNECT"};
 
 
 std::string     search_directive (const std::string &directive,  directive_t& location_dirts)
@@ -43,19 +41,28 @@ std::string     search_directive (const std::string &directive,  directive_t& lo
 }
 
 
-void     errorManager::isMethodValid(Method_t Method, bool requestHasBody, const std::string&  targetLocation)
+
+void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts,  bool requestHasBody)
 {
+    std::vector <std::string> m = utility::split(" f ", " ");
+    for (size_t i = 0; i < m.size(); i++)
+        std::cout << "------+++>" << m[i].size() << std::endl;    
+    
     if ((!requestHasBody && Method == "POST") || 
            (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
         throw StatusCode(BAD_REQUEST);
 
-    std::vector <std::string> allowedConfigMethods = utility::split (search_directive ("allow", targetLocation), " ");
-    for (size_t i = 0; i < _validMethods->size(); i++)
-        if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
+    std::vector <std::string> allowedMethods = utility::split(search_directive ("allow", location_dirts), " ");
+    for (size_t i = 0; i < allowedMethods.size(); i++)
+            std::cout << "#####" << allowedMethods[i] << std::endl;
+    for (size_t i = 0; i < allowedMethods.size(); i++)
+        if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
+    if (allowedMethods.size() == 0)
+        return ;
     
-    for (size_t i = 0; i < _notAllowedMethods->size(); i++)
-        if (Method == _notAllowedMethods[i])
+    for (size_t i = 0; i < _Methods->size(); i++)
+        if (Method == _Methods[i])
             throw StatusCode(METHOD_NOT_ALLOWED) ;
     throw StatusCode(BAD_REQUEST);
 }
@@ -70,7 +77,6 @@ void     errorManager::isProtocolValid(protocol_t protocol)
         throw StatusCode(HTTP_VERSION_NOT_SUPPORTED);
     throw StatusCode(BAD_REQUEST);
 }
-
 
 
 
@@ -161,10 +167,10 @@ bool     errorManager::isRequestValid(http_message_t &request)
     location_t     server_location = parser.get_server_locations(0);
     header_t              &header         = request.header;
 
+    request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
+    isMethodValid(header.find("Method")->second, server_location[request.targeted_Location], !request.body.empty());
     isProtocolValid(header.find("Protocol")->second);
     isHostValid(header);
-    request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
-    isMethodValid(header.find("Method")->second, !request.body.empty(), request.targeted_Location);
     defineFinalUri(header, request.targeted_Location, server_location);
     
 

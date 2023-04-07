@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 18:37:28 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 19:35:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ class errorManager
     typedef   std::string    protocol_t;
     
     static const std::string              _notAllowedMethods[5];//I could have used a set but it is hard to initialize a static set in c++98 witout using function
-    static const std::string              _validMethods[3];
+    std::vector <std::string>             _validMethods;
+    static const std::string              _validMethods;
     static const std::string              _validProtocol;
+
+    
     public:
     static bool  isRequestValid(http_message_t& request);
     

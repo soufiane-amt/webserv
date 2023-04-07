@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 18:38:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 19:48:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,6 @@ const std::string errorManager::_validMethods[3] = {"GET", "POST", "DELETE"};
 const std::string errorManager::_validProtocol = "HTTP/1.1";
 const std::string errorManager::_notAllowedMethods[5] = {"OPTIONS","HEAD","PUT","TRACE","CONNECT"};
 
-
-void     errorManager::isMethodValid(Method_t Method, bool requestHasBody)
-{
-    if ((!requestHasBody && Method == "POST") || 
-           (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
-        throw StatusCode(BAD_REQUEST);
-
-    for (size_t i = 0; i < _validMethods->size(); i++)
-        if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
-            return ;
-    
-    for (size_t i = 0; i < _notAllowedMethods->size(); i++)
-        if (Method == _notAllowedMethods[i])
-            throw StatusCode(METHOD_NOT_ALLOWED) ;
-    throw StatusCode(BAD_REQUEST);
-}
-
-
-
-void     errorManager::isProtocolValid(protocol_t protocol)
-{
-    if (protocol == _validProtocol)
-        return ;
-    if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
-        throw StatusCode(HTTP_VERSION_NOT_SUPPORTED);
-    throw StatusCode(BAD_REQUEST);
-}
 
 
 std::string     search_directive (const std::string &directive,  directive_t& location_dirts)
@@ -68,6 +41,37 @@ std::string     search_directive (const std::string &directive,  directive_t& lo
     }
     return (dir_value);
 }
+
+
+void     errorManager::isMethodValid(Method_t Method, bool requestHasBody, const std::string&  targetLocation)
+{
+    if ((!requestHasBody && Method == "POST") || 
+           (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
+        throw StatusCode(BAD_REQUEST);
+
+    std::vector <std::string> allowedConfigMethods = utility::split (search_directive ("allow", targetLocation), " ");
+    for (size_t i = 0; i < _validMethods->size(); i++)
+        if (Method == _validMethods[i])//valid method must be in the list of valid methods in the config file
+            return ;
+    
+    for (size_t i = 0; i < _notAllowedMethods->size(); i++)
+        if (Method == _notAllowedMethods[i])
+            throw StatusCode(METHOD_NOT_ALLOWED) ;
+    throw StatusCode(BAD_REQUEST);
+}
+
+
+
+void     errorManager::isProtocolValid(protocol_t protocol)
+{
+    if (protocol == _validProtocol)
+        return ;
+    if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
+        throw StatusCode(HTTP_VERSION_NOT_SUPPORTED);
+    throw StatusCode(BAD_REQUEST);
+}
+
+
 
 
 void     errorManager::isLocationRedirected(const std::string& targetLocat,location_t& server_location)
@@ -103,94 +107,27 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
     return "";
 }
 
-//This function is performed when we check if the URI is valid and we need to define the final 
-//directory or a file from where the file should be searched
 
-
-// std::string     search_root (const std::string &targetLocat, location_t server_location)
-// {
-//     directive_t           location_dirts = server_location[targetLocat];
-//     directive_t::iterator root_it ;
-//     std::string           root = "";
-    
-//     root_it =  location_dirts.find("root");
-//     if (root_it == location_dirts.end())
-//     {
-//         directive_t::iterator serv_it = parser.get_server_directives(0, "root");
-//         if (serv_it == location_dirts.end())
-//             throw StatusCode(NOT_FOUND);
-//         root = serv_it->second;
-//     }
-//     else
-//         root = root_it->second;
-//     return (root);
-// }
-
-
-// directive_t::iterator     search_directive (std::string &directive,  directive_t& location_dirts)
-// {
-//     directive_t::iterator dir_it ;
-    
-//     std::cout << "directive: " << directive << std::endl;
-//     for ( directive_t::const_iterator i = location_dirts.begin(); i != location_dirts.end(); i++)
-//         std::cout << i->first << " |--|  " << i->second << std::endl;
-//     // std::cout << "----" << directive << location_dirts.find("root")->second<< std::endl;
-//     dir_it =  location_dirts.find(directive);
-    
-//     std::cout << ">>>" << dir_it->first << " --  " << dir_it->second << std::endl;
-//     if (dir_it == location_dirts.end())
-//     {
-//         try
-//         {
-//             ::iterator serv_it;
-//             serv_it->first = directive;
-//             serv_it->second = parser.get_server_directives(0, directive);
-//             return serv_it;
-//         }
-//         catch(const std::exception& e)
-//         {
-//             throw StatusCode(NOT_FOUND);
-//         }
-//     }
-//     return (dir_it);
-// }
-
-// bool is_tageted_uri_defined_location(const std::string& targetLocat, location_t server_location)
-// {
-//     location_t::iterator it = server_location.find(targetLocat);
-//     if (it != server_location.end())
-//         return true;
-//     return false;
-// }
 
 void     errorManager::defineFinalUri (header_t& header, const std::string& targetLocat, location_t server_location)
 {
     struct stat sb;
     
-
-    //check redirections
     isLocationRedirected(targetLocat, server_location);
     std::string root =  search_directive("root", server_location[targetLocat]);
-    std::cout << "root: " << root << std::endl;
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
-    // if (header.at("URI").back() == '/')
-    //     header["URI"];
     if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::check_file_or_directory((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
     if (!utility::check_file_or_directory(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
     if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
+    if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
     {
         std::string it_ind = search_directive("index", server_location[targetLocat]);
         std::string it_auto = search_directive("autoindex", server_location[targetLocat]);
-        std::cout << "===> " << it_ind << std::endl;
-        std::cout << "===> " << it_auto << std::endl;
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
-        // std::cout << (it_loc->second.end() != it_ind) << std::endl;
-        // std::cout << it_loc->second.end().data() << std::endl;
-        // std::cout << it_ind. << std::endl;
         if (it_ind != "")
         {
             std::cout << "before" << header.at("URI")   << std::endl;
@@ -224,13 +161,11 @@ bool     errorManager::isRequestValid(http_message_t &request)
     location_t     server_location = parser.get_server_locations(0);
     header_t              &header         = request.header;
 
-    isMethodValid(header.find("Method")->second, !request.body.empty());
     isProtocolValid(header.find("Protocol")->second);
     isHostValid(header);
-    std::string   targetLocation = isURIValid(header.find("URI")->second, server_location);
-    std::cout << "targetLocation " << targetLocation << std::endl;
-    request.targeted_Location = targetLocation;
-    defineFinalUri(header, targetLocation, server_location);
+    request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
+    isMethodValid(header.find("Method")->second, !request.body.empty(), request.targeted_Location);
+    defineFinalUri(header, request.targeted_Location, server_location);
     
 
     //THis the max+body+size shit of which I'll take care later

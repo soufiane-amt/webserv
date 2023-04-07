@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 17:13:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/07 18:38:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,37 @@ void     errorManager::isProtocolValid(protocol_t protocol)
 }
 
 
-void     errorManager::isLocationRedirected(const std::string& URI,location_t server_location)
+std::string     search_directive (const std::string &directive,  directive_t& location_dirts)
 {
-    location_t::iterator it = server_location.find(URI);
+    std::string dir_value = "";
+    try
+    {
+        dir_value = location_dirts.at (directive);
+    }
+    catch(const std::exception& e)
+    {
+        try
+        {
+            dir_value = parser.get_server_directives (0, directive);
+        }
+        catch(const std::exception& e)
+        {
+            return (dir_value);
+        }
+    }
+    return (dir_value);
+}
+
+
+void     errorManager::isLocationRedirected(const std::string& targetLocat,location_t& server_location)
+{
+    location_t::iterator it = server_location.find(targetLocat);
     if (it != server_location.end())
     {
-        directive_t::iterator it_red = it->second.find("return");
-        if (it_red != it->second.end())
+        std::string red = search_directive ("return", server_location[targetLocat]);
+        if (red != "")
         {
-            StatusCode redirection = utility::redirector_proccessor(it_red->second);
+            StatusCode redirection = utility::redirector_proccessor(red);
             throw redirection;
         }
     }
@@ -132,27 +154,6 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
 //     }
 //     return (dir_it);
 // }
-std::string     search_directive (const std::string &directive,  directive_t& location_dirts)
-{
-    std::string dir_value = "";
-    try
-    {
-        dir_value = location_dirts.at (directive);
-    }
-    catch(const std::exception& e)
-    {
-        try
-        {
-            dir_value = parser.get_server_directives (0, directive);
-        }
-        catch(const std::exception& e)
-        {
-            return (dir_value);
-        }
-    }
-    return (dir_value);
-}
-
 
 // bool is_tageted_uri_defined_location(const std::string& targetLocat, location_t server_location)
 // {

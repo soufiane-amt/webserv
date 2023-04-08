@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 21:10:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 21:16:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ std::string msg= "GET / HTTP/1.1\r\n"
 #include <string.h>
 
 
-std::stringstream    request_response(std::string msg)
+std::stringstream&    request_response(std::string msg)
 {
     clientRequestParser test(msg);
     http_message_t &_request = test.getRequest();
@@ -61,7 +61,6 @@ std::stringstream    request_response(std::string msg)
         responsePreparation response(_request, e);
         return response.get_response();
     }
-    return "";
 
 }
 

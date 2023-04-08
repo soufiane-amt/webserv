@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 21:02:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 21:14:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,33 +27,33 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
     //     exceute_delete();
 }
 
-responsePreparation::response_t responsePreparation::get_response() const
+responsePreparation::response_t& responsePreparation::get_response()
 {
     return _response;
 }
 
 void responsePreparation::prepare_statusLine()
 {
-    _response += "HTTP/1.1 " + std::string(_statusCode.what());
-    _response += CRLF;
+    _response << "HTTP/1.1 " + std::string(_statusCode.what());
+    _response << CRLF;
 }
 
 
 void    responsePreparation::add_CRLF()
 {
-    _response.append(CRLF);
+    _response << CRLF;
 }
 
 
 void responsePreparation::prepare_server_name()
 {
-    _response += "Server: Webserv/1.0";
+    _response << "Server: Webserv/1.0";
     add_CRLF();
 }
 
 void responsePreparation::prepare_date()
 {
-    _response += "Date: " + utility::get_date();
+    _response << "Date: " + utility::get_date();
     add_CRLF();
 }
 
@@ -61,28 +61,28 @@ void responsePreparation::prepare_location()
 {
     if (_statusCode.get_redir_location() != "")
     {
-        _response += "Location: " + _statusCode.get_redir_location();
+        _response << "Location: " + _statusCode.get_redir_location();
         add_CRLF();
     }
 }
 
 void responsePreparation::prepare_content_length()
 {
-    size_t pos = _response.find(CRLF CRLF);
+    size_t pos = _response.str().find(CRLF CRLF);
     if (pos == std::string::npos)
         return;
-    std::string body_file = _response.substr(pos + 4);
+    std::string body_file = _response.str().substr(pos + 4);
 
     std::cout << ">>>>>>>> " << body_file.length() << std::endl;
     if (body_file.empty() == false)
-        _response.insert(pos, std::string(CRLF) + "Content-Length: " + std::to_string(body_file.length()));
+        _response.str().insert(pos, std::string(CRLF) + "Content-Length: " + std::to_string(body_file.length()));
 }
 
 void responsePreparation::prepare_allow()
 {
     if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
     {
-        _response += "Allow: GET, POST, DELETE";
+        _response << "Allow: GET, POST, DELETE";
         add_CRLF();
     }
 }
@@ -91,15 +91,15 @@ void responsePreparation::prepare_allow()
 
 // void responsePreparation::prepare_other_headers()
 // {
-//     _response += "Server: Webserv/1.0";
-//     _response += CRLF;
-//     _response += "Date: " + utility::get_date();
-//     _response += CRLF;
+//     _response << "Server: Webserv/1.0";
+//     _response << CRLF;
+//     _response << "Date: " + utility::get_date();
+//     _response << CRLF;
 //     if (_statusCode.get_redir_location() != "")
 //     {
-//         _response += "Location: " + _statusCode.get_redir_location();
-//         _response += CRLF;
-//         _response += CRLF;
+//         _response << "Location: " + _statusCode.get_redir_location();
+//         _response << CRLF;
+//         _response << CRLF;
 //     }
 // }
 
@@ -115,7 +115,7 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     {
         appropriate_page = _statusCode.get_associated_page();
         add_CRLF();add_CRLF();
-        _response.append(appropriate_page);
+        _response.str().append(appropriate_page);
         return;
     }
     if (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
@@ -126,14 +126,14 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     else
         appropriate_page = utility::get_file_content(_request.header["URI"]);
     add_CRLF();add_CRLF();
-    _response.append(appropriate_page);
+    _response.str().append(appropriate_page);
 }
 
 
 // void responsePreparation::prepare_content_length()
 // {
-//     _response += "Content-Length: " + std::to_string(_response.length());
-//     _response += CRLF;
+//     _response << "Content-Length: " + std::to_string(_response.str().length());
+//     _response << CRLF;
 // }
 
 void    responsePreparation::exceute_get()

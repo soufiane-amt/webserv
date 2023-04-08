@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 18:23:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 21:12:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 class responsePreparation
 {
     private:
-        typedef std::string     response_t;
+        typedef std::stringstream     response_t;
     
         http_message_t          _request;
         const  StatusCode&      _statusCode;
@@ -47,15 +47,15 @@ class responsePreparation
         void               prepare_location();
         void               prepare_content_length();
         
+        
         void               add_CRLF();
-        void               add_D_CRLF();
         
         void               prepare_allow();
         void               prepare_body();
         
         void               exceute_get();
-        void               exceute_post();
-        void               exceute_delete();
+        // void               exceute_post();
+        // void               exceute_delete();
 
         void               prepare_error_response();        
 };

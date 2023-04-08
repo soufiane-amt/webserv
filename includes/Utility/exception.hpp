@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/31 21:05:39 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 20:08:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class ParsingErrorDetected : public std::exception
         bool operator==(const std::string& rhs);
         virtual ~ParsingErrorDetected()throw();
 };
+
 
 class StatusCode : public std::exception
 {

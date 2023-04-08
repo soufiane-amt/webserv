@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:23:34 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 21:42:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,6 @@ std::string     utility::list_directory(const std::string& directory)
     std::string listing_file;
     
     // Open the current directory
-    std::cout <<  "vvvvvvvv" << directory.c_str() << std::endl;
     dir = opendir(directory.c_str());
     if (dir == NULL)
         return "";

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 22:01:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 00:13:08 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,17 @@ std::string     search_directive (const std::string &directive,  directive_t& lo
 
 void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts,  bool requestHasBody)
 {
-    std::vector <std::string> m = utility::split(" f ", " ");
-    for (size_t i = 0; i < m.size(); i++)
-        std::cout << "------+++>" << m[i].size() << std::endl;    
-    
     if ((!requestHasBody && Method == "POST") || 
            (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
         throw StatusCode(BAD_REQUEST);
 
-    std::vector <std::string> allowedMethods = utility::split(search_directive ("allow", location_dirts), " ");
-    for (size_t i = 0; i < allowedMethods.size(); i++)
-            std::cout << "#####" << allowedMethods[i] << std::endl;
+    std::string allow_value = search_directive ("allow", location_dirts);
+    if (allow_value == "")
+        return ;
+    std::vector <std::string> allowedMethods = utility::split(allow_value, " ");
     for (size_t i = 0; i < allowedMethods.size(); i++)
         if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
-    if (allowedMethods.size() == 0)
-        return ;
     
     for (size_t i = 0; i < _Methods->size(); i++)
         if (Method == _Methods[i])

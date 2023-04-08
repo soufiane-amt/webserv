@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:15:00 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 00:08:49 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
-    std::vector<std::string>spl_request = utility::split(clientRequestMsg, CRLF CRLF);
-    if (spl_request.size() != 2)
-        throw StatusCode(BAD_REQUEST);
+    std::vector<std::string>spl_request;
+    if (clientRequestMsg.find(CRLF CRLF) != std::string::npos)
+        spl_request = utility::split(clientRequestMsg, CRLF CRLF);
+    else
+        throw StatusCode(BAD_REQUEST); 
 
     _tokens = utility::split(spl_request[0], CRLF);
     _request.body = spl_request[1];

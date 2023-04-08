@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 16:28:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 18:27:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,38 @@ void responsePreparation::prepare_statusLine()
 {
     _response += "HTTP/1.1 " + std::string(_statusCode.what());
     _response += CRLF;
+}
+
+
+void    responsePreparation::add_CRLF()
+{
+    _response.append(CRLF);
+}
+
+void    responsePreparation::add_D_CRLF()
+{
+    _response.append(CRLF CRLF);
+}
+
+void responsePreparation::prepare_server_name()
+{
+    _response += "Server: Webserv/1.0";
+    add_CRLF();
+}
+
+void responsePreparation::prepare_date()
+{
+    _response += "Date: " + utility::get_date();
+    add_CRLF();
+}
+
+void responsePreparation::prepare_location()
+{
+    if (_statusCode.get_redir_location() != "")
+    {
+        _response += "Location: " + _statusCode.get_redir_location();
+        add_CRLF();
+    }
 }
 
 void responsePreparation::prepare_other_headers()
@@ -71,7 +103,6 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
     if (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                         parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
                         {
-                            std::cout << "+++>"<< _request.header["URI"]<< std::endl;
                             appropriate_page = utility::list_directory(_request.header["URI"]);
                         }
     else if (_statusCode.get_redir_location() == "")

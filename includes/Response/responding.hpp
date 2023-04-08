@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/30 20:48:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 18:23:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,28 @@ class responsePreparation
         
 
     private:
-        void               prepare_statusLine();
-        void               prepare_other_headers();
         void               prepare_rest();
+        void               prepare_other_headers();
+        
+        
+        void               prepare_statusLine();
+        
+        void               prepare_server_name();
+        void               prepare_date();
+        void               prepare_location();
         void               prepare_content_length();
-        void               prepare_content_type();
-        void               prepare_last_modified();
+        
+        void               add_CRLF();
+        void               add_D_CRLF();
+        
         void               prepare_allow();
+        void               prepare_body();
+        
         void               exceute_get();
         void               exceute_post();
         void               exceute_delete();
 
-        void               sendError();        
+        void               prepare_error_response();        
 };
 
 #endif

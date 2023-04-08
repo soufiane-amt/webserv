@@ -85,3 +85,8 @@ location /
 }
 ----> localhost:8080/  <<---this will display a list of files in the repo
 ----> localhost:8080/An/Other/Folder/  <<---this will display a list of files in the repo as long as the path is valid 
+
+
+
+what is  a domaine and a subdomaine 
+why URL starts with www

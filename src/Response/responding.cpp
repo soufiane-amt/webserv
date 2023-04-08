@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 18:46:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 16:28:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void responsePreparation::prepare_other_headers()
     _response += CRLF;
     _response += "Date: " + utility::get_date();
     _response += CRLF;
-    // _response += "Content-Type: text/html";
-    // _response += CRLF;
     if (_statusCode.get_redir_location() != "")
     {
         _response += "Location: " + _statusCode.get_redir_location();
@@ -70,7 +68,7 @@ void responsePreparation::prepare_rest() //I'm gonna assume for now that the uri
     struct stat sb;
 
 
-    if (stat(_request.header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode) && 
+    if (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                         parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
                         {
                             std::cout << "+++>"<< _request.header["URI"]<< std::endl;
@@ -101,6 +99,8 @@ void    responsePreparation::exceute_get()
 
 void    responsePreparation::exceute_post()
 {
+    prepare_statusLine();
+
 }
 
 void    responsePreparation::exceute_delete()

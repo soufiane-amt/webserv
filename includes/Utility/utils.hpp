@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:29:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 16:22:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ struct simpleConfPars
     
     // locations["/"]["index"] = "index.html";
     // locations["/"]["index"] = "index.html";
-    locations["/"]["max_body_size"] = "-1";
+    // locations["/"]["max_body_size"] = "-1";
 
     locations["/"]["root"] = "./www";
         // locations["/"]["index"] = "index.html";
@@ -86,12 +86,15 @@ struct simpleConfPars
     // locations["/"]["return"] = "302 https://www.youtube.com/";
 
     locations["/random"]["root"] = "./www/random/";
-    locations["/random"]["index"] = "page.html";
+    // locations["/random"]["index"] = "page.html";
     locations["/random"]["autoindex"] = "on";
     
-    // locations["/lol"]["root"] = "./www/images";
-    // // locations["/images"]["index"] = "super.jpg";
+    locations["/youtube"]["return"] = "302 https://www.youtube.com/";
     // locations["/images"]["autoindex"] = "on";
+
+    
+    locations["/upl"]["root"] = "./www/upload";
+    locations["/upl"]["upload"] = "upload_store";
     
     // directives["error_page"] = "404 /404.html";
     // locations["/404.html"]["root"] = "./www/error_pages";

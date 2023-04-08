@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:04:50 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/05 17:04:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 00:22:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@
 #define GONE "410 Gone"
 #define LENGTH_REQUIRED "411 Length Required"
 #define PRECONDITION_FAILED "412 Precondition Failed"
-#define PAYLOAD_TOO_LARGE "413 Payload Too Large"
+#define REQUEST_ENTITY_TOO_LARGE "413 Request Entity Too Large"
 #define URI_TOO_LONG "414 URI Too Long"
 #define UNSUPPORTED_MEDIA_TYPE "415 Unsupported Media Type"
 #define RANGE_NOT_SATISFIABLE "416 Range Not Satisfiable"

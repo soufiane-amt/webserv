@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:13:08 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 00:28:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,14 +168,9 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isHostValid(header);
     defineFinalUri(header, request.targeted_Location, server_location);
     
-
-    //THis the max+body+size shit of which I'll take care later
-    // std::pair <bool, directive_t::iterator> it2 = parser.get_directive(0, header["URI"], "max_body_size");
-    // std::cout << "header[\"URI\"] "  << it2.first <<  header["URI"] << (static_cast<int>(request.body.size()) > atoi((it2.second->second).c_str())) << std::endl;
-    // if (it2.first && static_cast<int>(request.body.size()) > atoi((it2.second->second).c_str()))
-    //     throw StatusCode(REQUEST_ENTITY_TOO_LARGE);
-    
-
+    std::string max_body_size = search_directive ("max_body_size", server_location[request.targeted_Location]);
+    if (max_body_size != "" && static_cast<int>(request.body.size()) > atoi(max_body_size.c_str()))
+        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 
     return true;
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 23:59:28 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/08 00:23:34 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ StatusCode utility::redirector_proccessor(const std::string& redirector)
     if (tokens[0] == "412")
         return (StatusCode(PRECONDITION_FAILED, tokens[1]));
     if (tokens[0] == "413")
-        return (StatusCode(PAYLOAD_TOO_LARGE, tokens[1]));
+        return (StatusCode(REQUEST_ENTITY_TOO_LARGE, tokens[1]));
     if (tokens[0] == "414")
         return (StatusCode(URI_TOO_LONG, tokens[1]));
     if (tokens[0] == "415")

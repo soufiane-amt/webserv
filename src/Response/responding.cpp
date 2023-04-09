@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 22:21:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 14:06:57 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,21 @@ void    responsePreparation::exceute_get()
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
-    prepare_location();
-    prepare_allow();
-    // _response+= "Content-Length: " + std::to_string(98486);
+    
+    // prepare_location();
+    // prepare_allow();
+    _response+= "Content-Length: " + std::to_string(utility::get_file_content(_request.header["URI"]).length());
+    std::cout << "length"<<  utility::get_file_content(_request.header["URI"]).length() << std::endl;
+    std::cout << "size  "<<utility::get_file_content(_request.header["URI"]).size() << std::endl;
+    
     // _response+= CRLF;
-    // _response+= CRLF;
-    prepare_body();
-    prepare_content_length();
+    // _response+= "Content-Type: image/jpg";
+    _response+= CRLF;
+    _response+= CRLF;
+    _response+= utility::get_file_content(_request.header["URI"]);
+
+    // prepare_body();
+    // prepare_content_length();
 }
 
 // void    responsePreparation::exceute_post()

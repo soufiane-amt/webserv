@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 20:55:13 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 21:40:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
     //     exceute_delete();
 }
 
-void responsePreparation::init_dir_listing()
-{
-    _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                        parser.get_server_locations(0).
-                        find(_request.targeted_Location)->second.find("autoindex")->second == "on");
-}
 
 std::vector<char>& responsePreparation::get_response()
 {
@@ -115,14 +109,17 @@ void        responsePreparation::prepare_meta_body_data()
     prepare_content_type(it);
 }
 
-// void responsePreparation::prepare_allow()
-// {
-//     if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
-//     {
-//         _response += "Allow: GET, POST, DELETE";
-//         add_CRLF();
-//     }
-// }
+void responsePreparation::prepare_allow()
+{
+    
+        std::cout << _statusCode.get_status_code() <<"\n";
+    if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
+    {
+        std::string allow = "Allow: "+ _allowed_methods + CRLF;
+        _response.insert(_response.end(), allow.begin(), allow.end());
+        add_CRLF();
+    }
+}
 
 
 void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
@@ -158,14 +155,8 @@ void    responsePreparation::exceute_get()
     prepare_date();
     
     prepare_location();
-    // prepare_allow();
     prepare_body();
     prepare_meta_body_data();
-    for (size_t i = 0; i < _response.size(); i++)
-    {
-        std::cout << _response[i];
-    }
-    std::cout << std::endl;
 }
 
 // void    responsePreparation::exceute_post()
@@ -184,9 +175,22 @@ void   responsePreparation::prepare_error_response()
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
+    prepare_allow();
     prepare_body();
     prepare_meta_body_data();
 }
+
+
+
+responsePreparation::response_t::iterator    responsePreparation::_find_in_response(const std::string& str)
+{
+    for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
+        if (*it == str[0])
+            if (std::string(it, it + str.size()) == str)
+                return it;
+    return _response.end();
+}
+
 
 
 std::string responsePreparation::get_mime_type(const std::string& filename) {
@@ -207,11 +211,13 @@ std::string responsePreparation::get_mime_type(const std::string& filename) {
     return "application/octet-stream";
 }
 
-responsePreparation::response_t::iterator    responsePreparation::_find_in_response(const std::string& str)
+
+void responsePreparation::init_dir_listing()
 {
-    for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
-        if (*it == str[0])
-            if (std::string(it, it + str.size()) == str)
-                return it;
-    return _response.end();
+    // _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
+    //                     parser.get_server_locations(0).
+    //                     find(_request.targeted_Location)->second.find("autoindex")->second == "on");
+    _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
+                        utility::search_directive("autoindex", parser.get_server_locations(0)[_request.targeted_Location]) == "on");
+    _allowed_methods = utility::search_directive("allow", parser.get_server_locations(0)[_request.targeted_Location]);
 }

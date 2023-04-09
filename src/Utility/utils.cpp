@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 15:18:07 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 21:25:23 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,3 +259,29 @@ int        utility::check_file_or_directory(const std::string& path)
         return S_FILE;
     return 0;
 }
+
+/* ************************************************************************** */
+                            // utility::search_directive :
+/* ************************************************************************** */
+
+std::string     utility::search_directive (const std::string &directive,  directive_t& location_dirts)
+{
+    std::string dir_value = "";
+    try
+    {
+        dir_value = location_dirts.at (directive);
+    }
+    catch(const std::exception& e)
+    {
+        try
+        {
+            dir_value = parser.get_server_directives (0, directive);
+        }
+        catch(const std::exception& e)
+        {
+            return (dir_value);
+        }
+    }
+    return (dir_value);
+}
+

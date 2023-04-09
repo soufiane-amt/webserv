@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 20:52:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 21:33:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class responsePreparation
         response_t              _response;
         bool                    _dir_listing_on;
 
+        std::string             _allowed_methods;
     public:
         responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
         

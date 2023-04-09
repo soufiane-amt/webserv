@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 18:33:33 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 21:36:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ struct simpleConfPars
     // directives["return"] = "302 https://www.youtube.com/";
     // directives["root"] = "./www";
     directives["root"] = "index.html";
+    // directives["autoindex"] = "on";
     // directives["allow"] = "POST";
     
     // locations["/"]["index"] = "index.html";
@@ -82,7 +83,7 @@ struct simpleConfPars
 
     locations["/"]["root"] = "./www";
         // locations["/"]["index"] = "index.html";
-    // locations["/"]["allow"] = "POST";
+    locations["/"]["allow"] = "POST";
     locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 https://www.youtube.com/";
 
@@ -155,13 +156,16 @@ struct utility
 
     static std::string                          get_date();
 
-    static std::vector<char>                          get_file_content(const std::string& uri);
+    static std::vector<char>                    get_file_content(const std::string& uri);
     
     static StatusCode                           redirector_proccessor(const std::string& redirector);
 
     static std::string                          list_directory(const std::string& directory);
 
     static int                                  check_file_or_directory(const std::string& path);
+    
+    static std::string                          search_directive (const std::string &directive,  directive_t& location_dirts);
+
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);
@@ -170,6 +174,8 @@ struct utility
     //case insensitive search :
     static bool                     caseInsensitiveStringCompare(char a, char b);
 
+
+    
 };
 
 

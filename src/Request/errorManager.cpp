@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:28:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 21:25:47 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,6 @@ const std::string errorManager::_validProtocol = "HTTP/1.1";
 const std::string errorManager::_Methods[8] = {"GET", "POST", "DELETE", "OPTIONS","HEAD","PUT","TRACE","CONNECT"};
 
 
-std::string     search_directive (const std::string &directive,  directive_t& location_dirts)
-{
-    std::string dir_value = "";
-    try
-    {
-        dir_value = location_dirts.at (directive);
-    }
-    catch(const std::exception& e)
-    {
-        try
-        {
-            dir_value = parser.get_server_directives (0, directive);
-        }
-        catch(const std::exception& e)
-        {
-            return (dir_value);
-        }
-    }
-    return (dir_value);
-}
-
-
 
 void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts,  bool requestHasBody)
 {
@@ -48,7 +26,7 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
            (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
         throw StatusCode(BAD_REQUEST);
 
-    std::string allow_value = search_directive ("allow", location_dirts);
+    std::string allow_value = utility::search_directive ("allow", location_dirts);
     if (allow_value == "")
         return ;
     std::vector <std::string> allowedMethods = utility::split(allow_value, " ");
@@ -80,7 +58,7 @@ void     errorManager::isLocationRedirected(const std::string& targetLocat,locat
     location_t::iterator it = server_location.find(targetLocat);
     if (it != server_location.end())
     {
-        std::string red = search_directive ("return", server_location[targetLocat]);
+        std::string red = utility::search_directive ("return", server_location[targetLocat]);
         if (red != "")
         {
             StatusCode redirection = utility::redirector_proccessor(red);
@@ -115,7 +93,7 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     struct stat sb;
     
     isLocationRedirected(targetLocat, server_location);
-    std::string root =  search_directive("root", server_location[targetLocat]);
+    std::string root =  utility::search_directive("root", server_location[targetLocat]);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
     if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::check_file_or_directory((root + header.at("URI"))) )
@@ -126,8 +104,8 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
     {
-        std::string it_ind = search_directive("index", server_location[targetLocat]);
-        std::string it_auto = search_directive("autoindex", server_location[targetLocat]);
+        std::string it_ind = utility::search_directive("index", server_location[targetLocat]);
+        std::string it_auto = utility::search_directive("autoindex", server_location[targetLocat]);
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_ind != "")
         {
@@ -168,7 +146,7 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isHostValid(header);
     defineFinalUri(header, request.targeted_Location, server_location);
     
-    std::string max_body_size = search_directive ("max_body_size", server_location[request.targeted_Location]);
+    std::string max_body_size = utility::search_directive ("max_body_size", server_location[request.targeted_Location]);
     if (max_body_size != "" && static_cast<int>(request.body.size()) > atoi(max_body_size.c_str()))
         throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 

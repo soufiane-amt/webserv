@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 17:13:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:43:32 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ class responsePreparation
         // void               exceute_post();
         // void               exceute_delete();
 
-        void               prepare_error_response();        
+        void               prepare_error_response();      
+        std::string        get_mime_type(const std::string& filename);
+  
 };
 
 #endif

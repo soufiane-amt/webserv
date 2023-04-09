@@ -37,7 +37,17 @@ Http protocol plays the role of communication language between the server and cl
 To do that we have to:
 
 -Get the request and parse it ;
--Check 
+
+
+//getmime_type
+application/octet-stream is a MIME type that is used to indicate that the data in a file is in binary format and cannot be easily interpreted or displayed as text. The MIME type consists of two parts: "application" indicates that the data is an application-level data, and "octet-stream" indicates that the data is a stream of arbitrary bytes.
+
+In practical terms, application/octet-stream is often used as a catch-all MIME type for files that cannot be identified by their extension or for files that do not fit into any other defined MIME type. For example, if a server receives a file with an unknown extension, it may set the MIME type to application/octet-stream to indicate that the file is binary data that cannot be directly displayed by a web browser.
+
+In most cases, application/octet-stream is used as a default MIME type when the server does not know the specific MIME type of a file or when the file format is not a recognized type. However, it is generally recommended to use more specific MIME types whenever possible to ensure that the client application can correctly interpret and handle the data.
+
+
+
 
 
 
@@ -87,6 +97,7 @@ location /
 ----> localhost:8080/An/Other/Folder/  <<---this will display a list of files in the repo as long as the path is valid 
 
 
-
+//Questions
 what is  a domaine and a subdomaine 
 why URL starts with www
+MIME

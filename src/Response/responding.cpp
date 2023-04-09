@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 18:30:20 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:43:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,15 @@ void responsePreparation::prepare_date()
     add_CRLF();
 }
 
-// void responsePreparation::prepare_location()
-// {
-//     if (_statusCode.get_redir_location() != "")
-//     {
-//         _response += "Location: " + _statusCode.get_redir_location();
-//         add_CRLF();
-//     }
-// }
+void responsePreparation::prepare_location()
+{
+    if (_statusCode.get_redir_location() != "")
+    {
+        std::string location = "Location: " + _statusCode.get_redir_location();
+        _response.insert(_response.end(), location.begin(), location.end());
+        add_CRLF();
+    }
+}
 
 void responsePreparation::prepare_content_length()
 {
@@ -91,16 +92,6 @@ void responsePreparation::prepare_content_length()
             }
         }
     }
-
-    // size_t pos = _response.find(d_crlf.begin(), d_crlf.end());
-    // if (pos == std::string::npos)
-    //     return;
-    // std::string body_file = _response.substr(pos + 4);
-    // if (_response.substr(pos, 4) == CRLF CRLF)
-    //     std::cout << "|||||||||||||\n";        
-    // // std::cout << ">>>>>>>> " << body_file.length() << std::endl;
-    // if (body_file.empty() == false)
-    //     _response.insert(pos, std::string(CRLF) + "Content-Length: " + std::to_string(body_file.length() - 2));
 }
 
 // void responsePreparation::prepare_allow()
@@ -111,23 +102,6 @@ void responsePreparation::prepare_content_length()
 //         add_CRLF();
 //     }
 // }
-
-
-
-// void responsePreparation::prepare_other_headers()
-// {
-//     _response += "Server: Webserv/1.0";
-//     _response += CRLF;
-//     _response += "Date: " + utility::get_date();
-//     _response += CRLF;
-//     if (_statusCode.get_redir_location() != "")
-//     {
-//         _response += "Location: " + _statusCode.get_redir_location();
-//         _response += CRLF;
-//         _response += CRLF;
-//     }
-// }
-
 
 
 void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
@@ -158,43 +132,16 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     }
 }
 
-
-// void responsePreparation::prepare_content_length()
-// {
-//     _response += "Content-Length: " + std::to_string(_response.length());
-//     _response += CRLF;
-// }
-
 void    responsePreparation::exceute_get()
 {
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
     
-    // prepare_location();
+    prepare_location();
     // prepare_allow();
-    // _response += "Content-Length: " + std::to_string(utility::get_file_content(_request.header["URI"]).size());
-    // std::cout << "length"<<  utility::get_file_content(_request.header["URI"]).length() << std::endl;
-    // std::cout << "size  "<<utility::get_file_content(_request.header["URI"]).size() << std::endl;
-    
-    // _response+= CRLF;
-    // _response+= "Content-Type: image/jpg";
-    // _response+= CRLF;
-    // _response+= CRLF;
-    // _final_response.insert(_final_response.end(), _response.begin(), _response.end());
-    // _final_response.insert(_final_response.end(), utility::get_file_content(_request.header["URI"]).begin(), utility::get_file_content(_request.header["URI"]).end());
-    // _response+= utility::get_file_content(_request.header["URI"]);
-
     prepare_body();
     prepare_content_length();
-    // for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); it++)
-    //             if (std::string(it, it + 2) ==  CRLF)
-    //             {
-    //                 std::cout << "CRLF" << std::endl;
-    //                 it ++;
-    //             }
-    //             else
-    //                 std::cout << *it;
 
 }
 
@@ -216,4 +163,24 @@ void   responsePreparation::prepare_error_response()
     prepare_date();
     prepare_body();
     prepare_content_length();
+}
+
+
+string responsePreparation::get_mime_type(const string& filename) {
+    string::size_type idx = filename.rfind('.');
+    if (idx != string::npos) {
+        string extension = filename.substr(idx + 1);
+        if (extension == "txt") {
+            return "text/plain";
+        } else if (extension == "html" || extension == "htm") {
+            return "text/html";
+        } else if (extension == "jpg" || extension == "jpeg") {
+            return "image/jpeg";
+        } else if (extension == "gif") {
+            return "image/gif";
+        } else if (extension == "png") {
+            return "image/png";
+        }
+    }
+    return "application/octet-stream";
 }

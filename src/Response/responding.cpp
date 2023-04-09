@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 16:00:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 16:17:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string>
 
 
-responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode), _response("")
+responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
     if(_statusCode.is_error_status())
         prepare_error_response();
@@ -135,24 +135,28 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
 {
     std::string appropriate_page ;
 
-    if (_statusCode.get_redir_location() != "")
-        return;
+    if (_statusCode.get_redir_location() != "") return;
+    
     if (_statusCode.is_error_status())
     {
         appropriate_page = _statusCode.get_associated_page();
         add_CRLF();add_CRLF();
-        _response.append(appropriate_page);
+        _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
         return;
     }
     if (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                        parser.get_server_locations(0).find(_request.targeted_Location)->second.find("autoindex")->second == "on")
-                        {
-                            appropriate_page = utility::list_directory(_request.header["URI"]);
-                        }
+                        parser.get_server_locations(0).
+                        find(_request.targeted_Location)->second.find("autoindex")->second == "on")//here we need to check if autoindex is on
+    {
+        appropriate_page = utility::list_directory(_request.header["URI"]);
+        _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
+    }
     else
-        appropriate_page = utility::get_file_content(_request.header["URI"]);
+    {
+        std::vector <char> tmp = utility::get_file_content(_request.header["URI"]);
+        _response.insert(_response.end(), tmp.begin(), tmp.end());
+    }
     add_CRLF();add_CRLF();
-    _response.append(appropriate_page);
 }
 
 
@@ -170,20 +174,20 @@ void    responsePreparation::exceute_get()
     
     // prepare_location();
     // prepare_allow();
-    _response += "Content-Length: " + std::to_string(utility::get_file_content(_request.header["URI"]).size());
+    // _response += "Content-Length: " + std::to_string(utility::get_file_content(_request.header["URI"]).size());
     // std::cout << "length"<<  utility::get_file_content(_request.header["URI"]).length() << std::endl;
     // std::cout << "size  "<<utility::get_file_content(_request.header["URI"]).size() << std::endl;
     
     // _response+= CRLF;
     // _response+= "Content-Type: image/jpg";
-    _response+= CRLF;
-    _response+= CRLF;
-    _final_response.insert(_final_response.end(), _response.begin(), _response.end());
-    _final_response.insert(_final_response.end(), utility::get_file_content(_request.header["URI"]).begin(), utility::get_file_content(_request.header["URI"]).end());
+    // _response+= CRLF;
+    // _response+= CRLF;
+    // _final_response.insert(_final_response.end(), _response.begin(), _response.end());
+    // _final_response.insert(_final_response.end(), utility::get_file_content(_request.header["URI"]).begin(), utility::get_file_content(_request.header["URI"]).end());
     // _response+= utility::get_file_content(_request.header["URI"]);
 
-    // prepare_body();
-    // prepare_content_length();
+    prepare_body();
+    prepare_content_length();
 }
 
 // void    responsePreparation::exceute_post()

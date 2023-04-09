@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 15:12:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:42:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 class responsePreparation
 {
     private:
-        typedef std::string     response_t;
+        typedef std::vector<char>     response_t;
     
         http_message_t          _request;
         const  StatusCode&      _statusCode;
@@ -33,7 +33,7 @@ class responsePreparation
     public:
         responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
         
-        std::vector<char>         get_response() ;
+        response_t         get_response() ;
         
 
     private:

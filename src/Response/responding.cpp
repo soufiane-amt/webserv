@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 18:43:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 20:55:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
+    init_dir_listing();
     if(_statusCode.is_error_status())
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
@@ -25,6 +26,13 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
     //     exceute_post();
     // else if (_request.header["Method"] == "DELETE")
     //     exceute_delete();
+}
+
+void responsePreparation::init_dir_listing()
+{
+    _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
+                        parser.get_server_locations(0).
+                        find(_request.targeted_Location)->second.find("autoindex")->second == "on");
 }
 
 std::vector<char>& responsePreparation::get_response()
@@ -72,26 +80,39 @@ void responsePreparation::prepare_location()
     }
 }
 
-void responsePreparation::prepare_content_length()
+void responsePreparation::prepare_content_length(response_t::iterator& it)
 {
-    std::string  content_length = CRLF "Content-Length: ";
-
-    for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
+    if (_response.end() != it)
     {
-        if (*it == CRLF[0])
+        std::string  content_length = CRLF "Content-Length: ";
+        size_t body_size = (_response.end() - it - 4);
+        if (body_size != 0)
         {
-            if (std::string(it, it + 4) == CRLF CRLF)
-            {
-                size_t body_size = (_response.end() - it - 4);
-                if (body_size != 0)
-                {
-                    content_length  += std::to_string(body_size);
-                    _response.insert(it, content_length.begin(), content_length.end());
-                }
-                break;
-            }
+            content_length  += std::to_string(body_size);
+            it = _response.insert(it, content_length.begin(), content_length.end());
         }
     }
+}
+
+
+void responsePreparation::prepare_content_type(response_t::iterator& it)
+{
+    if (_response.end() != it)
+    {
+        std::string content_type = CRLF "Content-Type: ";
+        if (!_statusCode.is_error_status() && _dir_listing_on == false)
+            content_type += get_mime_type(_request.header["URI"]);
+        else
+            content_type += "text/html";
+        it = _response.insert(it, content_type.begin(), content_type.end());
+    }
+}
+
+void        responsePreparation::prepare_meta_body_data()
+{
+    response_t::iterator    it = _find_in_response(CRLF CRLF);
+    prepare_content_length(it);
+    prepare_content_type(it);
 }
 
 // void responsePreparation::prepare_allow()
@@ -118,9 +139,7 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
         return;
     }
-    if (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                        parser.get_server_locations(0).
-                        find(_request.targeted_Location)->second.find("autoindex")->second == "on")//here we need to check if autoindex is on
+    if (_dir_listing_on == true)//here we need to check if autoindex is on
     {
         appropriate_page = utility::list_directory(_request.header["URI"]);
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
@@ -141,8 +160,12 @@ void    responsePreparation::exceute_get()
     prepare_location();
     // prepare_allow();
     prepare_body();
-    prepare_content_length();
-
+    prepare_meta_body_data();
+    for (size_t i = 0; i < _response.size(); i++)
+    {
+        std::cout << _response[i];
+    }
+    std::cout << std::endl;
 }
 
 // void    responsePreparation::exceute_post()
@@ -162,25 +185,33 @@ void   responsePreparation::prepare_error_response()
     prepare_server_name();
     prepare_date();
     prepare_body();
-    prepare_content_length();
+    prepare_meta_body_data();
 }
 
 
-string responsePreparation::get_mime_type(const string& filename) {
-    string::size_type idx = filename.rfind('.');
-    if (idx != string::npos) {
-        string extension = filename.substr(idx + 1);
-        if (extension == "txt") {
+std::string responsePreparation::get_mime_type(const std::string& filename) {
+    size_t idx = filename.rfind('.');
+    if (idx != std::string::npos) {
+        std::string extension = filename.substr(idx + 1);
+        if (extension == "txt")
             return "text/plain";
-        } else if (extension == "html" || extension == "htm") {
+        else if (extension == "html" || extension == "htm")
             return "text/html";
-        } else if (extension == "jpg" || extension == "jpeg") {
+        else if (extension == "jpg" || extension == "jpeg")
             return "image/jpeg";
-        } else if (extension == "gif") {
+        else if (extension == "gif")
             return "image/gif";
-        } else if (extension == "png") {
+        else if (extension == "png")
             return "image/png";
-        }
     }
     return "application/octet-stream";
+}
+
+responsePreparation::response_t::iterator    responsePreparation::_find_in_response(const std::string& str)
+{
+    for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
+        if (*it == str[0])
+            if (std::string(it, it + str.size()) == str)
+                return it;
+    return _response.end();
 }

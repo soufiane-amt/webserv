@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 18:43:32 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 20:52:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class responsePreparation
         http_message_t          _request;
         const  StatusCode&      _statusCode;
         response_t              _response;
+        bool                    _dir_listing_on;
 
     public:
         responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
@@ -36,30 +37,32 @@ class responsePreparation
         
 
     private:
-        void               prepare_rest();
-        void               prepare_other_headers();
-        
-        
-        void               prepare_statusLine();
-        
-        void               prepare_server_name();
-        void               prepare_date();
-        void               prepare_location();
-        void               prepare_content_length();
-        
-        
-        void               add_CRLF();
-        
-        void               prepare_allow();
-        void               prepare_body();
-        
-        void               exceute_get();
-        // void               exceute_post();
-        // void               exceute_delete();
+        void             prepare_rest();
+        void             prepare_other_headers();
 
-        void               prepare_error_response();      
-        std::string        get_mime_type(const std::string& filename);
-  
+
+        void             prepare_statusLine();
+
+        void             prepare_server_name();
+        void             prepare_date();
+        void             prepare_location();
+        void             prepare_content_length(response_t::iterator& ite);
+        void             prepare_content_type(response_t::iterator& ite);
+        void             prepare_meta_body_data();
+
+        void             add_CRLF();
+
+        void             prepare_allow();
+        void             prepare_body();
+
+        void             exceute_get();
+        // void             exceute_post();
+        // void             exceute_delete()
+        void             prepare_error_response();      
+        std::string      get_mime_type(const std::string& filename);
+
+        response_t::iterator    _find_in_response(const std::string& str);
+        void             init_dir_listing();
 };
 
 #endif

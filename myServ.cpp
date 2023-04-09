@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/06 02:31:42 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:28:36 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ int polling::closeConnections(int fd)
     return (0);
 }
 
+
+//check keep-alive section in page 79
+//timing of the connection (heartbeat)
+//message structure
+//checking for client termination page 92
+//using keeo-alives in setsockopt page 94
+//Understand How to Time Out a connect Call page 183
+
 int     polling::sendAll(int fd, char *buff, int *len)
 {
     int total = 0; //checking how many bytes we've sent
@@ -108,7 +116,7 @@ int     polling::recvAll(int fd, char *buff, int len)
     // }
 }
 
-void    polling::handlePoll(mySocket &sock, char *resp)
+void    polling::handlePoll(tcpServer &sock, char *resp)
 {
     for (unsigned int i = 0; i < this->_pollfds.size() ; i++)
     {

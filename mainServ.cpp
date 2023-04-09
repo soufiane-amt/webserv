@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/01 01:23:24 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:29:18 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main(void)
     "<html>hello, world</html>\r\n";
     
     //create socket object and bind it
-    mySocket sock;
+    tcpServer sock;
     
     //create poll object 
     polling pl;

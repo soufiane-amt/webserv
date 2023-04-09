@@ -6,14 +6,14 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/06 02:42:55 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:28:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MYSERV_HPP
 # define MYSERV_HPP
 
-#include "Socket.hpp"
+#include "tcpServer.hpp"
 
 
 //add class for packet
@@ -27,7 +27,7 @@ class   polling
         
         int     callPoll(struct pollfd *fds, nfds_t nfds, int timeout);
         void    pushFd(int sockfd, int event);
-        void    handlePoll(mySocket &sock, char *event);
+        void    handlePoll(tcpServer &sock, char *event);
         int     closeConnections(int fd);
         int     sendAll(int fd, char *buf, int *len);
         int     recvAll(int fd, char *buf, int len);

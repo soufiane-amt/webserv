@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   tcpServer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 08:59:38 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:27:22 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "myServ.hpp"
 
-mySocket::mySocket()
+tcpServer::tcpServer()
 {
     std::cout << "Socket default constructor and initializer." << std::endl;
     //init len of structs
@@ -26,7 +26,7 @@ mySocket::mySocket()
 
     //create socket
     this->sockfd = socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
-    mySocket::testSysCall(mySocket::getAcceptFd());
+    tcpServer::testSysCall(tcpServer::getAcceptFd());
 
     //set the socket to be non-blocking
     fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
@@ -34,22 +34,22 @@ mySocket::mySocket()
     std::cout << "Socket created succesfully." << std::endl;
     
     //fix bind: socket already in use error
-    mySocket::rerunServ();
+    tcpServer::rerunServ();
     
     //bind socket to the address
     this->bindRes = bind(getSockFd(), (struct sockaddr *)&this->webservAddr, this->webservAddrlen);
-    mySocket::testSysCall(mySocket::getBindValue());
+    tcpServer::testSysCall(tcpServer::getBindValue());
     std::cout << "Socket succesfully bound to address." << std::endl;
 
 }
 
-mySocket::~mySocket()
+tcpServer::~tcpServer()
 {
     std::cout << "Socket default deconstructor." << std::endl;
-    mySocket::closeConnection();
+    tcpServer::closeConnection();
 }
 
-void    mySocket::testSysCall(int fd)
+void    tcpServer::testSysCall(int fd)
 {
     if (fd < 0)
     {
@@ -58,73 +58,73 @@ void    mySocket::testSysCall(int fd)
     }
 }
 
-void    mySocket::rerunServ(void)
+void    tcpServer::rerunServ(void)
 {
     int enable = 1;
     
     int check = setsockopt(getSockFd(), SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
-    mySocket::testSysCall(check);
+    tcpServer::testSysCall(check);
 }
 
-int mySocket::getSockFd(void) const
+int tcpServer::getSockFd(void) const
 {
     return (this->sockfd);    
 }
 
-int mySocket::getBindValue(void) const
+int tcpServer::getBindValue(void) const
 {
     return (this->bindRes);
 }
 
-int mySocket::getAcceptFd(void) const
+int tcpServer::getAcceptFd(void) const
 {
     return (this->acceptSockFd);
 }
 
-int mySocket::getSockName(void) const
+int tcpServer::getSockName(void) const
 {
     return (this->sockName);
 }
 
-const char*   mySocket::getBuffer(void) const
+const char*   tcpServer::getBuffer(void) const
 {
     return (buffer);
 }
 
-void    mySocket::listenRequest(void)
+void    tcpServer::listenRequest(void)
 {
     int check = listen(getSockFd(), BACKLOG);
-    mySocket::testSysCall(check);
+    tcpServer::testSysCall(check);
     std::cout << "Server listening for connections ... " << std::endl;
 }
 
-void    mySocket::acceptConnection(void)
+void    tcpServer::acceptConnection(void)
 {
     this->clientAddrlen = sizeof(this->clientAddr);
     this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
 }
 
-void    mySocket::closeConnection(void)
+void    tcpServer::closeConnection(void)
 {
     close(this->acceptSockFd);
     close(this->sockfd);
 }
 
-void    mySocket::sendReq(int sockfd, const void *buf, int len, int flags)
+void    tcpServer::sendReq(int sockfd, const void *buf, int len, int flags)
 {
     this->sendRes = send(sockfd, buf, len, flags);
     //close sockfd of the connection
     close(sockfd);
-    mySocket::testSysCall(this->sendRes);
+    tcpServer::testSysCall(this->sendRes);
 }
 
-void    mySocket::recvReq(int sockfd, void *buf, int len, int flags)
+void    tcpServer::recvReq(int sockfd, void *buf, int len, int flags)
 {
     this->recvRes = recv(sockfd, buf, len, flags);
-    mySocket::testSysCall(this->recvRes);
+    tcpServer::testSysCall(this->recvRes);
 }
 
-void    mySocket::retrieveClientAdd(void)
+void    tcpServer::retrieveClientAdd(void)
 {
     this->sockName = getsockname(getAcceptFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
 }
@@ -138,7 +138,7 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-void    mySocket::printLogs(void)
+void    tcpServer::printLogs(void)
 {
 
     char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];

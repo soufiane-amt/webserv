@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.hpp                                         :+:      :+:    :+:   */
+/*   tcpServer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/03/31 06:53:06 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:26:46 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SOCKET_HPP
-# define SOCKET_HPP
+#ifndef TCPSERVER_HPP
+# define TCPSERVER_HPP
 
 #include <iostream>
 #include <stdio.h>
@@ -33,7 +33,7 @@
 
 //temp buff size
 # define BUFFER_SIZE 1024
-class mySocket
+class tcpServer
 {
     private:
         //server/client addresses info
@@ -53,8 +53,8 @@ class mySocket
 
         
     public:
-        mySocket();
-        ~mySocket();
+        tcpServer();
+        ~tcpServer();
         void    testSysCall(int fd);
         void    rerunServ(void);
         void    listenRequest(void);

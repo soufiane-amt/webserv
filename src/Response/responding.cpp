@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 16:17:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:10:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
 
 std::vector<char> responsePreparation::get_response()
 {
-    return _final_response;
+    return _response;
 }
 
 void responsePreparation::prepare_statusLine()
@@ -73,7 +73,7 @@ void responsePreparation::prepare_date()
 
 void responsePreparation::prepare_content_length()
 {
-    static std::string  content_length = "Content-Length: ";
+    static std::string  content_length = CRLF "Content-Length: ";
 
     for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
     {
@@ -81,7 +81,11 @@ void responsePreparation::prepare_content_length()
         {
             if (std::string(it, it + 4) == CRLF CRLF)
             {
+                if (std::string(it, it + 6) == CRLF CRLF CRLF)
+                    std::cout << "YEP\n";
+                // std::cout << ">>>>>>>>" << std::string(it.base()) << std::endl;
                 size_t body_size = _response.end() - it + 4;
+                std::cout << ">>>>>>>> " << body_size << std::endl;
                 if (body_size != 0)
                 {
                     std::string body_size_str = std::to_string(body_size);
@@ -135,12 +139,13 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
 {
     std::string appropriate_page ;
 
+    add_CRLF();
+
     if (_statusCode.get_redir_location() != "") return;
     
     if (_statusCode.is_error_status())
     {
         appropriate_page = _statusCode.get_associated_page();
-        add_CRLF();add_CRLF();
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
         return;
     }
@@ -156,7 +161,6 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
         std::vector <char> tmp = utility::get_file_content(_request.header["URI"]);
         _response.insert(_response.end(), tmp.begin(), tmp.end());
     }
-    add_CRLF();add_CRLF();
 }
 
 
@@ -186,8 +190,13 @@ void    responsePreparation::exceute_get()
     // _final_response.insert(_final_response.end(), utility::get_file_content(_request.header["URI"]).begin(), utility::get_file_content(_request.header["URI"]).end());
     // _response+= utility::get_file_content(_request.header["URI"]);
 
+    std::cout << "{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}"<<std::endl; 
     prepare_body();
     prepare_content_length();
+    for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); ++it)
+            std::cout << *it;
+    std::cout << std::endl;
+
 }
 
 // void    responsePreparation::exceute_post()
@@ -206,6 +215,6 @@ void   responsePreparation::prepare_error_response()
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
-    // prepare_body();
-    // prepare_content_length();
+    prepare_body();
+    prepare_content_length();
 }

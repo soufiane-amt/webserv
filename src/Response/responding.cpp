@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 17:10:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:30:20 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
     //     exceute_delete();
 }
 
-std::vector<char> responsePreparation::get_response()
+std::vector<char>& responsePreparation::get_response()
 {
     return _response;
 }
@@ -73,7 +73,7 @@ void responsePreparation::prepare_date()
 
 void responsePreparation::prepare_content_length()
 {
-    static std::string  content_length = CRLF "Content-Length: ";
+    std::string  content_length = CRLF "Content-Length: ";
 
     for (response_t::iterator it = _response.begin(); it != _response.end(); it++)
     {
@@ -81,16 +81,11 @@ void responsePreparation::prepare_content_length()
         {
             if (std::string(it, it + 4) == CRLF CRLF)
             {
-                if (std::string(it, it + 6) == CRLF CRLF CRLF)
-                    std::cout << "YEP\n";
-                // std::cout << ">>>>>>>>" << std::string(it.base()) << std::endl;
-                size_t body_size = _response.end() - it + 4;
-                std::cout << ">>>>>>>> " << body_size << std::endl;
+                size_t body_size = (_response.end() - it - 4);
                 if (body_size != 0)
                 {
-                    std::string body_size_str = std::to_string(body_size);
+                    content_length  += std::to_string(body_size);
                     _response.insert(it, content_length.begin(), content_length.end());
-                    _response.insert(it + content_length.length(), body_size_str.begin(), body_size_str.end());
                 }
                 break;
             }
@@ -190,12 +185,16 @@ void    responsePreparation::exceute_get()
     // _final_response.insert(_final_response.end(), utility::get_file_content(_request.header["URI"]).begin(), utility::get_file_content(_request.header["URI"]).end());
     // _response+= utility::get_file_content(_request.header["URI"]);
 
-    std::cout << "{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}"<<std::endl; 
     prepare_body();
     prepare_content_length();
-    for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); ++it)
-            std::cout << *it;
-    std::cout << std::endl;
+    // for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); it++)
+    //             if (std::string(it, it + 2) ==  CRLF)
+    //             {
+    //                 std::cout << "CRLF" << std::endl;
+    //                 it ++;
+    //             }
+    //             else
+    //                 std::cout << *it;
 
 }
 

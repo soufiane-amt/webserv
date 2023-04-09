@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 21:11:44 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 14:52:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ struct utility
 
     static std::string                          get_date();
 
-    static std::string                          get_file_content(const std::string& uri);
+    static std::vector<char>                          get_file_content(const std::string& uri);
     
     static StatusCode                           redirector_proccessor(const std::string& redirector);
 

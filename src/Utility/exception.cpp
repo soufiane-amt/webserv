@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:09:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 14:03:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:18:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ std::string StatusCode::get_status_code() const
     return (_status_code);
 }
 
-std::string StatusCode::get_associated_page() const
-{
-    return (utility::get_file_content(URI_ERROR + _status_code.substr(0,3) + "_sc" + ".html"));
-}
+// std::string StatusCode::get_associated_page() const
+// {
+//     return (utility::get_file_content(URI_ERROR + _status_code.substr(0,3) + "_sc" + ".html"));
+// }
 
 std::string StatusCode::get_redir_location() const
 {

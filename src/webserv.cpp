@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 21:45:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:20:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ std::string msg= "GET / HTTP/1.1\r\n"
 #include <string.h>
 
 
-std::string    request_response(std::string msg)
+std::vector<char>    request_response(std::string msg)
 {
     clientRequestParser test(msg);
     http_message_t &_request = test.getRequest();
@@ -61,7 +61,7 @@ std::string    request_response(std::string msg)
         responsePreparation response(_request, e);
         return response.get_response();
     }
-    return "";
+    return std::vector<char>();
 }
 
 void    tempServer (int port)
@@ -108,9 +108,15 @@ void    tempServer (int port)
         char buffer[30000] = {0};
         valread = read( new_socket , buffer, 30000);
         printf("%s\n",buffer );
-        std::string response = request_response(buffer).c_str();
-        std::cout << response.c_str() << std::endl;
-        write(new_socket , response.c_str() , response.length());
+        std::vector<char> response = request_response(buffer);
+        for (std::vector<char>::iterator it = response.begin(); it != response.end(); ++it)
+            if (*it != '\0')
+                std::cout << *it;
+            else
+                break;  
+        std::cout << std::endl;
+
+        write(new_socket , response.data() , response.size());
         printf("------------------Hello message sent-------------------\n");
         close(new_socket);
     }

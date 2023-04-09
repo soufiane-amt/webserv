@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 21:42:25 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:18:07 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,19 @@ std::string utility::get_date()
                             // utility::get_file_content :
 /* ************************************************************************** */
 
-std::string utility::get_file_content(const std::string& uri)
+std::vector<char> utility::get_file_content(const std::string& uri)
 {
     std::ifstream file(uri);
-    std::string content;
+    std::vector<char> content;
     std::string line;
 
     if (file.is_open())
     {
         while (getline(file, line))
-            content += line + "\n";
+        {
+            line += "\n";
+            content.insert(content.end(), line.begin(), line.end()) ;
+        }
         file.close();
     }
     return content;

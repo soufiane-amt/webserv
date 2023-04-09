@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/09 22:26:46 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:40:54 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,15 @@
 #include <poll.h>
 #include <vector>
 
+#include "myServ.hpp"
+
 # define HTTP_PORT 80
 # define BACKLOG 100
 
 //temp buff size
 # define BUFFER_SIZE 1024
+
+class   polling;
 class tcpServer
 {
     private:
@@ -53,7 +57,7 @@ class tcpServer
 
         
     public:
-        tcpServer();
+        tcpServer(polling &pl);
         ~tcpServer();
         void    testSysCall(int fd);
         void    rerunServ(void);

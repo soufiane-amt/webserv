@@ -6,13 +6,13 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/09 22:27:22 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:44:51 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "myServ.hpp"
 
-tcpServer::tcpServer()
+tcpServer::tcpServer(polling &pl)
 {
     std::cout << "Socket default constructor and initializer." << std::endl;
     //init len of structs
@@ -40,6 +40,12 @@ tcpServer::tcpServer()
     this->bindRes = bind(getSockFd(), (struct sockaddr *)&this->webservAddr, this->webservAddrlen);
     tcpServer::testSysCall(tcpServer::getBindValue());
     std::cout << "Socket succesfully bound to address." << std::endl;
+
+    //make the socket listen for connections
+    tcpServer::listenRequest();
+
+    //push the socket fd to poll()
+    pl.pushFd(this->sockfd, POLLIN);
 
 }
 

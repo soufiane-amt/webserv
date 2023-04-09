@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/09 22:29:18 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:44:56 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,11 @@ int main(void)
     "Content-type: text/html\r\n\r\n"
     "<html>hello, world</html>\r\n";
     
-    //create socket object and bind it
-    tcpServer sock;
-    
-    //create poll object 
+    //create poll object to handle servers
     polling pl;
-
-    //push the socket fd to poll()
-    pl.pushFd(sock.getSockFd(), POLLIN);
     
-    //listen for connections 
-    sock.listenRequest();
+    //create socket object and bind it (socket could take args depends on the config)
+    tcpServer sock(pl);
     
     while (1)
     {

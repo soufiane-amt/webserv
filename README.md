@@ -108,7 +108,13 @@ why sending post becomes an option request
 
 how can a hacker take advantage  of http communication
 
+
+
+why php lang was created 
+
+
 understand the pattern of this request
+
 
 POST /users/sign_in HTTP/1.1
 Host: courses.pikuma.com
@@ -131,4 +137,8 @@ upgrade-insecure-requests: 1
 user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
 Content-Length: 248
 
-utf8=%E2%9C%93&authenticity_token=JNILdOpPMyaWiAOglWOawroANt9Xe75rjcRAavpnFFF%2FSp%2FamFt6eZJ9%2F%2BtmxJKKAagMcxKl%2Bd9XWq2SnUAqtQ%3D%3D&user%5Bemail%5D=soufianeamt11%40gmail.com&user%5Bpassword%5D=soufianeamt11%40gmail.comm&user%5Bremember_me%5D=0
+utf8=%E2%9C%93&authenticity_token=JNILdOpPMyaWiAOglWOawroANt9Xe75rjcRAavpnFFF%2FSp%2FamFt6eZJ9%2F%2BtmxJKKAagMcxKl%2Bd9XWq2SnUAqtQ%3D%3D&user%5Bemail%5D=soufianeamt11%40gmail.com&user%5Bpassword%5D=soufianeamt11%40gmail.comm&user%5Bremember_me%5D=
+
+
+The Common Gateway Interface (CGI) provides the middleware between WWW servers and external databases and information sources. The World Wide Web Consortium (W3C) defined the Common Gateway Interface (CGI) and also defined how a program interacts with a Hyper Text Transfer Protocol (HTTP) server. The Web server typically passes the form information to a small application program that processes the data and may send back a confirmation message. This process or convention for passing data back and forth between the server and the application is called the common gateway interface (CGI). 
+

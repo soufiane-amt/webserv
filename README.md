@@ -101,3 +101,34 @@ location /
 what is  a domaine and a subdomaine 
 why URL starts with www
 MIME
+
+
+Why servers don't allow OPTIONS for security reasons
+why sending post becomes an option request
+
+how can a hacker take advantage  of http communication
+
+understand the pattern of this request
+
+POST /users/sign_in HTTP/1.1
+Host: courses.pikuma.com
+authority: courses.pikuma.com
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+accept-language: fr-FR,fr;q=0.9
+cache-control: max-age=0
+content-type: application/x-www-form-urlencoded
+cookie: visitor_id=1840790975; split=%7B%22beta_checkout%22%3A%22test%22%7D; _ga=GA1.1.740607860.1681142369; _ga=GA1.3.740607860.1681142369; _gid=GA1.3.968319808.1681142831; _gat_tenantTracker=1; _ga_T7VSHHFQGL=GS1.1.1681145367.2.1.1681145367.0.0.0; mp_e9f85a260e22673665c335ea07907e45_mixpanel=%7B%22distinct_id%22%3A%20%2216924c01c298d-09524324974757-36657105-13c680-16924c01c2ab2e%22%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fcourses.pikuma.com%2Fusers%22%2C%22%24initial_referring_domain%22%3A%20%22courses.pikuma.com%22%7D; _thinkific_session=TVU1eHFGMFlCOHRLT1J1NEpwTFpvVzVKcmVjRGwxT3lsVDQ4bnZ4NVNpMjZadStjZ1hoMXJUTVpyaWwzZlFtSitQY1MxMENhcnFCRXFkeHNPSVRndTRsTzJvdmhPeG5HWHQwUkF6SnpDS1BGbitqVFMzZGxYeHRSSUkzRFVkeUtlZ3BDcW5LdFUwcnFna3dzU0Ezc0hqc2JmUFJYUGg1TkdXbHBiQysxd0lwRklNTFlrNmRERDg5RUhhT1JsL0czQlJocW9EbEhYaktBcFRHWDloekU1dVg5Z21HSUxUc0paTkJBdldQRTJIKzRrT29nV1Vzd05RQmVwdHhkTENRSjRGT3A1UGVLamVqRENsZ24yYTlGTHNzOCtsbjRoazhURmZWS1FxM0hiZ0pVcmUyeno4M0U0ZElpNlFPcTYxVWd1cDJaaGszN1B5UjhkQW4yKzRiL2k5MkFqZXgrMVA4SDI4NXRXUHBOeUZzdFNLY0I0UVJxdWVDdkpFNjNiUHB5dG5udFlvQTJnZFBpeTRRU3hjRHNZaGU2SmEwajlPaG9QcUFnSzIxZDd2TGRFdjFMZjVaTGxSRVFkWng5dFRaTVl6SUtDTUpIMUVvU2R1bGgvcnA2UlJEVXozeC9KZ0cwTW5kdWxHcFByUFE9LS1DZWtPL2JFVHRSVEFrYkVnQnlrWTVnPT0%3D--f4ebb29e769438cfb963b86a51b4158610dde936; _thinkific_session=Ulhhd3Jia1FWbCt5VkhQWFlEK0R6cDBzT1VSMTBZQnpWZ1ZlZ3k0dXZoRzIxdjZqSXdaVDFaeHJRMWtEWlp5dmQ2MWMwWXJ0MDNOSndLaEIzUlJINTNoT1FYeTZCSFBremd6K21POTRBeGo1UmxaeXlpRkhDT3luOFI0SFUwajVVb3VtN0RYalpyT3lGVDRmZGo4NTFMU2ZmZFgzb2lrRGFZaDdkRWhqMnFRRG5oVWRWQTU3RkZRRHZNTlU0NFVnKzVneGNrblBGK1JZUGhLMTlaU2J5TkhlZDNlbGRmVDdTSTAyNGZoRGI1UjdBRnN6Wm15ZjRsRWVXU0NuS0h0WkFjbThURTB6aDNwYnZiWTM4Z1Rzak1yNll1M2FqVDlqakFtVHN4R2NrTWhRVFNOTldPMVFzOWpkZFFrYlV3WmxrVDc0dk5CelI4ajJsVVpIcVVrR3JuNi9NdVoyMGNHZXV0UE5KYjdEZkJzVzcwenVoRnN2RnNseWkvMjdORzFzdytRRFAzQ2pSWDlDZjlucGd4NlNIWjRTSTdWTEtUV2Z5MXhJNkhPM1pKSHlEbmF0VWZVa3ZBQUpGM0NKYkpId0JQU2psS0ZsL3ZEWjZVdnBiOG5iZUFvY2NUU3BmL3pvS0owNDg2MXUrK1k9LS05a1pwNVpjSXBUcGEyK2gwUTExbmdBPT0%3D--616128908a75d63c427fcc1f24694a040fc1df25; split=%7B%22beta_checkout%22%3A%22test%22%7D; visitor_id=1840798130
+origin: https://courses.pikuma.com
+referer: https://courses.pikuma.com/users/sign_in
+sec-ch-ua: "Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+sec-fetch-dest: document
+sec-fetch-mode: navigate
+sec-fetch-site: same-origin
+sec-fetch-user: ?1
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+Content-Length: 248
+
+utf8=%E2%9C%93&authenticity_token=JNILdOpPMyaWiAOglWOawroANt9Xe75rjcRAavpnFFF%2FSp%2FamFt6eZJ9%2F%2BtmxJKKAagMcxKl%2Bd9XWq2SnUAqtQ%3D%3D&user%5Bemail%5D=soufianeamt11%40gmail.com&user%5Bpassword%5D=soufianeamt11%40gmail.comm&user%5Bremember_me%5D=0

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 21:40:09 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/10 14:15:18 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,6 @@ void    responsePreparation::exceute_get()
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
-    
     prepare_location();
     prepare_body();
     prepare_meta_body_data();
@@ -162,6 +161,11 @@ void    responsePreparation::exceute_get()
 // void    responsePreparation::exceute_post()
 // {
 //     prepare_statusLine();
+//     prepare_server_name();
+//     prepare_date();
+//     prepare_location();
+//     prepare_body();
+//     prepare_meta_body_data();
 
 // }
 

@@ -31,3 +31,58 @@ Overall, the use of both Last-Modified and ETag headers allows for more efficien
 
 
 
+http message structure :
+1. The first line tells the client which method to use, which entity
+(document) to apply it to, and which version of HTTP the client is
+using. Possible HTTP 1.1 methods are GET, POST, HEAD, PUT,
+LINK, UNLINK, DELETE, OPTIONS, and TRACE. HTTP 1.0 does
+not support the OPTIONS or TRACE method. Not all methods need
+be supported by a server.
+The URL specifies the location of a document to apply the method
+to. Each server may have its own way of translating the URL string
+into some form of usable resource. For example, the URL may
+represent a document to transmit to the client. Or the URL may
+actually map to a program, the output of which is sent to the client.
+Finally, the last entry on the first line specifies the version of HTTP
+the client is using.
+2. General message headers are optional headers used in both the
+client request and server response. They indicate general
+information such as the current time or the path through a network
+that the client and server are using.
+3. Request headers tell the server more information about the client.
+The client can identify itself and the user to the server, and specify
+preferred document formats that it would like to see from the server.
+4. Entity headers are used when an entity (a document) is about to be
+sent. They specify information about the entity, such as encoding
+schemes, length, type, and origin.
+
+
+HTTP/1.1 Methods:
+A client request method is a command or request that a web client issues to a server. You can
+think of the method as the declaration of the client's intentions. There are exceptions, of course,
+but here are some generalizations:
+
+You can think of a GET request as meaning that you just want to retrieve a resource on the
+server. This resource could be the contents of a static file or invoke a program that
+generates data.
+
+A HEAD request means that you just want some information about the document, but don't
+need the document itself.
+
+A POST request says that you're providing some information of your own (generally used
+for fill-in forms). This typically changes the state of the server in some way. For example, it
+could create a record in a database.
+
+PUT is used to provide a new or replacement document to be stored on the server.
+
+DELETE is used to remove a document on the server.
+
+TRACE asks that proxies declare themselves in the headers, so the client can learn the
+path that the document took (and thus determine where something might have been
+garbled or lost). This is used for protocol debugging purposes.
+
+OPTIONS is used when the client wants to know what other methods can be used for that
+document (or for the server at large).
+
+CONNECT is used when a client needs to talk to a HTTPS server through a proxy server.
+

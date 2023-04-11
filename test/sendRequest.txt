@@ -1,5 +1,5 @@
-GET /postman-echo.com/get HTTP/1.1
-host: localhost
-Accept: text/lol
+GET / HTTP/1.1
+host: dsfdsfsd
+Accept: plain/txt
 User-Agent: dssdfds
 

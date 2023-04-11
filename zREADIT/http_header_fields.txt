@@ -1,0 +1,19 @@
+The use of entity tag:
+
+In HTTP, an entity tag (ETag) is an HTTP header that is used to identify a specific version of a resource, such as a web page or file, that is available on a web server. An ETag is typically used to help optimize the performance of web applications by reducing the amount of data that needs to be transmitted between a server and a client.
+
+When a client requests a resource from a web server, the server can include an ETag header in the response that contains a unique identifier for the resource. The client can then use this identifier to determine whether it needs to download a new version of the resource or whether it can use a cached version that it has already downloaded.
+
+If the client already has a cached version of the resource, it can include the ETag value in a conditional request to the server, along with other information such as the If-Modified-Since header. The server can then compare the ETag value with the current version of the resource on the server, and if they match, it can send a "304 Not Modified" response to indicate that the cached version can be used. If the ETag values do not match, the server can send the updated version of the resource to the client.
+
+The use of ETags can help to reduce the amount of data that needs to be transmitted between a server and a client, and can improve the performance of web applications by reducing the number of unnecessary downloads of resources that have not changed. However, it is important to note that the use of ETags can also have some drawbacks, such as increased server load and storage requirements, and potential issues with caching when multiple servers are used.
+
+
+
+Last-modified:
+
+most recent modification time of the document requested by the client.
+this modification time is often used for caching purposes a browser may not need to request the 
+entire HTML file again if it hasn't changed , it will just use the cached one.
+
+

@@ -17,3 +17,17 @@ this modification time is often used for caching purposes a browser may not need
 entire HTML file again if it hasn't changed , it will just use the cached one.
 
 
+Etag vs last-modified:
+
+Although ETag and Last-Modified headers serve similar purposes, they are used in different ways and have different strengths and weaknesses.
+
+The Last-Modified header is useful for determining whether a resource has been modified since a specific date and time. The client can send a request to the server with the If-Modified-Since header, which contains the value of the Last-Modified header from the last time the client downloaded the resource. If the server's Last-Modified value is newer than the client's, the server sends a new copy of the resource to the client. Otherwise, the server sends a "304 Not Modified" response, indicating that the client's cached copy is still valid.
+
+On the other hand, ETag provides a way to determine whether a resource has changed based on its content, not just its modification time. The ETag value is typically calculated based on the content of the resource, as well as other factors such as the content encoding and language. When the client requests the resource again, it sends the ETag value back to the server in the If-None-Match header. If the server's ETag value matches the client's, the server sends a "304 Not Modified" response. Otherwise, the server sends the updated resource.
+
+Using both Last-Modified and ETag headers provides additional flexibility and redundancy in the caching process. If a server supports both headers, the client can use the Last-Modified header as the first level of caching, and the ETag header as a fallback mechanism in case the Last-Modified value is not accurate or the server does not support it.
+
+Overall, the use of both Last-Modified and ETag headers allows for more efficient and accurate caching of resources in HTTP.
+
+
+

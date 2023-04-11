@@ -86,3 +86,24 @@ document (or for the server at large).
 
 CONNECT is used when a client needs to talk to a HTTPS server through a proxy server.
 
+
+
+URLencoding in POST method:
+
+Not encoding data in a POST request can lead to errors and security vulnerabilities.
+
+If data is not properly encoded in a POST request, special characters such as spaces, ampersands, and plus signs can be misinterpreted by the server. This can lead to errors in data processing and corrupt the data being sent. For example, if a plus sign is not properly encoded, it can be interpreted as a space by the server, causing data to be lost or corrupted.
+
+In addition to errors, not encoding data can also create security vulnerabilities. If data is not properly encoded, it can be used to inject malicious code into a website or application. This is known as a code injection attack or an injection vulnerability. For example, an attacker could inject malicious SQL code into a form that is not properly encoded, allowing them to access sensitive information or modify data in a database.
+
+By properly encoding data in a POST request, the risk of errors and security vulnerabilities is greatly reduced. Proper encoding ensures that the data is transmitted accurately and can be correctly interpreted by the server, while also preventing malicious code injection attacks.
+
+user=util-tester&pass1=1234&pass2=1234
+When the client wants to send characters that normally have special meanings, like the
+ampersand and equal sign, the client replaces the characters with a percent sign (%) followed by
+an ASCII value in hexadecimal (base 16). This removes ambiguity when a special character is
+used. The only exception, however, is the space character (ASCII 32), which can be encoded as a
+plus sign (+) as well as %20. The preferred format is %20 instead of the plus sign.
+
+the content sent using URLencoding has content-type: application/x-www-form-urlencoded
+

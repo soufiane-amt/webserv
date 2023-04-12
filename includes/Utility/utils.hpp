@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/10 14:19:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/12 20:35:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ struct simpleConfPars
     // directives["max_body_size"] = "-1";
     
     // directives["return"] = "302 https://www.youtube.com/";
-    // directives["root"] = "./www";
+    directives["root"] = "./www";
     directives["root"] = "index.html";
     // directives["autoindex"] = "on";
     // directives["allow"] = "POST";
@@ -85,7 +85,10 @@ struct simpleConfPars
         // locations["/"]["index"] = "index.html";
     // locations["/"]["allow"] = "POST";
     locations["/"]["autoindex"] = "on";
-    // locations["/"]["return"] = "302 https://www.youtube.com/";
+    // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
+
+    locations["/command"]["root"] = "./www";
+    locations["/command"]["index"] = "command.html";
 
     locations["/random"]["root"] = "./www/random/";
     // locations["/random"]["index"] = "page.html";

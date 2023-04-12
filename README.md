@@ -142,3 +142,39 @@ utf8=%E2%9C%93&authenticity_token=JNILdOpPMyaWiAOglWOawroANt9Xe75rjcRAavpnFFF%2F
 
 The Common Gateway Interface (CGI) provides the middleware between WWW servers and external databases and information sources. The World Wide Web Consortium (W3C) defined the Common Gateway Interface (CGI) and also defined how a program interacts with a Hyper Text Transfer Protocol (HTTP) server. The Web server typically passes the form information to a small application program that processes the data and may send back a confirmation message. This process or convention for passing data back and forth between the server and the application is called the common gateway interface (CGI). 
 
+
+
+
+Connection: close
+The close option signifies that either the client or server wishes to end
+the connection (i.e., this is the last transaction). The keep-alive option
+signifies that the client wishes to keep the connection open. The default
+behavior of web applications differs between HTTP 1.0 and 1.1.
+By default, HTTP 1.1 uses persistent connections, where the connection
+does not automatically close after a transaction. When an HTTP 1.1 web
+client no longer has any requests, or the server has reached some
+preprogrammed limit in spending resources on the client, a
+Connection: close header indicates that no more transactions will
+proceed, and the connection closes after the current one. An HTTP 1.1
+client or server that doesn't support persistent connections should always
+use the Connection: close header.
+HTTP 1.0, on the other hand, does not have persistent connections by
+default. If a 1.0 client wishes to use persistent connections, it uses the
+keep-alive parameter. A Connection: keep-alive header is
+issued by both HTTP 1.0 clients and servers for each transaction under
+persistent connections. The last transaction does not have a
+Connection: keep-alive header, and behaves like a
+Connection: close header under HTTP 1.1. HTTP 1.0 servers that
+do not support persistent connections will not have a Connection:
+keep-alive header in their response, and the client should disconnect
+after the first transaction completes.
+Use of the keep-alive parameter is known to cause problems with
+proxy servers that do not understand persistent connections for HTTP
+1.0. If a proxy server blindly forwards the Connection: keep-alive
+header, the origin-server and initial client are using persistent
+connections while the proxy server is not. The origin server maintains the
+network connection when the proxy server expects a disconnect; timing
+problems follow.
+To get around that, when HTTP 1.1 proxies encounter an HTTP 1.0
+request, it must remove the Connection header and any headers
+specified by the Connection header before forwarding the message.

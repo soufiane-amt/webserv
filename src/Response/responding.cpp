@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/10 17:51:18 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/12 17:43:34 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
         exceute_get();
-    // else if (_request.header["Method"] == "POST")
-    //     exceute_post();
+    else if (_request.header["Method"] == "POST")
+        exceute_post();
     // else if (_request.header["Method"] == "DELETE")
     //     exceute_delete();
 }
@@ -160,12 +160,22 @@ void    responsePreparation::exceute_get()
 
 void    responsePreparation::exceute_post()
 {
+    std::string command;
+    command = _request.body.substr(_request.body.find('=') + 1);
+    command[command.find('+')] = ' ';
+    system(command.c_str());
+    
     prepare_statusLine();
-    prepare_server_name();
-    prepare_date();
-    prepare_location();
-    prepare_body();
-    prepare_meta_body_data();
+    add_CRLF();
+    std::vector <char> tmp = utility::get_file_content("www/command.html");
+    _response.insert(_response.end(), tmp.begin(), tmp.end());
+    
+    // prepare_server_name();
+    // prepare_date();
+    
+    // prepare_location();
+    // prepare_body();
+    // prepare_meta_body_data();
 
 }
 

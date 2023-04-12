@@ -107,3 +107,45 @@ plus sign (+) as well as %20. The preferred format is %20 instead of the plus si
 
 the content sent using URLencoding has content-type: application/x-www-form-urlencoded
 
+
+201 Created
+This status code is used whenever a new URL is created.
+With this result code, the Location header is given by the
+server to specify where the new data was placed.
+
+
+Accept-Encoding: encoding_types
+Through the Accept-Encoding header, a client may specify what
+encoding algorithms it understands. If this header is omitted, the server
+will send the requested entity-body without any additional encoding.
+Encoding mechanisms can be used to reduce consumption of scarce
+resources, at the expense of less expensive resources. For example,
+large files may be compressed to reduce transmission time over slow
+network connections.
+
+Content-Encoding is an HTTP response header that specifies the encoding applied to the message body in order to safely transfer it over the network. 
+The encoding specified in this header applies to the message body only, not to the headers or any other part of the message.
+
+
+The Authorization header is an HTTP request header that contains the credentials required to authenticate a user agent with a server. The value of the header is typically composed of two parts: the authentication scheme and the user credentials.
+
+The general syntax of the Authorization header is as follows:
+
+php
+Copy code
+Authorization: <scheme> <credentials>
+scheme specifies the authentication scheme being used, such as Basic, Digest, Bearer, or OAuth.
+
+credentials is a string containing the user's authentication credentials, which varies depending on the scheme. For example, with the Basic scheme, the credentials are typically the username and password, separated by a colon and encoded in base64 format.
+
+Here's an example of an Authorization header using the Basic scheme:
+
+makefile
+Copy code
+Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+In this example, the credentials are username:password, which are encoded in base64 format.
+
+Note that the Authorization header is typically used in conjunction with an HTTPS connection to ensure that the credentials are transmitted securely over the network.
+
+
+

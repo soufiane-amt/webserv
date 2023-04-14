@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/12 20:35:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 17:00:36 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ struct simpleConfPars
     // directives["autoindex"] = "on";
     // directives["allow"] = "POST";
     
-    // locations["/"]["index"] = "index.html";
+    locations["/"]["index"] = "index.html";
     // locations["/"]["index"] = "index.html";
     // locations["/"]["max_body_size"] = "-1";
 
@@ -168,6 +168,11 @@ struct utility
     static int                                  check_file_or_directory(const std::string& path);
     
     static std::string                          search_directive (const std::string &directive,  directive_t& location_dirts);
+
+
+    static std::string                          get_file_hash(const std::string& path);
+
+    static std::string                          get_last_modified(const std::string& filepath);
 
     private:
     //trim methods :

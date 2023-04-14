@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/10 17:51:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 17:04:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 
 
-//Status-Line
+//Status-Line /***********you should use different classes for this************/
 
 class responsePreparation
 {
@@ -26,7 +26,7 @@ class responsePreparation
         typedef std::vector<char>     response_t;
     
         http_message_t          _request;
-        const  StatusCode&      _statusCode;
+        StatusCode              _statusCode;
         response_t              _response;
         bool                    _dir_listing_on;
 
@@ -47,6 +47,9 @@ class responsePreparation
         void             prepare_server_name();
         void             prepare_date();
         void             prepare_location();
+        void             prepare_last_modified();
+        void             prepare_eTag();
+    
         void             prepare_content_length(response_t::iterator& ite);
         void             prepare_content_type(response_t::iterator& ite);
         void             prepare_meta_body_data();
@@ -64,6 +67,7 @@ class responsePreparation
 
         response_t::iterator    _find_in_response(const std::string& str);
         void             init_dir_listing();
+        void             change_status_line(const char *status_code);
 };
 
 #endif

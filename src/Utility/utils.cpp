@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 21:25:23 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 17:28:22 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ std::string utility::get_date()
 {
     std::time_t t = std::time(nullptr);
     std::string date = std::asctime(std::localtime(&t));
-    date.resize(date.size() - 1);
+    date.erase(date.size() - 1);
+    date.append(" GMT");
     return (date);
 }
 
@@ -285,3 +286,36 @@ std::string     utility::search_directive (const std::string &directive,  direct
     return (dir_value);
 }
 
+
+/* ************************************************************************** */
+                            // utility::get_file_hash :
+/* ************************************************************************** */
+
+std::string             utility::get_file_hash(const std::string& filepath)
+{
+    struct stat result;
+    if (stat(filepath.c_str(), &result) != 0) {
+        return "";
+    }
+    std::time_t timestamp = result.st_mtime;
+    std::stringstream etag;
+    etag << std::hex << timestamp << "-" << result.st_size;
+    return "\"" + etag.str() + "\"";
+}
+
+
+/* ************************************************************************** */
+                            // utility::get_last_modified :
+/* ************************************************************************** */
+
+std::string             utility::get_last_modified(const std::string& filepath)
+{
+    struct stat result;
+    if (stat(filepath.c_str(), &result) != 0) {
+        return "";
+    }
+    std::time_t timestamp = result.st_mtime;
+    std::stringstream last_modified;
+    last_modified << std::put_time(std::gmtime(&timestamp), "%a, %d %b %Y %T GMT");
+    return last_modified.str();
+}

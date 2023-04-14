@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/12 17:43:34 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 17:28:15 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
         exceute_get();
-    else if (_request.header["Method"] == "POST")
-        exceute_post();
+    // else if (_request.header["Method"] == "POST")
+    //     exceute_post();
     // else if (_request.header["Method"] == "DELETE")
     //     exceute_delete();
 }
@@ -154,8 +154,15 @@ void    responsePreparation::exceute_get()
     prepare_server_name();
     prepare_date();
     prepare_location();
-    prepare_body();
-    prepare_meta_body_data();
+    prepare_last_modified();
+    prepare_eTag();
+    if (_statusCode.get_status_code() == OK)
+    {
+        prepare_body();
+        prepare_meta_body_data();
+    }
+    else
+        add_CRLF();
 }
 
 void    responsePreparation::exceute_post()
@@ -228,10 +235,43 @@ std::string responsePreparation::get_mime_type(const std::string& filename) {
 
 void responsePreparation::init_dir_listing()
 {
-    // _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-    //                     parser.get_server_locations(0).
-    //                     find(_request.targeted_Location)->second.find("autoindex")->second == "on");
     _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                         utility::search_directive("autoindex", parser.get_server_locations(0)[_request.targeted_Location]) == "on");
     _allowed_methods = utility::search_directive("allow", parser.get_server_locations(0)[_request.targeted_Location]);
+}
+
+void responsePreparation::prepare_eTag()
+{
+    std::string file_hash = utility::get_file_hash(_request.header["URI"]);
+    if (_request.header.find("If-None-Match") != _request.header.end() && _request.header["If-None-Match"] == file_hash)
+        change_status_line(NOT_MODIFIED);
+    std::string eTag = "ETag: " + file_hash;
+    _response.insert(_response.end(), eTag.begin(), eTag.end());
+    add_CRLF();
+}
+
+void    responsePreparation::prepare_last_modified()
+{
+    std::string last_modified =  utility::get_last_modified(_request.header["URI"]);
+    if (_request.header.find("If-Modified-Since") != _request.header.end() && _request.header["If-Modified-Since"] == last_modified)
+        change_status_line(NOT_MODIFIED);
+    last_modified.insert(0, "Last-Modified: ");
+    _response.insert(_response.end(), last_modified.begin(), last_modified.end());
+    add_CRLF();
+}
+
+
+
+
+
+void        responsePreparation::change_status_line(const char *status_code)
+{
+    this->_statusCode = StatusCode(status_code);
+    _response.erase(_response.begin(), _find_in_response(CRLF));
+    std::string status_line = "HTTP/1.1 " + std::string(status_code);
+    _response.insert(_response.begin(), status_line.begin(), status_line.end());
+    std::cout << "modifying things" << std::endl;
+        for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); ++it)
+                std::cout << *it;
+        std::cout << std::endl;
 }

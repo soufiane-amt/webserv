@@ -1,26 +1,24 @@
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <string>
-#include <cstdio>
-#include <array>
+#include <sys/stat.h>
 
-int main() {
-  std::string command = "python myscript.py";
-  std::string output;
-
-  // Open a pipe to read the output of the Python script
-  std::array<char, 128> buffer;
-  std::auto_ptr<FILE> pipe(popen(command.c_str(), "r"));
-  if (!pipe.get()) {
-    throw std::runtime_error("popen() failed!");
-  }
-
-  // Read the output of the Python script from the pipe
-  while (fgets(buffer.data(), buffer.size(), pipe.get()) != NULL) {
-    output += buffer.data();
-  }
-
-  // Print the output
-  std::cout << "Output from Python script: " << output << std::endl;
-
-  return 0;
+std::string generate_etag(const std::string& filepath)
+{
+    struct stat result;
+    if (stat(filepath.c_str(), &result) != 0) {
+        return "";
+    }
+    std::time_t timestamp = result.st_mtime;
+    std::stringstream etag;
+    etag << std::hex << timestamp << "-" << result.st_size;
+    return "\"" + etag.str() + "\"";
 }
+
+int main()
+{
+    std::string filepath = "../www/index.html";
+    std::cout << "ETag: " << generate_etag(filepath) << std::endl;
+}
+//643962c4-cb

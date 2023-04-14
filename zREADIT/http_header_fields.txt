@@ -149,3 +149,8 @@ Note that the Authorization header is typically used in conjunction with an HTTP
 
 
 
+
+
+There are two general methods for determining if a server resource has
+changed. One method checks for the most recent modification time of the document. Another
+method checks for modifications in the entity tag associated with the document.

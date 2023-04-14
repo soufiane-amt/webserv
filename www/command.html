@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>commanding Page</title>
-</head>
-<body>
-	<h1>commanding</h1>
-	<form action="http://10.12.12.2:1111" method="POST">
-		<label for="command">command:</label>
-		 <input type="text" id="command" name="command" required><br><br>
-		<!-- <label for="password">Password:</label>
-		<input type="password" id="password" name="password" required><br><br> --> 
-		<input type="submit" value="execute">
-	</form>
-</body>
-</html>
+<form method="post" action="http://localhost:1112/" enctype="multipart/form-data">
+	Enter a file to upload:<br>
+	<input name="thefile" type="file"><br>
+	<input name="done" type="submit">
+  </form>
+  

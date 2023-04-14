@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 18:02:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 20:54:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
         exceute_get();
-    // else if (_request.header["Method"] == "POST")
-    //     exceute_post();
+    else if (_request.header["Method"] == "POST")
+        exceute_post();
     // else if (_request.header["Method"] == "DELETE")
     //     exceute_delete();
 }

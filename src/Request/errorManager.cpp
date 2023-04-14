@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/09 21:25:47 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 20:46:27 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,11 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_ind != "")
         {
-            std::cout << "before" << header.at("URI")   << std::endl;
             if (header.at("URI").back() != '/' && it_ind.front() != '/')
                 header.at("URI") += "/";
             else if (header.at("URI").back() == '/' && it_ind.front() == '/')
                 header.at("URI").pop_back();
             header.at("URI") +=  it_ind;
-            std::cout << "after" << header.at("URI")   << std::endl;
             if (utility::check_file_or_directory(header["URI"]) == S_DIRECTORY)
                 throw StatusCode(NOT_FOUND);
         }

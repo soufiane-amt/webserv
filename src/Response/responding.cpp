@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 17:28:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/14 18:02:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,8 +270,4 @@ void        responsePreparation::change_status_line(const char *status_code)
     _response.erase(_response.begin(), _find_in_response(CRLF));
     std::string status_line = "HTTP/1.1 " + std::string(status_code);
     _response.insert(_response.begin(), status_line.begin(), status_line.end());
-    std::cout << "modifying things" << std::endl;
-        for (std::vector<char>::iterator it = _response.begin(); it != _response.end(); ++it)
-                std::cout << *it;
-        std::cout << std::endl;
 }

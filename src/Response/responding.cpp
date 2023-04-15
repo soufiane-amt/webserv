@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 20:54:24 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 18:25:29 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     }
     if (_dir_listing_on == true)//here we need to check if autoindex is on
     {
-        appropriate_page = utility::list_directory(_request.header["URI"]);
+        std::cout << " +++++++++" << _request.header["URI"] << "\n";
+        appropriate_page = utility::list_directory(_request.header["URI"], _request.targeted_Location);
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
     }
     else
@@ -156,6 +157,7 @@ void    responsePreparation::exceute_get()
     prepare_location();
     prepare_last_modified();
     prepare_eTag();
+    prepare_connection ();
     if (_statusCode.get_status_code() == OK)
     {
         prepare_body();
@@ -262,7 +264,16 @@ void    responsePreparation::prepare_last_modified()
 
 
 
-
+void    responsePreparation::prepare_connection()
+{
+    std::string connection = "Connection: ";
+    if (!_statusCode.is_error_status() && _request.header.find("Connection") != _request.header.end())
+        connection += _request.header["Connection"];
+    else
+        connection += "close";
+    _response.insert(_response.end(), connection.begin(), connection.end());
+    add_CRLF();
+}
 
 void        responsePreparation::change_status_line(const char *status_code)
 {

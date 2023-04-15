@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 20:46:27 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 21:47:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
     if (!utility::check_file_or_directory(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
+    std::cout << "Chof" << std::endl;
     if (stat(header.at("URI").c_str(), &sb) != -1 && S_ISDIR(sb.st_mode))
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
     {
@@ -114,6 +115,7 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
             else if (header.at("URI").back() == '/' && it_ind.front() == '/')
                 header.at("URI").pop_back();
             header.at("URI") +=  it_ind;
+            std::cout<< ">>>>>" << header.at("URI") << std::endl;
             if (utility::check_file_or_directory(header["URI"]) == S_DIRECTORY)
                 throw StatusCode(NOT_FOUND);
         }

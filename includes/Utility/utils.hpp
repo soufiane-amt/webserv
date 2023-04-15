@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 17:00:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 21:47:46 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ struct simpleConfPars
     // directives["return"] = "302 https://www.youtube.com/";
     directives["root"] = "./www";
     directives["root"] = "index.html";
-    // directives["autoindex"] = "on";
+    directives["autoindex"] = "on";
     // directives["allow"] = "POST";
     
-    locations["/"]["index"] = "index.html";
+    // locations["/"]["index"] = "index.html";
     // locations["/"]["index"] = "index.html";
     // locations["/"]["max_body_size"] = "-1";
+    locations["/"]["autoindex"] = "on";
 
     locations["/"]["root"] = "./www";
         // locations["/"]["index"] = "index.html";
     // locations["/"]["allow"] = "POST";
-    locations["/"]["autoindex"] = "on";
     // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
 
     locations["/command"]["root"] = "./www";
@@ -163,7 +163,7 @@ struct utility
     
     static StatusCode                           redirector_proccessor(const std::string& redirector);
 
-    static std::string                          list_directory(const std::string& directory);
+    static std::string                          list_directory( std::string directory,  std::string traget_location);
 
     static int                                  check_file_or_directory(const std::string& path);
     

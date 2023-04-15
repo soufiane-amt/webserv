@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 17:28:22 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 21:40:27 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,12 +211,40 @@ StatusCode utility::redirector_proccessor(const std::string& redirector)
                             // utility::directory_listing :
 /* ************************************************************************** */
 
-std::string     utility::list_directory(const std::string& directory)
+std::string     utility::list_directory(std::string directory,  std::string target_location)
 {
     DIR *dir;
     struct dirent *ent;
     std::string listing_file;
     
+    std::string direct = directory;
+    (void)target_location;
+    // target_location = target_location == "/" ? "" : target_location;
+    // if (target_location == "")
+    //     target_location = directory;
+    // size_t i = directory.find_first_of (target_location);
+    // std::cout << "i : " << i << std::endl;
+    // if (i != std::string::npos)
+    //     direct.erase (0, 4 + i + target_location.length());
+    //     // if (direct[0] == '/' && direct[1] == '/')
+    //         direct.erase (0, 1);
+    //         direct.erase (0, 1);
+    //         direct.erase (direct.length() - 1, 1);
+    // if (direct == "")
+    //     direct = "/";
+    if (target_location == "/")
+        direct = "";
+    else
+    {
+        size_t i = directory.find (target_location);
+        std::cout << "i : " << i << std::endl;
+        std::cout << "directory : " << directory << std::endl;
+        if (i != std::string::npos)
+            direct.erase (0,  i);
+
+    }
+    std::cout << "dir : " << direct << std::endl;
+    std::cout << "target_location : " << target_location << std::endl;
     // Open the current directory
     dir = opendir(directory.c_str());
     if (dir == NULL)
@@ -229,10 +257,10 @@ std::string     utility::list_directory(const std::string& directory)
     while ((ent = readdir(dir)) != NULL) {
         if (ent->d_type == DT_DIR) {
             // Output a link for a directory
-            listing_file += "<a href=\"" + std::string(ent->d_name) + "/\">" + std::string(ent->d_name) + "/</a><br>\n";
+            listing_file += "<a href=\"" + direct  + std::string(ent->d_name) + "/\">" + std::string(ent->d_name) + "/</a><br>\n";
         } else {
             // Output a link for a file
-            listing_file += "<a href=\"" + std::string(ent->d_name) + "\">" + std::string(ent->d_name) + "</a><br>\n";
+            listing_file += "<a href=\"" + direct  + std::string(ent->d_name) + "\">" + std::string(ent->d_name) + "</a><br>\n";
         }
     }
     

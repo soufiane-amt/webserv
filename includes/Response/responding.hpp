@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/14 17:04:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 17:20:34 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ class responsePreparation
         void             add_CRLF();
 
         void             prepare_allow();
+
+        void             prepare_connection();
         void             prepare_body();
 
         void             exceute_get();

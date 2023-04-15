@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/13 16:49:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/04/14 00:59:53 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@ CGI::CGI()
 }
 
 CGI::~CGI()
+{
+    
+}
+
+
+//check cgi scripts extensions
+void    CGI::checkCGI()
 {
     
 }

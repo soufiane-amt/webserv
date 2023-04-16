@@ -2,6 +2,18 @@
 #include <cstring>
 #include <iostream>
 
+#include <vector>
+
+char** convert_vector_to_char_array(std::vector<std::string>& vec) {
+    char** arr = new char*[vec.size() + 1];
+    for (size_t i = 0; i < vec.size(); ++i) {
+        arr[i] = new char[vec[i].size() + 1];
+        std::strcpy(arr[i], vec[i].c_str());
+    }
+    arr[vec.size()] = NULL;
+    return arr;
+}
+
 bool is_cgi_url(const std::string& url) {
   // Check if the URL starts with the "http://" or "https://" protocol
   if (url.compare(0, 7, "http://") == 0 || url.compare(0, 8, "https://") == 0) {

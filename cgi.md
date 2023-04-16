@@ -20,3 +20,17 @@
 
 ### 4-execution:
 -set envirenment vars and create new process for executing the script
+
+### example of cgi URL:
+
+=> http://example.com/cgi-bin/script.cgi
+=> file:///home/user/scripts/script.cgi
+
+cookie:
+
+-generate a token for each session
+-store data in DB
+-compare data to serve client
+
+
+

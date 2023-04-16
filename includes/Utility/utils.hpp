@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/15 23:48:57 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/16 00:29:52 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,8 @@ struct utility
     //case insensitive search :
     static bool                     caseInsensitiveStringCompare(char a, char b);
 
-
+    //decoding ascii code
+    static std::string                     decode_ascii_code(const std::string& splited_nodes);
     
 };
 

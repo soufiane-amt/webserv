@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 00:03:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/16 00:31:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,32 +358,47 @@ std::map<std::string, std::string>   utility::decode_x_www_form_urlencoded_forma
 {
     std::vector<std::string> tokens = split(form, "&");
     std::map<std::string, std::string> form_map;
+    std::map<std::string, std::string> splited_nodes;
     std::vector<std::string> key_value;
-
+    
     for (size_t i = 0; i < tokens.size(); i++)
     {
         key_value = split(tokens[i], "=");
         if (key_value.size() == 2)
-            form_map[key_value[0]] = key_value[1];
+            splited_nodes[key_value[0]] = key_value[1];
     }
-    //decoding ascii code in c++98 only
-    for (std::map<std::string, std::string>::iterator it = form_map.begin(); it != form_map.end(); it++)
+    
+    std::string decoded_key;
+    std::string decoded_value;
+    for (std::map<std::string, std::string>::iterator it = splited_nodes.begin(); it != splited_nodes.end(); it++)
     {
-        std::string value = it->second;
-        std::string decoded_value = "";
-        for (size_t i = 0; i < value.length(); i++)
-        {
-            if (value[i] == '%')
-            {
-                std::string hex = value.substr(i + 1, 2);
-                int ascii = std::strtol(hex.c_str(), NULL, 16);
-                decoded_value += static_cast<char>(ascii);
-                i += 2;
-            }
-            else
-                decoded_value += value[i];
-        }
-        it->second = decoded_value;
+        std::string decoded_key = decode_ascii_code(it->first);
+        form_map[decoded_key];
+        std::string decoded_value = decode_ascii_code(it->second);
+        form_map[decoded_key] = decoded_value;
     }
     return form_map;
+}
+
+
+/* ************************************************************************** */
+                            // utility::decode_ascii_code :
+/* ************************************************************************** */
+
+std::string     utility::decode_ascii_code(const std::string& str)
+{
+    std::string decoded_str = "";
+    for (size_t i = 0; i < str.length(); i++)
+    {
+        if (str[i] == '%')
+        {
+            std::string hex = str.substr(i + 1, 2);
+            int ascii = std::strtol(hex.c_str(), NULL, 16);
+            decoded_str += static_cast<char>(ascii);
+            i += 2;
+        }
+        else
+            decoded_str += str[i];
+    }
+    return decoded_str;
 }

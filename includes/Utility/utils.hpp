@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/15 21:47:46 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/15 23:48:57 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,10 @@ struct utility
 
     static std::string                          get_last_modified(const std::string& filepath);
 
+    static std::map<std::string, std::string>   decode_x_www_form_urlencoded_format(const std::string& form);
+    
+    static std::map<std::string, std::string>   decode_form_data_format(const std::string& form);
+    
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

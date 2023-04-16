@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/15 21:40:27 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/16 00:03:02 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,4 +346,44 @@ std::string             utility::get_last_modified(const std::string& filepath)
     std::stringstream last_modified;
     last_modified << std::put_time(std::gmtime(&timestamp), "%a, %d %b %Y %T GMT");
     return last_modified.str();
+}
+
+
+
+/* ************************************************************************** */
+                            // utility::decode_x_www_form_urlencoded_format :
+/* ************************************************************************** */
+
+std::map<std::string, std::string>   utility::decode_x_www_form_urlencoded_format(const std::string& form)
+{
+    std::vector<std::string> tokens = split(form, "&");
+    std::map<std::string, std::string> form_map;
+    std::vector<std::string> key_value;
+
+    for (size_t i = 0; i < tokens.size(); i++)
+    {
+        key_value = split(tokens[i], "=");
+        if (key_value.size() == 2)
+            form_map[key_value[0]] = key_value[1];
+    }
+    //decoding ascii code in c++98 only
+    for (std::map<std::string, std::string>::iterator it = form_map.begin(); it != form_map.end(); it++)
+    {
+        std::string value = it->second;
+        std::string decoded_value = "";
+        for (size_t i = 0; i < value.length(); i++)
+        {
+            if (value[i] == '%')
+            {
+                std::string hex = value.substr(i + 1, 2);
+                int ascii = std::strtol(hex.c_str(), NULL, 16);
+                decoded_value += static_cast<char>(ascii);
+                i += 2;
+            }
+            else
+                decoded_value += value[i];
+        }
+        it->second = decoded_value;
+    }
+    return form_map;
 }

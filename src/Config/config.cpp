@@ -6,80 +6,77 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/03/23 17:56:06 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/11 23:42:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Utility/utils.hpp"
-#include "../../includes/config/config.hpp"
+#include "config.hpp"
+
+std::string	Config::lstrtrim(std::string &str)
+{
+	size_t	start;
+
+	start = str.find_first_not_of(" \t");
+	if (start == std::string::npos)
+		return ("");
+	str = str.substr(start);
+	return (str);
+}
+
+std::string	Config::rstrtrim(std::string &str)
+{
+	size_t	end;
+
+	end = str.find_last_not_of(" \t");
+	if (end == std::string::npos)
+		return ("");
+	str = str.substr(0, end + 1);
+	return (str);
+}
+
+void	Config::server_block(vector_it &it)
+{
+	size_t	pos;
+
+	pos = it->find_first_of("#");
+	if (pos != std::string::npos)
+	{
+		*it = it->substr(0, pos);
+		*it = rstrtrim(*it);
+		if (it->length() != 8)
+			throw "Error in server line";
+	}
+}
+
+void	Config::check_server(std::vector<std::string> &lines)
+{
+	int	i = 0;
+
+	for (vector_it it = lines.begin(); it != lines.end(); it++)
+	{
+		if (*it == "" || it->at(0) == '#')
+			continue;
+		else if (it->find("server {", 0) == std::string::npos && i == 0)
+			throw "Error, first line must contains server block";
+		else if (it->find("server {", 0) == 0)
+		{
+			server_block(it);
+			i++;
+		}
+		else
+			throw "Error";
+	}
+}
 
 Config::Config(std::ifstream &file)
 {
+	std::string	line;
+
 	while (std::getline(file, line))
 	{
-		pos = line.find_first_not_of(" \t");
-		if (pos != std::string::npos)
-			line = line.substr(pos);
+		line = lstrtrim(line);
+		line = rstrtrim(line);
 		lines.push_back(line);
 	}
-	checker();
-}
-
-void	Config::checker()
-{
-	for (std::vector<std::string>::iterator it = lines.begin(); it != lines.end(); it++)
-	{
-		line = *it;
-		pos = line.find(' ');
-		if (pos != std::string::npos)
-		{
-			key = line.substr(0, pos);
-			value = line.substr(pos + 1);
-			map_config[key] = value;
-		}
-	}
-}
-
-const std::string	Config::get_key(const std::string &key) const
-{
-	std::map<std::string, std::string>::const_iterator it = map_config.find(key);
-	if (it != map_config.end())
-		return it->second;
-	return "Not found";
-}
-
-int	check_file_name(std::string config, std::string end_char)
-{
-	if (config.length() <= end_char.length()
-		|| config.substr(config.length() - end_char.length()) != end_char)
-	{
-		std::cout << "error in file name" << std::endl;
-		return (1);
-	}
-	return (0);
-}
-
-int	main(int ac, char **av)
-{
-
-	if (ac == 2)
-	{
-		std::string		config = av[1];
-		std::ifstream	file(config);
-		std::string		end_char = ".conf";
-
-		if (file)
-		{
-			if (check_file_name(config, end_char))
-				return (1);
-		}
-		else
-		{
-			std::cout << "there is no config file" << std::endl;
-			return (1);
-		}
-		Config	test(file);
-		std::cout << test.get_key("listen") << std::endl;
-	}
-	return (0);
+	check_server(lines);
 }

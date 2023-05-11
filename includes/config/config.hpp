@@ -6,14 +6,14 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/03/23 17:55:57 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/11 18:25:57 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 
-#include "../Utility/utils.hpp"
+#include "utils.hpp"
 
 typedef std::map<std::string, std::string> directive_t;
 typedef std::map<std::string, directive_t> location_t;
@@ -22,16 +22,19 @@ typedef std::vector<std::pair<directive_t, location_t> > server_t;
 class	Config
 {
 	private:
-		std::map<std::string, std::string> map_config;
 		std::string	key;
 		std::string value;
 		std::vector<std::string> lines;
-		std::string	line;
-		std::string::size_type pos;
+		directive_t directives;
+		location_t locations;
+		server_t servers;
 	public:
+		typedef	std::vector<std::string>::iterator vector_it;
 		Config(std::ifstream &file);
-		void	checker();
-		const	std::string	get_key(const std::string &key) const;
+		std::string	lstrtrim(std::string	&str);
+		std::string	rstrtrim(std::string	&str);
+		void	check_server(std::vector<std::string> &lines);
+		void	server_block(vector_it &it);
 };
 
 #endif

@@ -3,16 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/03/17 14:24:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/08 18:27:21 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "config.hpp"
+#include "utils.hpp"
 
-
-int main ()
+int	check_file_name(std::string config, std::string end_char)
 {
-    
+	if (config.length() <= end_char.length()
+		|| config.substr(config.length() - end_char.length()) != end_char)
+	{
+		std::cout << "error in file name" << std::endl;
+		return (1);
+	}
+	return (0);
+}
+
+int	main(int ac, char **av)
+{
+
+	if (ac == 2)
+	{
+		std::string		config = av[1];
+		std::ifstream	file(config);
+		std::string		end_char = ".conf";
+
+		if (file)
+		{
+			if (check_file_name(config, end_char))
+				return (1);
+		}
+		else
+		{
+			std::cout << "there is no config file" << std::endl;
+			return (1);
+		}
+		try
+		{
+			Config	test(file);
+		}
+		catch(const char *e)
+		{
+			std::cerr << e << '\n';
+		}
+	}
+	return (0);
 }

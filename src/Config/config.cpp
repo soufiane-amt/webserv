@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/11 23:42:24 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/19 23:56:41 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,37 +34,83 @@ std::string	Config::rstrtrim(std::string &str)
 	return (str);
 }
 
-void	Config::server_block(vector_it &it)
+void	Config::tokenize(std::vector<std::string> &lines)
 {
-	size_t	pos;
-
-	pos = it->find_first_of("#");
-	if (pos != std::string::npos)
-	{
-		*it = it->substr(0, pos);
-		*it = rstrtrim(*it);
-		if (it->length() != 8)
-			throw "Error in server line";
-	}
-}
-
-void	Config::check_server(std::vector<std::string> &lines)
-{
-	int	i = 0;
+	key_val	kv;
 
 	for (vector_it it = lines.begin(); it != lines.end(); it++)
 	{
-		if (*it == "" || it->at(0) == '#')
-			continue;
-		else if (it->find("server {", 0) == std::string::npos && i == 0)
-			throw "Error, first line must contains server block";
-		else if (it->find("server {", 0) == 0)
+		if (*it == "server")
 		{
-			server_block(it);
-			i++;
+			kv.key = TOKEN_SERVER;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == "location")
+		{
+			kv.key = TOKEN_LOCATIOIN;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == "{")
+		{
+			kv.key = TOKEN_O_BRACE;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == "}")
+		{
+			kv.key = TOKEN_C_BRACE;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == ";")
+		{
+			kv.key = TOKEN_SEMICOLON;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (it->at(0) == '#')
+		{
+			kv.key = TOKEN_COMMENTS;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (it->at(0) == '/' && *(it - 1) == "location")
+		{
+			kv.key = TOKEN_L_VALUE;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
+			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
+			|| *it == "index" || *it == "upload")
+		{
+			kv.key = TOKEN_DIRECTIVE;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (it->back() == ';' || tokens.back().key == TOKEN_DIRECTIVE)
+		{
+			if (it->back() == ';')
+			{
+				it->pop_back();
+				kv.key = TOKEN_D_VALUE;
+				kv.value = *it;
+				tokens.push_back(kv);
+				kv.key = TOKEN_SEMICOLON;
+				kv.value = ";";
+				tokens.push_back(kv);	
+			}
+			else
+			{
+				kv.key = TOKEN_D_VALUE;
+				kv.value = *it;
+				tokens.push_back(kv);
+			}
 		}
 		else
-			throw "Error";
+			throw Config::Error_config_file();
 	}
 }
 
@@ -76,7 +122,22 @@ Config::Config(std::ifstream &file)
 	{
 		line = lstrtrim(line);
 		line = rstrtrim(line);
-		lines.push_back(line);
+		if (line.empty())
+			continue;
+		for (size_t i = 0; i < line.length(); i++)
+		{
+			if (line[i] == '\n' || line[i] == '\t')
+				line[i] = ' ';
+		}
+		split_lines = utility::split(line, " ");
+		for (std::vector<std::string>::const_iterator it = split_lines.begin(); it != split_lines.end(); ++it) {
+            lines.push_back(*it);
+        }
 	}
-	check_server(lines);
+	tokenize(lines);
+}
+
+const char*	Config::Error_config_file::what() const throw()
+{
+	return "Error in config file";
 }

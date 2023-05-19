@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/08 18:27:21 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:51:26 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	main(int ac, char **av)
 		{
 			Config	test(file);
 		}
-		catch(const char *e)
+		catch(std::exception &e)
 		{
-			std::cerr << e << '\n';
+			std::cerr << e.what() << '\n';
 		}
 	}
 	return (0);

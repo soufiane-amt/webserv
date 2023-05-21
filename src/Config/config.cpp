@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 21:04:05 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 23:40:05 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,6 @@ void	Config::tokenize(std::vector<std::string> &lines)
 		else if (*it == "}")
 		{
 			kv.key = TOKEN_C_BRACE;
-			kv.value = *it;
-			tokens.push_back(kv);
-		}
-		else if (*it == ";")
-		{
-			kv.key = TOKEN_SEMICOLON;
 			kv.value = *it;
 			tokens.push_back(kv);
 		}

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 18:16:06 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 20:13:32 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	Config::tokenize(std::vector<std::string> &lines)
 	}
 }
 
-void Config::directive_check(key_val_it &it)
+void Config::directive_check(key_val_it &it, int *i)
 {
 	if (it->key == TOKEN_DIRECTIVE)
 	{
@@ -127,11 +127,20 @@ void Config::directive_check(key_val_it &it)
 		else if ((it + 1)->key != TOKEN_D_VALUE && (it + 1)->key != TOKEN_D_VALUE2)
 				throw Config::Error_config_file();
 	}
+	else if (it->key == TOKEN_C_BRACE)
+		(*i)--;
 }
 
 void Config::location_check(key_val_it &it)
 {
-	
+	if (it->key == TOKEN_LOCATIOIN)
+	{
+		if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
+			&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
+				throw Config::Error_config_file();
+		else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
+				throw Config::Error_config_file();
+	}
 }
 
 void Config::server_check(std::vector<key_val> &tokens)
@@ -150,11 +159,20 @@ void Config::server_check(std::vector<key_val> &tokens)
 		}
 		else if (i != 0 && it->key != TOKEN_SERVER)
 		{
-			directive_check(it);
-			location_check(it);
+			if (i == 1 && it->key == TOKEN_LOCATIOIN)
+			{
+				location_check(it);
+				i++;
+			}
+			else if (i == 2 && it->key != TOKEN_LOCATIOIN)
+				directive_check(it, &i);
+			else if (i == 1 && it->key != TOKEN_LOCATIOIN)
+				directive_check(it, &i);
+			else
+				throw Config::Error_config_file();
 		}
-		// else
-		// 	throw Config::Error_config_file();
+		else
+			throw Config::Error_config_file();
 	}
 }
 

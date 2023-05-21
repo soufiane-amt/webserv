@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/19 23:56:41 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:16:06 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,14 @@ void	Config::tokenize(std::vector<std::string> &lines)
 			kv.value = *it;
 			tokens.push_back(kv);
 		}
-		else if (it->at(0) == '/' && *(it - 1) == "location")
+		else if (it->at(0) == '/' && it->back() != ';')
 		{
-			kv.key = TOKEN_L_VALUE;
-			kv.value = *it;
-			tokens.push_back(kv);
+			if (tokens.size() > 0 && tokens.back().key == TOKEN_LOCATIOIN)
+			{
+				kv.key = TOKEN_L_VALUE;
+				kv.value = *it;
+				tokens.push_back(kv);
+			}
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
@@ -90,7 +93,7 @@ void	Config::tokenize(std::vector<std::string> &lines)
 			kv.value = *it;
 			tokens.push_back(kv);
 		}
-		else if (it->back() == ';' || tokens.back().key == TOKEN_DIRECTIVE)
+		else if (it->back() == ';' || (tokens.size() > 0 && tokens.back().key == TOKEN_DIRECTIVE))
 		{
 			if (it->back() == ';')
 			{
@@ -104,13 +107,54 @@ void	Config::tokenize(std::vector<std::string> &lines)
 			}
 			else
 			{
-				kv.key = TOKEN_D_VALUE;
+				kv.key = TOKEN_D_VALUE2;
 				kv.value = *it;
 				tokens.push_back(kv);
 			}
 		}
 		else
 			throw Config::Error_config_file();
+	}
+}
+
+void Config::directive_check(key_val_it &it)
+{
+	if (it->key == TOKEN_DIRECTIVE)
+	{
+		if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
+			&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
+				throw Config::Error_config_file();
+		else if ((it + 1)->key != TOKEN_D_VALUE && (it + 1)->key != TOKEN_D_VALUE2)
+				throw Config::Error_config_file();
+	}
+}
+
+void Config::location_check(key_val_it &it)
+{
+	
+}
+
+void Config::server_check(std::vector<key_val> &tokens)
+{
+	int	i = 0;
+
+	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
+	{
+		if (it->key == TOKEN_COMMENTS)
+			continue;
+		else if (i == 0 && it->key == TOKEN_SERVER)
+		{
+			i++;
+			if ((it + 1)->key != TOKEN_O_BRACE || (it + 2)->key == TOKEN_C_BRACE)
+				throw Config::Error_config_file();
+		}
+		else if (i != 0 && it->key != TOKEN_SERVER)
+		{
+			directive_check(it);
+			location_check(it);
+		}
+		// else
+		// 	throw Config::Error_config_file();
 	}
 }
 
@@ -135,6 +179,7 @@ Config::Config(std::ifstream &file)
         }
 	}
 	tokenize(lines);
+	server_check(tokens);
 }
 
 const char*	Config::Error_config_file::what() const throw()

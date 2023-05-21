@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/19 23:51:57 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:15:35 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef enum e_type
 	TOKEN_LOCATIOIN,
 	TOKEN_DIRECTIVE,
 	TOKEN_D_VALUE,
+	TOKEN_D_VALUE2,
 	TOKEN_L_VALUE,
 	TOKEN_O_BRACE,
 	TOKEN_C_BRACE,
@@ -47,6 +48,7 @@ class	Config
 		server_t servers;
 	public:
 		typedef	std::vector<std::string>::iterator vector_it;
+		typedef	std::vector<key_val>::iterator key_val_it;
 		class Error_config_file : public std::exception
 		{
 			virtual const char *what() const throw();
@@ -55,7 +57,9 @@ class	Config
 		std::string	lstrtrim(std::string	&str);
 		std::string	rstrtrim(std::string	&str);
 		void	tokenize(std::vector<std::string> &lines);
-		void	server_block(vector_it &it);
+		void	server_check(std::vector<key_val> &tokens);
+		void	directive_check(key_val_it &it);
+		void	location_check(key_val_it &it);
 };
 
 #endif

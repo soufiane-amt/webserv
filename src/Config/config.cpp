@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 20:13:32 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 21:04:05 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	Config::tokenize(std::vector<std::string> &lines)
 			kv.value = *it;
 			tokens.push_back(kv);
 		}
-		else if (it->back() == ';' || (tokens.size() > 0 && tokens.back().key == TOKEN_DIRECTIVE))
+		else if (it->back() == ';' || (tokens.size() > 0 && (tokens.back().key == TOKEN_DIRECTIVE || tokens.back().key == TOKEN_D_VALUE2)))
 		{
 			if (it->back() == ';')
 			{
@@ -117,6 +117,30 @@ void	Config::tokenize(std::vector<std::string> &lines)
 	}
 }
 
+void Config::d_value_check(key_val_it &it)
+{
+	if ((it - 1)->value == "listen")
+	{
+		int	number = 0;
+		std::istringstream iss(it->value);
+		if (!(iss >> number))
+			throw Config::Error_config_file();
+		else if (number < 0 || number > 65535 || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
+	else if ((it - 1)->value == "autoindex")
+	{
+		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
+	else if ((it - 1)->value == "return")
+	{
+		if (it->key != TOKEN_D_VALUE2 && (it + 1)->key != TOKEN_D_VALUE
+			&& (it + 2)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
+}
+
 void Config::directive_check(key_val_it &it, int *i)
 {
 	if (it->key == TOKEN_DIRECTIVE)
@@ -127,6 +151,8 @@ void Config::directive_check(key_val_it &it, int *i)
 		else if ((it + 1)->key != TOKEN_D_VALUE && (it + 1)->key != TOKEN_D_VALUE2)
 				throw Config::Error_config_file();
 	}
+	else if (it->key == TOKEN_D_VALUE || it->key == TOKEN_D_VALUE2)
+		d_value_check(it);
 	else if (it->key == TOKEN_C_BRACE)
 		(*i)--;
 }

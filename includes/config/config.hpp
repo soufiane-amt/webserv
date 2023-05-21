@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 20:02:41 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/21 20:19:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ class	Config
 		void	tokenize(std::vector<std::string> &lines);
 		void	server_check(std::vector<key_val> &tokens);
 		void	directive_check(key_val_it &it, int *i);
+		void	d_value_check(key_val_it &it);
 		void	location_check(key_val_it &it);
 };
 

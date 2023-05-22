@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/15 21:50:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/16 00:33:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
     if (!utility::check_file_or_directory(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
-    std::cout << "Chof" << std::endl;
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
     {
         std::string it_ind = utility::search_directive("index", server_location[targetLocat]);

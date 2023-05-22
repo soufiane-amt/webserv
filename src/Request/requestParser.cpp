@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:08:49 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/22 10:24:19 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,18 @@ void    clientRequestParser::parseOtherLines (std::string line)
     if (itr != key.end())
         key = "host";
     }
+    //here I make sure to remove the the key part of the header
     line.erase(0, pos + 1);
+    //I remove the leading spaces from the value part of the header
     value = utility::trim(line, SP);
+    //I make sure that the value part of the header is not empty
+    if (value.empty())
+        throw StatusCode(BAD_REQUEST);
+    //I make sure that the value part of the header does not contain any space other than the space character
     for (std::string::iterator it = value.begin(); it != value.end(); it++)
         if (isspace(*it) && *it != ' ' )
             throw StatusCode(BAD_REQUEST);
-
+    //
     if (_request.header.find(key) == _request.header.end())//in case the host is already there
         _request.header[key] = value;
 }

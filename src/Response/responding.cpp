@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 00:10:11 by samajat          ###   ########.fr       */
+/*   Updated: 2023/04/16 00:33:03 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,12 +170,12 @@ void    responsePreparation::exceute_get()
 void    responsePreparation::exceute_post()
 {
     //output an std::map of the form data
-    std::map<std::string, std::string> form_data = utility::decode_x_www_form_urlencoded_format(_request.body);
+    // std::map<std::string, std::string> form_data = utility::decode_x_www_form_urlencoded_format(_request.body);
 
-    for(std::map<std::string, std::string>::iterator it = form_data.begin(); it != form_data.end(); ++it)
-    {
-        std::cout << it->first << " => " << it->second << '\n';
-    }
+    // for(std::map<std::string, std::string>::iterator it = form_data.begin(); it != form_data.end(); ++it)
+    // {
+    //     std::cout << it->first << " => " << it->second << '\n';
+    // }
     // std::string command;
     // command = _request.body.substr(_request.body.find('=') + 1);
     // command[command.find('+')] = ' ';

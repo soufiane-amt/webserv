@@ -154,3 +154,24 @@ Note that the Authorization header is typically used in conjunction with an HTTP
 There are two general methods for determining if a server resource has
 changed. One method checks for the most recent modification time of the document. Another
 method checks for modifications in the entity tag associated with the document.
+
+
+Cookies:
+Cookies are small text files that are used to store data on a user's computer or device. When a user visits a website, the website can set a cookie in the user's browser to store information such as user preferences, login credentials, and browsing behavior. Some examples of metadata that cookies can contain include:
+
+User ID or session ID: A unique identifier that the server uses to identify the user's session and retrieve their data.
+
+User preferences: Information about the user's preferences, such as language, font size, and theme.
+
+Login credentials: If the user has logged in to a website, the cookie may contain their username and password or a token that can be used to authenticate the user.
+
+Browsing behavior: Cookies can be used to track the user's browsing behavior, such as the pages they have visited, the items they have viewed or added to their cart, and the links they have clicked.
+
+Advertising information: Cookies can be used to track the user's interests and serve them targeted advertising based on their browsing behavior.
+
+Session information: Cookies can be used to store information about the user's session, such as the time of their last visit, the duration of their session, and the pages they have visited during their session.
+
+It's important to note that not all cookies contain sensitive or personally identifiable information, and many cookies are used to improve the user's browsing experience. However, some cookies can be used for tracking or profiling purposes, which can raise privacy concerns. Web users can manage their cookie settings in their browser preferences to control which cookies are stored on their device.
+
+
+

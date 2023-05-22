@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 23:40:05 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 14:57:23 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,25 @@ void Config::d_value_check(key_val_it &it)
 			&& (it + 2)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 	}
+	else if ((it - 1)->value == "allow")
+	{
+		std::vector<std::string> unique_values;
+		while (it->key != TOKEN_SEMICOLON)
+		{
+			if (it->value == "POST" || it->value == "GET" || it->value == "DELETE")
+			{
+				if (std::find(unique_values.begin(), unique_values.end(), it->value) == unique_values.end())
+					unique_values.push_back(it->value);
+				else
+					throw Config::Error_config_file();
+			}
+			else
+				throw Config::Error_config_file();
+			it++;
+		}
+		if (unique_values.size() < 1 || unique_values.size() > 3)
+				throw Config::Error_config_file();
+	}
 }
 
 void Config::directive_check(key_val_it &it, int *i)
@@ -194,6 +213,8 @@ void Config::server_check(std::vector<key_val> &tokens)
 		else
 			throw Config::Error_config_file();
 	}
+	if (i != 0)
+		throw Config::Error_config_file();
 }
 
 Config::Config(std::ifstream &file)

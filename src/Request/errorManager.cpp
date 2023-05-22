@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 00:33:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/22 11:53:00 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
     if (it != server_location.end())
         return URI.substr(0, URI.size());
     size_t pos = URI.find_last_of('/');
-    if (!pos )
+    if (pos == 0)
         return "/";
     else if (pos != std::string::npos)
         return isURIValid(URI.substr(0, pos), server_location);
@@ -130,6 +130,14 @@ void   errorManager::isHostValid(const header_t& header)
             throw StatusCode(BAD_REQUEST);
 }
 
+void                 isBodySizeValid(const std::string& body, const directive_t& header)
+{
+    std::string max_body_size = utility::search_directive ("max_body_size", header);
+    if (max_body_size != "" && static_cast<int>(body.size()) > atoi(max_body_size.c_str()))
+        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
+
+}
+
 bool     errorManager::isRequestValid(http_message_t &request)
 {
     location_t     server_location = parser.get_server_locations(0);
@@ -141,9 +149,10 @@ bool     errorManager::isRequestValid(http_message_t &request)
     isHostValid(header);
     defineFinalUri(header, request.targeted_Location, server_location);
     
-    std::string max_body_size = utility::search_directive ("max_body_size", server_location[request.targeted_Location]);
-    if (max_body_size != "" && static_cast<int>(request.body.size()) > atoi(max_body_size.c_str()))
-        throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
+    isBodySizeValid(request.body, server_location[request.targeted_Location]);
+    // std::string max_body_size = utility::search_directive ("max_body_size", server_location[request.targeted_Location]);
+    // if (max_body_size != "" && static_cast<int>(request.body.size()) > atoi(max_body_size.c_str()))
+    //     throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 
     return true;
 }

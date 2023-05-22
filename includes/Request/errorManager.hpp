@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/07 21:40:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/22 11:49:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class errorManager
     
     static const std::string              _Methods[8];//I could have used a set but it is hard to initialize a static set in c++98 witout using function
     static const std::string              _validProtocol;
+    
     public:
     static bool  isRequestValid(http_message_t& request);
     
@@ -38,6 +39,7 @@ class errorManager
     static  void                isHostValid(const header_t& header);
     static  void                isLocationRedirected(const std::string& URI, location_t &server_location);
 
+    static void                 isBodySizeValid(const std::string& body, const header_t& header);
     static void                 defineFinalUri (header_t& header, const std::string& targetLocation, location_t server_location);
 };
 

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/22 10:24:19 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/22 11:29:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ void    clientRequestParser::parseOtherLines (std::string line)
     for (std::string::iterator it = value.begin(); it != value.end(); it++)
         if (isspace(*it) && *it != ' ' )
             throw StatusCode(BAD_REQUEST);
-    //
-    if (_request.header.find(key) == _request.header.end())//in case the host is already there
-        _request.header[key] = value;
+    _request.header[key] = value;
 }
 
 void    clientRequestParser::parseHeader ()

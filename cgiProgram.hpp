@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/14 00:50:24 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:29:24 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ class CGI
         ~CGI();
         void    checkCGI();
         void    handleCGI();
+        //set env vars
+        //cgi directive in config file
 };
 
 #endif

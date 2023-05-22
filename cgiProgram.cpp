@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/16 17:21:54 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:39:59 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void    CGI::handleCGI()
 
     //set cgi cmd
     //set cgi env
+    //content type
+    //content length
 
     //convert cgi strings to char **
     
@@ -68,10 +70,10 @@ void    CGI::handleCGI()
 
         //The CGI should be run in the correct directory for relative path file access.
         // changes the current working directory of the child process to the root directory of the server
-
+        //chdir to the root of the cgi
         
 
-         char *const args[] = {"python3", "cgi_exemple.py", NULL};
+        char *const args[] = {"python3", "cgi_exemple.py", NULL};
         if (execve("/usr/bin/python3", args, NULL) < 0)
             exit(EXIT_FAILURE);
     }
@@ -84,7 +86,7 @@ void    CGI::handleCGI()
         buffer[nbytes] = '\0';
     }
 
-
+    
     std::cout << buffer << std::endl;
 }
 

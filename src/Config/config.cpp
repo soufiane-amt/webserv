@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 21:45:24 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:48:00 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,7 @@ void Config::server_check(std::vector<key_val> &tokens)
 	}
 	brace_counter(tokens);
 	fill_containers(tokens);
+	std::cout << directives["listen"] << std::endl;
 }
 
 Config::Config(std::ifstream &file)

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 16:14:18 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:54:13 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ void Config::server_check(std::vector<key_val> &tokens)
 		else if (i == 0 && it->key == TOKEN_SERVER)
 		{
 			i++;
-			if ((it + 1)->key != TOKEN_O_BRACE || (it + 2)->key == TOKEN_C_BRACE)
+			if ((it + 1)->key != TOKEN_O_BRACE)
 				throw Config::Error_config_file();
 		}
 		else if (i != 0 && it->key != TOKEN_SERVER)

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 17:54:13 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 18:28:58 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,9 @@ void Config::directive_check(key_val_it &it, int *i)
 	}
 	else if (it->key == TOKEN_C_BRACE)
 		(*i)--;
+	else if (it->key == TOKEN_O_BRACE && ((it - 1)->key != TOKEN_L_VALUE
+		&& (it - 1)->key != TOKEN_SERVER))
+		throw Config::Error_config_file();
 }
 
 void Config::location_check(key_val_it &it)
@@ -182,6 +185,21 @@ void Config::location_check(key_val_it &it)
 			throw Config::Error_config_file();
 	else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
 			throw Config::Error_config_file();
+}
+
+void Config::brace_counter(std::vector<key_val> &tokens)
+{
+	int	count = 0;
+
+	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
+	{
+		if (it->key == TOKEN_O_BRACE)
+			count++;
+		else if (it->key == TOKEN_C_BRACE)
+			count--;
+	}	
+	if (count != 0)
+		throw Config::Error_config_file();
 }
 
 void Config::server_check(std::vector<key_val> &tokens)
@@ -215,8 +233,7 @@ void Config::server_check(std::vector<key_val> &tokens)
 		else
 			throw Config::Error_config_file();
 	}
-	if (i != 0)
-		throw Config::Error_config_file();
+	brace_counter(tokens);
 }
 
 Config::Config(std::ifstream &file)

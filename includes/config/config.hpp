@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/21 20:19:24 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 18:13:40 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class	Config
 		void	directive_check(key_val_it &it, int *i);
 		void	d_value_check(key_val_it &it);
 		void	location_check(key_val_it &it);
+		void	brace_counter(std::vector<key_val> &tokens);
 };
 
 #endif

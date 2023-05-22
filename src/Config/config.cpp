@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 14:57:23 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 16:14:18 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,20 +166,22 @@ void Config::directive_check(key_val_it &it, int *i)
 	}
 	else if (it->key == TOKEN_D_VALUE || it->key == TOKEN_D_VALUE2)
 		d_value_check(it);
+	else if (it->key == TOKEN_SEMICOLON)
+	{
+		if ((it + 1)->key == TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
 	else if (it->key == TOKEN_C_BRACE)
 		(*i)--;
 }
 
 void Config::location_check(key_val_it &it)
 {
-	if (it->key == TOKEN_LOCATIOIN)
-	{
-		if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
-			&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
-				throw Config::Error_config_file();
-		else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
-				throw Config::Error_config_file();
-	}
+	if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
+		&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
+			throw Config::Error_config_file();
+	else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
+			throw Config::Error_config_file();
 }
 
 void Config::server_check(std::vector<key_val> &tokens)

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 18:28:58 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:45:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,25 @@ void Config::brace_counter(std::vector<key_val> &tokens)
 		throw Config::Error_config_file();
 }
 
+void Config::fill_containers(std::vector<key_val> &tokens)
+{
+	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
+	{
+		if (it->key == TOKEN_DIRECTIVE)
+		{
+			directives.insert(std::make_pair(it->value, (it + 1)->value));
+			if ((it + 2)->key == TOKEN_D_VALUE || (it + 2)->key == TOKEN_D_VALUE2)
+				directives[it->value] += ", " + (it + 2)->value;
+			if ((it + 3)->key == TOKEN_D_VALUE || (it + 3)->key == TOKEN_D_VALUE2)
+				directives[it->value] += ", " + (it + 3)->value;
+		}
+		else if (it->key == TOKEN_LOCATIOIN)
+			locations.insert(std::make_pair(it->value, directives));
+		else if (it->key == TOKEN_SERVER)
+			servers.push_back(std::pair<directive_t, location_t>(directives, locations));
+	}
+}
+
 void Config::server_check(std::vector<key_val> &tokens)
 {
 	int	i = 0;
@@ -234,6 +253,7 @@ void Config::server_check(std::vector<key_val> &tokens)
 			throw Config::Error_config_file();
 	}
 	brace_counter(tokens);
+	fill_containers(tokens);
 }
 
 Config::Config(std::ifstream &file)

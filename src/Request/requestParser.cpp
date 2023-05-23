@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/22 11:29:14 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/23 17:14:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
         throw StatusCode(BAD_REQUEST); 
 
     _tokens = utility::split(spl_request[0], CRLF);
-    _request.body = spl_request[1];
+    if (spl_request.size() == 2 )
+        _request.body = spl_request[1];
+    // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
@@ -56,6 +58,7 @@ void    clientRequestParser::check_the_absoluteURI ()
 
 void    clientRequestParser::parseFirstLine ()
 {
+
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw StatusCode(BAD_REQUEST);
@@ -96,9 +99,21 @@ void    clientRequestParser::parseOtherLines (std::string line)
 
 void    clientRequestParser::parseHeader ()
 {
+    try
+    {
     parseFirstLine ();
     for (tokens_t::iterator it = _tokens.begin() + 1; it != _tokens.end() ; it++)
         parseOtherLines(*it);
+
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "the problem is here" << '\n';
+    }
+
+    
+        /* code */
+    
 }
 
 

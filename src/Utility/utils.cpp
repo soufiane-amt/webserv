@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 13:00:04 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/23 17:06:46 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ std::vector<std::string> utility::split(std::string str, std::string delimiter)
 {
     std::vector<std::string> tokens;
     size_t pos = 0;
-    std::string token;
+    std::string token = "";
     while ((pos = str.find(delimiter)) != std::string::npos) {
         token = str.substr(0, pos);
+        if (!token.empty()) {
             tokens.push_back(token);
+        }
         str.erase(0, pos + delimiter.length());
     }
+    if (!str.empty()) {
         tokens.push_back(str);
+    }
     return tokens;
 }
 
@@ -218,20 +222,6 @@ std::string     utility::list_directory(std::string directory,  std::string targ
     std::string listing_file;
     
     std::string direct = directory;
-    (void)target_location;
-    // target_location = target_location == "/" ? "" : target_location;
-    // if (target_location == "")
-    //     target_location = directory;
-    // size_t i = directory.find_first_of (target_location);
-    // std::cout << "i : " << i << std::endl;
-    // if (i != std::string::npos)
-    //     direct.erase (0, 4 + i + target_location.length());
-    //     // if (direct[0] == '/' && direct[1] == '/')
-    //         direct.erase (0, 1);
-    //         direct.erase (0, 1);
-    //         direct.erase (direct.length() - 1, 1);
-    // if (direct == "")
-    //     direct = "/";
     if (target_location == "/")
         direct = "";
     else
@@ -355,7 +345,7 @@ std::string             utility::get_last_modified(const std::string& filepath)
 /* ************************************************************************** */
 
 std::map<std::string, std::string>   utility::decode_x_www_form_urlencoded_format(const std::string& form)
-{
+{//////**************PLEASE READ THIS*********////// :====> you should replace std::map with std::vector<std::pair<std::string, std::string>> for better performance
     std::vector<std::string> tokens = split(form, "&");
     std::map<std::string, std::string> form_map;
     std::map<std::string, std::string> splited_nodes;

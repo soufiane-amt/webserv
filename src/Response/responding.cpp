@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 00:33:03 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/23 10:38:12 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ responsePreparation::responsePreparation(const http_message_t& request, const  S
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
         exceute_get();
-    else if (_request.header["Method"] == "POST")
-        exceute_post();
+    // else if (_request.header["Method"] == "POST")
+    //     exceute_post();
     // else if (_request.header["Method"] == "DELETE")
     //     exceute_delete();
 }
@@ -79,7 +79,7 @@ void responsePreparation::prepare_content_length(response_t::iterator& it)
     if (_response.end() != it)
     {
         std::string  content_length = CRLF "Content-Length: ";
-        size_t body_size = (_response.end() - it - 4);
+        size_t body_size = (_response.end() - it - 4);//the 4 is for the CRLF CRLF
         if (body_size != 0)
         {
             content_length  += std::to_string(body_size);
@@ -138,7 +138,6 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     }
     if (_dir_listing_on == true)//here we need to check if autoindex is on
     {
-        std::cout << " +++++++++" << _request.header["URI"] << "\n";
         appropriate_page = utility::list_directory(_request.header["URI"], _request.targeted_Location);
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
     }
@@ -160,7 +159,7 @@ void    responsePreparation::exceute_get()
     prepare_connection ();
     if (_statusCode.get_status_code() == OK)
     {
-        prepare_body();
+        prepare_body();//this function must always be called first than the next one
         prepare_meta_body_data();
     }
     else

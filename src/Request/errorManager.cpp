@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/22 11:53:00 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/23 17:15:19 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ const std::string errorManager::_Methods[8] = {"GET", "POST", "DELETE", "OPTIONS
 
 void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts,  bool requestHasBody)
 {
+    // std::cout << "--------------"<< requestHasBody<<std::endl;
     if ((!requestHasBody && Method == "POST") || 
            (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
         throw StatusCode(BAD_REQUEST);
@@ -44,6 +45,7 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
 
 void     errorManager::isProtocolValid(protocol_t protocol)
 {
+    std::cout << "protocol:" << protocol << std::endl;
     if (protocol == _validProtocol)
         return ;
     if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
@@ -130,12 +132,11 @@ void   errorManager::isHostValid(const header_t& header)
             throw StatusCode(BAD_REQUEST);
 }
 
-void                 isBodySizeValid(const std::string& body, const directive_t& header)
+void    errorManager::isBodySizeValid(const std::string& body,  directive_t& header)
 {
     std::string max_body_size = utility::search_directive ("max_body_size", header);
     if (max_body_size != "" && static_cast<int>(body.size()) > atoi(max_body_size.c_str()))
         throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
-
 }
 
 bool     errorManager::isRequestValid(http_message_t &request)
@@ -144,8 +145,10 @@ bool     errorManager::isRequestValid(http_message_t &request)
     header_t              &header         = request.header;
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
+    // std::cout << "header.find(\"Protocol\")->second" <<header.find("Protocol")->second <<std::endl;
     isMethodValid(header.find("Method")->second, server_location[request.targeted_Location], !request.body.empty());
     isProtocolValid(header.find("Protocol")->second);
+
     isHostValid(header);
     defineFinalUri(header, request.targeted_Location, server_location);
     

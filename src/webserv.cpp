@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 16:08:47 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/23 16:44:12 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ std::vector<char>    request_response(std::string msg)
 
     try
     {
-        errorManager::isRequestValid(_request);
-        responsePreparation response(_request);
-        return response.get_response();
+            errorManager::isRequestValid(_request);
+            responsePreparation response(_request);
+        
+            return response.get_response();
+        
     }
     catch(const StatusCode& e)
     {

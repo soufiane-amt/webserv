@@ -1,10 +1,10 @@
 #include <string>
 #include <cstring>
 #include <iostream>
-
 #include <vector>
 
-char** convert_vector_to_char_array(std::vector<std::string>& vec) {
+char** convert_vector_to_char_array(std::vector<std::string>& vec) 
+{
     char** arr = new char*[vec.size() + 1];
     for (size_t i = 0; i < vec.size(); ++i) {
         arr[i] = new char[vec[i].size() + 1];
@@ -14,9 +14,26 @@ char** convert_vector_to_char_array(std::vector<std::string>& vec) {
     return arr;
 }
 
-bool is_cgi_url(const std::string& url) {
-  // Check if the URL starts with the "http://" or "https://" protocol
-  if (url.compare(0, 7, "http://") == 0 || url.compare(0, 8, "https://") == 0) {
+
+bool isCGIFile(const std::string& filename)
+{
+    std::string::size_type dotPos = filename.rfind('.');
+    if (dotPos != std::string::npos)
+    {
+        std::string extension = filename.substr(dotPos + 1);
+        // Compare the extension with CGI file extensions
+        if (extension == "cgi" || extension == "php" || extension == "py")
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool is_cgi_url(const std::string& url)
+{
+  // Check if the URL starts with the "http://" protocol
+  if (url.compare(0, 7, "http://") == 0) {
     // Look for the presence of a CGI script name in the URL's path
     const char* path = url.c_str() + (url.compare(0, 7, "http://") == 0 ? 7 : 8);
     if (std::strstr(path, "/cgi-bin/") != NULL || std::strstr(path, ".cgi") != NULL) {

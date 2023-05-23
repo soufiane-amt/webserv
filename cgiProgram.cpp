@@ -6,15 +6,22 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/22 19:39:59 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:22:27 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgiProgram.hpp"
 
+    //idk if we gonna need this one
+	// HTTP_COOKIE="//get the cookie from the header 
+
+    //cgi_cmd = cgiPath + file to set in execve
+
+
+
 CGI::CGI()
 {
-    this->_name = "/Users/fech-cha/Desktop/webserv/cgi_exemple.py";
+
 }
 
 CGI::~CGI()
@@ -22,6 +29,21 @@ CGI::~CGI()
     
 }
 
+//expect &req in arg
+void    CGI::setEnvCgi()
+{
+    this->_env.push_back("SERVER_NAME=" + getServerNameFromReq());
+    this->_env.push_back("SERVER_SOFTWARE=webserv");
+    this->_env.push_back("SERVER_PORT="+getPortFromReq());
+    this->_env.push_back("REQUEST_METHOD="+getReqMeth());
+    this->_env.push_back("GATEWAY_INTERFACE=CGI");
+    this->_env.push_back("SERVER_PROTOCOL=HTTP1.1");
+    this->_env.push_back("CONTENT_TYPE="+getContentTypeFromReq());
+    this->_env.push_back("CONTENT_LENGTH="+getContentLength());
+    this->_env.push_back("DOCUMENT_ROOT="+getRootDirectory());
+    this->_env.push_back("QUERY_STRING="+getQueryStr());
+    this->_env.push_back("SCRIPT_FILENAME="+getCGIScriptName());
+}
 
 //check cgi scripts extensions
 void    CGI::checkCGI()
@@ -31,12 +53,13 @@ void    CGI::checkCGI()
 
 void    CGI::handleCGI()
 {
+
     char buffer[1024];
     int fd[2];
     int check = 0;
 
     //store output of cgi script
-    std::string res;
+    std::string cgiResp;
 
     //set cgi cmd
     //set cgi env
@@ -74,6 +97,8 @@ void    CGI::handleCGI()
         
 
         char *const args[] = {"python3", "cgi_exemple.py", NULL};
+        //change to directory of the cgi
+        
         if (execve("/usr/bin/python3", args, NULL) < 0)
             exit(EXIT_FAILURE);
     }

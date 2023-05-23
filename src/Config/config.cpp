@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 21:49:30 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:40:03 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ std::string	Config::rstrtrim(std::string &str)
 	return (str);
 }
 
-void	Config::tokenize(std::vector<std::string> &lines)
+void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tokens)
 {
 	key_val	kv;
 
@@ -78,10 +78,12 @@ void	Config::tokenize(std::vector<std::string> &lines)
 				kv.value = *it;
 				tokens.push_back(kv);
 			}
+			else
+				throw Config::Error_config_file();
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
-			|| *it == "index" || *it == "upload")
+			|| *it == "index" || *it == "upload" || *it == "max_body_size")
 		{
 			kv.key = TOKEN_DIRECTIVE;
 			kv.value = *it;
@@ -106,6 +108,12 @@ void	Config::tokenize(std::vector<std::string> &lines)
 				tokens.push_back(kv);
 			}
 		}
+		else if (*it == "\n")
+		{
+			kv.key = TOKEN_NL;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
 		else
 			throw Config::Error_config_file();
 	}
@@ -122,9 +130,28 @@ void Config::d_value_check(key_val_it &it)
 		else if (number < 0 || number > 65535 || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 	}
+	else if ((it - 1)->value == "max_body_size")
+	{
+		int	number = 0;
+		std::istringstream iss(it->value);
+		if (!(iss >> number))
+			throw Config::Error_config_file();
+		else if (number < 0 || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
 	else if ((it - 1)->value == "autoindex")
 	{
 		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
+	else if ((it - 1)->value == "root")
+	{
+		if (it->value.at(0) != '/' || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+	}
+	else if ((it - 1)->value == "index" || (it - 1)->value == "server_name")
+	{
+		if (it->value.at(0) == '/' || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 	}
 	else if ((it - 1)->value == "return")
@@ -158,8 +185,7 @@ void Config::directive_check(key_val_it &it, int *i)
 {
 	if (it->key == TOKEN_DIRECTIVE)
 	{
-		if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
-			&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
+		if ((it - 1)->key != TOKEN_NL)
 				throw Config::Error_config_file();
 		else if ((it + 1)->key != TOKEN_D_VALUE && (it + 1)->key != TOKEN_D_VALUE2)
 				throw Config::Error_config_file();
@@ -168,20 +194,23 @@ void Config::directive_check(key_val_it &it, int *i)
 		d_value_check(it);
 	else if (it->key == TOKEN_SEMICOLON)
 	{
-		if ((it + 1)->key == TOKEN_SEMICOLON)
+		if ((it + 1)->key != TOKEN_NL)
 			throw Config::Error_config_file();
 	}
 	else if (it->key == TOKEN_C_BRACE)
+	{
+		if ((it + 1)->key != TOKEN_NL)
+			throw Config::Error_config_file();
 		(*i)--;
+	}
 	else if (it->key == TOKEN_O_BRACE && ((it - 1)->key != TOKEN_L_VALUE
-		&& (it - 1)->key != TOKEN_SERVER))
+		&& (it - 1)->key != TOKEN_SERVER) && (it + 1)->key != TOKEN_NL)
 		throw Config::Error_config_file();
 }
 
 void Config::location_check(key_val_it &it)
 {
-	if ((it - 1)->key != TOKEN_SEMICOLON && (it - 1)->key != TOKEN_O_BRACE
-		&& (it - 1)->key != TOKEN_C_BRACE && (it - 1)->key != TOKEN_COMMENTS)
+	if ((it - 1)->key != TOKEN_NL)
 			throw Config::Error_config_file();
 	else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
 			throw Config::Error_config_file();
@@ -227,12 +256,12 @@ void Config::server_check(std::vector<key_val> &tokens)
 
 	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
 	{
-		if (it->key == TOKEN_COMMENTS)
+		if (it->key == TOKEN_COMMENTS || (i == 0 && it->key == TOKEN_NL))
 			continue;
 		else if (i == 0 && it->key == TOKEN_SERVER)
 		{
 			i++;
-			if ((it + 1)->key != TOKEN_O_BRACE)
+			if ((it + 1)->key != TOKEN_O_BRACE || ((it + 2)->key != TOKEN_COMMENTS && (it + 2)->key != TOKEN_NL))
 				throw Config::Error_config_file();
 		}
 		else if (i != 0 && it->key != TOKEN_SERVER)
@@ -253,12 +282,15 @@ void Config::server_check(std::vector<key_val> &tokens)
 			throw Config::Error_config_file();
 	}
 	brace_counter(tokens);
-	fill_containers(tokens);
+	// fill_containers(tokens);
 }
 
 Config::Config(std::ifstream &file)
 {
 	std::string	line;
+	std::vector<std::string> split_lines;
+	std::vector<std::string> lines;
+	std::vector<key_val> tokens;
 
 	while (std::getline(file, line))
 	{
@@ -266,17 +298,17 @@ Config::Config(std::ifstream &file)
 		line = rstrtrim(line);
 		if (line.empty())
 			continue;
-		for (size_t i = 0; i < line.length(); i++)
+		line += '\n';
+		for (size_t i = 0; i < line.length() + 1; i++)
 		{
-			if (line[i] == '\n' || line[i] == '\t')
+			if (line[i] == '\t')
 				line[i] = ' ';
 		}
 		split_lines = utility::split(line, " ");
-		for (std::vector<std::string>::const_iterator it = split_lines.begin(); it != split_lines.end(); ++it) {
-            lines.push_back(*it);
-        }
+		for (vector_it it = split_lines.begin(); it != split_lines.end(); ++it)
+			utility::split2(*it, "\n", lines);
 	}
-	tokenize(lines);
+	tokenize(lines, tokens);
 	server_check(tokens);
 }
 

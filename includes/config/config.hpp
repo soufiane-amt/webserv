@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/22 19:33:17 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:25:38 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef enum e_type
 	TOKEN_C_BRACE,
 	TOKEN_SEMICOLON,
 	TOKEN_COMMENTS,
+	TOKEN_NL,
 }	t_type;
 
 struct	key_val
@@ -38,11 +39,6 @@ struct	key_val
 class	Config
 {
 	private:
-		std::string	key;
-		std::string value;
-		std::vector<std::string> split_lines;
-		std::vector<std::string> lines;
-		std::vector<key_val> tokens;
 		directive_t directives;
 		location_t locations;
 		server_t servers;
@@ -56,7 +52,7 @@ class	Config
 		Config(std::ifstream &file);
 		std::string	lstrtrim(std::string	&str);
 		std::string	rstrtrim(std::string	&str);
-		void	tokenize(std::vector<std::string> &lines);
+		void	tokenize(std::vector<std::string> &lines, std::vector<key_val> &tokens);
 		void	server_check(std::vector<key_val> &tokens);
 		void	directive_check(key_val_it &it, int *i);
 		void	d_value_check(key_val_it &it);

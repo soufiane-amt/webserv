@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/21 20:27:45 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/23 14:31:09 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef std::vector<std::pair<directive_t, location_t> > server_t;
 struct utility
 {
     static std::vector<std::string> split(std::string str, std::string delimiter);
+    static void split2(std::string str, std::string delimiter, std::vector<std::string> &tokens);
 };
 
 #endif

@@ -14,6 +14,13 @@ char** convert_vector_to_char_array(std::vector<std::string>& vec)
     return arr;
 }
 
+//avoid memory leaks
+void freeConvertedArray(char** array, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        delete[] array[i];
+    }
+    delete[] array;
+}
 
 bool isCGIFile(const std::string& filename)
 {

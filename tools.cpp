@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/24 10:54:19 by fech-cha          #+#    #+#             */
+/*   Updated: 2023/05/24 10:55:25 by fech-cha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -51,21 +63,21 @@ bool is_cgi_url(const std::string& url)
   return false;
 }
 
-int main() {
-  std::string url1 = "http://example.com/cgi-bin/script.cgi";
-  std::string url2 = "file:///home/user/scripts/script.cgi";
+// int main() {
+//   std::string url1 = "http://example.com/cgi-bin/script.cgi";
+//   std::string url2 = "file:///home/user/scripts/script.cgi";
 
-  if (is_cgi_url(url1)) {
-    std::cout << "URL 1 is using CGI" << std::endl;
-  } else {
-    std::cout << "URL 1 is not using CGI" << std::endl;
-  }
+//   if (is_cgi_url(url1)) {
+//     std::cout << "URL 1 is using CGI" << std::endl;
+//   } else {
+//     std::cout << "URL 1 is not using CGI" << std::endl;
+//   }
 
-  if (is_cgi_url(url2)) {
-    std::cout << "URL 2 is using CGI" << std::endl;
-  } else {
-    std::cout << "URL 2 is not using CGI" << std::endl;
-  }
+//   if (is_cgi_url(url2)) {
+//     std::cout << "URL 2 is using CGI" << std::endl;
+//   } else {
+//     std::cout << "URL 2 is not using CGI" << std::endl;
+//   }
 
-  return 0;
-}
+//   return 0;
+// }

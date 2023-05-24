@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/23 17:25:38 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:46:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ struct	key_val
 class	Config
 {
 	private:
-		directive_t directives;
-		location_t locations;
 		server_t servers;
 	public:
 		typedef	std::vector<std::string>::iterator vector_it;
@@ -54,11 +52,11 @@ class	Config
 		std::string	rstrtrim(std::string	&str);
 		void	tokenize(std::vector<std::string> &lines, std::vector<key_val> &tokens);
 		void	server_check(std::vector<key_val> &tokens);
-		void	directive_check(key_val_it &it, int *i);
-		void	d_value_check(key_val_it &it);
+		void	directive_check(key_val_it &t_it, location_t &locations, directive_t &directives, key_val_it &it, int *i);
+		void	d_value_check(directive_t &directives, key_val_it &it, int i);
 		void	location_check(key_val_it &it);
 		void	brace_counter(std::vector<key_val> &tokens);
-		void	fill_containers(std::vector<key_val> &tokens);
+		void	fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it);
 };
 
 #endif

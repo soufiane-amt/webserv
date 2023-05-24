@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/23 17:40:03 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:22:46 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 	}
 }
 
-void Config::d_value_check(key_val_it &it)
+void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 {
 	if ((it - 1)->value == "listen")
 	{
@@ -128,6 +128,10 @@ void Config::d_value_check(key_val_it &it)
 		if (!(iss >> number))
 			throw Config::Error_config_file();
 		else if (number < 0 || number > 65535 || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value;
+		else
 			throw Config::Error_config_file();
 	}
 	else if ((it - 1)->value == "max_body_size")
@@ -138,20 +142,32 @@ void Config::d_value_check(key_val_it &it)
 			throw Config::Error_config_file();
 		else if (number < 0 || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "autoindex")
 	{
 		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "root")
 	{
 		if (it->value.at(0) != '/' || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
+		if (it->value.back() == '/' && it->value.size() > 1)
+			it->value.pop_back();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "index" || (it - 1)->value == "server_name")
 	{
 		if (it->value.at(0) == '/' || (it + 1)->key != TOKEN_SEMICOLON)
+			throw Config::Error_config_file();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value;
+		else if (i == 2 && (it - 1)->value == "server_name")
 			throw Config::Error_config_file();
 	}
 	else if ((it - 1)->value == "return")
@@ -159,6 +175,14 @@ void Config::d_value_check(key_val_it &it)
 		if (it->key != TOKEN_D_VALUE2 && (it + 1)->key != TOKEN_D_VALUE
 			&& (it + 2)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
+		int	number = 0;
+		std::istringstream iss(it->value);
+		if (!(iss >> number))
+			throw Config::Error_config_file();
+		else if (number < 100 || number > 599)
+			throw Config::Error_config_file();
+		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+			directives[(it - 1)->value] = it->value + " " + (it + 1)->value;
 	}
 	else if ((it - 1)->value == "allow")
 	{
@@ -168,7 +192,13 @@ void Config::d_value_check(key_val_it &it)
 			if (it->value == "POST" || it->value == "GET" || it->value == "DELETE")
 			{
 				if (std::find(unique_values.begin(), unique_values.end(), it->value) == unique_values.end())
+				{
 					unique_values.push_back(it->value);
+					if (i == 1 && directives["allow"].size() < 16)
+						directives["allow"] += it->value + " ";
+					else
+						throw Config::Error_config_file();
+				}
 				else
 					throw Config::Error_config_file();
 			}
@@ -181,17 +211,51 @@ void Config::d_value_check(key_val_it &it)
 	}
 }
 
-void Config::directive_check(key_val_it &it, int *i)
+void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it)
+{
+	std::string	temp;
+
+	t_it++;
+	for (; t_it->key != TOKEN_SERVER && t_it != it; t_it++)
+	{
+		if (t_it->key == TOKEN_L_VALUE)
+		{
+			if (locations.find(t_it->value) != locations.end())
+				throw Config::Error_config_file();
+			temp = t_it->value;
+			if (temp.back() == '/' && temp.size() > 1)
+				temp.pop_back();
+			t_it++;
+			while (t_it->key != TOKEN_C_BRACE)
+			{
+				if (t_it->key == TOKEN_DIRECTIVE)
+				{
+					if (locations[temp].find(t_it->value) != locations[temp].end())
+						throw Config::Error_config_file();
+					if ((t_it + 2)->key == TOKEN_SEMICOLON)
+						locations[temp][t_it->value] = (t_it + 1)->value;
+					else if ((t_it + 3)->key == TOKEN_SEMICOLON)
+						locations[temp][t_it->value] = (t_it + 1)->value + " " + (t_it + 2)->value;
+					else if ((t_it + 4)->key == TOKEN_SEMICOLON)
+						locations[temp][t_it->value] = (t_it + 1)->value + " " + (t_it + 2)->value + " " + (t_it + 3)->value;
+				}
+				t_it++;
+			}
+		}
+	}
+}
+
+void Config::directive_check(key_val_it &t_it, location_t &locations, directive_t &directives, key_val_it &it, int *i)
 {
 	if (it->key == TOKEN_DIRECTIVE)
 	{
 		if ((it - 1)->key != TOKEN_NL)
-				throw Config::Error_config_file();
+			throw Config::Error_config_file();
 		else if ((it + 1)->key != TOKEN_D_VALUE && (it + 1)->key != TOKEN_D_VALUE2)
-				throw Config::Error_config_file();
+			throw Config::Error_config_file();
 	}
 	else if (it->key == TOKEN_D_VALUE || it->key == TOKEN_D_VALUE2)
-		d_value_check(it);
+		d_value_check(directives, it, *i);
 	else if (it->key == TOKEN_SEMICOLON)
 	{
 		if ((it + 1)->key != TOKEN_NL)
@@ -202,6 +266,16 @@ void Config::directive_check(key_val_it &it, int *i)
 		if ((it + 1)->key != TOKEN_NL)
 			throw Config::Error_config_file();
 		(*i)--;
+		if (*i == 0)
+		{
+			fill_locations(t_it, locations, it);
+			if (directives.size() == 0 && locations.size() == 0)
+				throw Config::Error_config_file();
+			// for (location_t::iterator it = locations.begin(); it != locations.end(); it++)
+			servers.push_back(std::pair<directive_t, location_t>(directives, locations));
+			directives.clear();
+			locations.clear();
+		}
 	}
 	else if (it->key == TOKEN_O_BRACE && ((it - 1)->key != TOKEN_L_VALUE
 		&& (it - 1)->key != TOKEN_SERVER) && (it + 1)->key != TOKEN_NL)
@@ -211,9 +285,9 @@ void Config::directive_check(key_val_it &it, int *i)
 void Config::location_check(key_val_it &it)
 {
 	if ((it - 1)->key != TOKEN_NL)
-			throw Config::Error_config_file();
+		throw Config::Error_config_file();
 	else if ((it + 1)->key != TOKEN_L_VALUE || (it + 2)->key != TOKEN_O_BRACE)
-			throw Config::Error_config_file();
+		throw Config::Error_config_file();
 }
 
 void Config::brace_counter(std::vector<key_val> &tokens)
@@ -231,27 +305,11 @@ void Config::brace_counter(std::vector<key_val> &tokens)
 		throw Config::Error_config_file();
 }
 
-void Config::fill_containers(std::vector<key_val> &tokens)
-{
-	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
-	{
-		if (it->key == TOKEN_DIRECTIVE)
-		{
-			directives.insert(std::make_pair(it->value, (it + 1)->value));
-			if ((it + 2)->key == TOKEN_D_VALUE || (it + 2)->key == TOKEN_D_VALUE2)
-				directives[it->value] += ", " + (it + 2)->value;
-			if ((it + 3)->key == TOKEN_D_VALUE || (it + 3)->key == TOKEN_D_VALUE2)
-				directives[it->value] += ", " + (it + 3)->value;
-		}
-		else if (it->key == TOKEN_LOCATIOIN)
-			locations.insert(std::make_pair(it->value, directives));
-		else if (it->key == TOKEN_SERVER)
-			servers.push_back(std::pair<directive_t, location_t>(directives, locations));
-	}
-}
-
 void Config::server_check(std::vector<key_val> &tokens)
 {
+	directive_t directives;
+	location_t locations;
+	key_val_it t_it;
 	int	i = 0;
 
 	for (key_val_it it = tokens.begin(); it != tokens.end(); it++)
@@ -260,6 +318,7 @@ void Config::server_check(std::vector<key_val> &tokens)
 			continue;
 		else if (i == 0 && it->key == TOKEN_SERVER)
 		{
+			t_it = it;
 			i++;
 			if ((it + 1)->key != TOKEN_O_BRACE || ((it + 2)->key != TOKEN_COMMENTS && (it + 2)->key != TOKEN_NL))
 				throw Config::Error_config_file();
@@ -272,9 +331,9 @@ void Config::server_check(std::vector<key_val> &tokens)
 				i++;
 			}
 			else if (i == 2 && it->key != TOKEN_LOCATIOIN)
-				directive_check(it, &i);
+				directive_check(t_it, locations, directives, it, &i);
 			else if (i == 1 && it->key != TOKEN_LOCATIOIN)
-				directive_check(it, &i);
+				directive_check(t_it, locations, directives, it, &i);
 			else
 				throw Config::Error_config_file();
 		}
@@ -282,7 +341,24 @@ void Config::server_check(std::vector<key_val> &tokens)
 			throw Config::Error_config_file();
 	}
 	brace_counter(tokens);
-	// fill_containers(tokens);
+	// for (std::vector<std::pair<directive_t, location_t> >::iterator it = servers.begin(); it != servers.end(); ++it) {
+    //     directive_t& directives = it->first;
+    //     location_t& locations = it->second;
+
+    //     std::cout << "Directive_t content:" << std::endl;
+    //     for (directive_t::iterator dir_it = directives.begin(); dir_it != directives.end(); ++dir_it) {
+    //         std::cout << "Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
+    //     }
+
+    //     std::cout << "Location_t content:" << std::endl;
+    //     for (location_t::iterator loc_it = locations.begin(); loc_it != locations.end(); ++loc_it) {
+    //         std::cout << "Key: " << loc_it->first << std::endl;
+    //         directive_t& temp_dir = loc_it->second;
+    //         for (directive_t::iterator dir_it = temp_dir.begin(); dir_it != temp_dir.end(); ++dir_it) {
+    //             std::cout << "    Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
+    //         }
+    //     }
+    // }
 }
 
 Config::Config(std::ifstream &file)

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/09 22:40:54 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:23:07 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
+
+//close / keep-alive option
 
 #include "myServ.hpp"
 

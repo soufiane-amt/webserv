@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 18:24:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 19:12:34 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,30 +402,30 @@ std::string     utility::decode_ascii_code(const std::string& str)
 
 std::map<std::string, std::string>   utility::decode_form_data_format(const std::string& form)
 {
-    std::vector<std::string>           tokens       =           split(form, "\r\n");
-    std::map<std::string, std::string> form_map;
-    std::map<std::string, std::string> splited_nodes;
-    std::vector<std::string>           key_value;
-    
-    for (size_t i = 0; i < tokens.size(); i++)
-    {
-        key_value = split(tokens[i], "=");
-        if (key_value.size() == 2)
-            splited_nodes[key_value[0]] = key_value[1];
-    }
-    
-    std::string decoded_key;
-    std::string decoded_value;
-    for (std::map<std::string, std::string>::iterator it = splited_nodes.begin(); it != splited_nodes.end(); it++)
-    {
-        decoded_key = decode_ascii_code(it->first);
-        form_map[decoded_key];
+        std::vector<std::string>           tokens       =           split(form, "\r\n");
+        std::map<std::string, std::string> form_map;
+        std::map<std::string, std::string> splited_nodes;
+        std::vector<std::string>           key_value;
+        
+        for (size_t i = 0; i < tokens.size(); i++)
+        {
+            key_value = split(tokens[i], "=");
+            if (key_value.size() == 2)
+                splited_nodes[key_value[0]] = key_value[1];
+        }
+        
+        std::string decoded_key;
+        std::string decoded_value;
+        for (std::map<std::string, std::string>::iterator it = splited_nodes.begin(); it != splited_nodes.end(); it++)
+        {
+            decoded_key = decode_ascii_code(it->first);
+            form_map[decoded_key];
 
-        decoded_value = decode_ascii_code(it->second);
-        form_map[decoded_key] = decoded_value;
+            decoded_value = decode_ascii_code(it->second);
+            form_map[decoded_key] = decoded_value;
+        }
+        return form_map;
     }
-    return form_map;
-}
 
 std::vector <std::string>            utility::get_directory_files(const std::string& path)
 {
@@ -435,8 +435,11 @@ std::vector <std::string>            utility::get_directory_files(const std::str
     if ((dir = opendir (path.c_str())) != NULL) {
         while ((ent = readdir (dir)) != NULL) {
             if (ent->d_name[0] != '.' || (ent->d_name[0] == '.' && ent->d_name[1] != '.')) // ignore hidden files
+            {
+                std::cout << "((((()))))" << ent->d_name[0] << std::endl;
                 files.push_back(ent->d_name);
-
+                
+            }
         }
         closedir (dir);
     } else {

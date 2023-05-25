@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/24 15:58:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 14:29:02 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class responsePreparation
         bool                    _dir_listing_on;
 
         std::string             _allowed_methods;
+;
     public:
         responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
         
@@ -63,7 +64,9 @@ class responsePreparation
 
         void             exceute_get();
         void             exceute_post();
-        // void             exceute_delete()
+        void             exceute_delete();
+
+
         void             prepare_error_response();      
         std::string      get_mime_type(const std::string& filename);
 
@@ -71,7 +74,9 @@ class responsePreparation
         void             _init();
         void             change_status_line(const char *status_code);
 
-        bool             check_if_cgi(std::string file_path);
+        // bool             check_if_cgi(std::string file_path);
+        bool             file_is_deletable(const std::string& file_path);
+        bool             arePathsSame(const char* path1, const char* path2);
 };
 
 #endif

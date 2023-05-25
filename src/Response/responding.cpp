@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/24 16:03:43 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 14:30:30 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
     _init();
-    check_if_cgi(_request.header["URI"]);
+    // check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
@@ -195,9 +195,30 @@ void    responsePreparation::exceute_post()
 
 }
 
-// void    responsePreparation::exceute_delete()
-// {
-// }
+
+
+void    responsePreparation::exceute_delete()
+{
+    //Check if the file to delete is the sameone in random/ zone
+    //if yes, then delete it
+    //else, return 403 forbidden
+    
+    if ()
+    {
+        std::string command;
+        command = "rm " + _request.header["URI"];
+        system(command.c_str());
+        _statusCode.set_status_code(OK);
+    }
+    else
+        _statusCode.set_status_code(FORBIDDEN);
+    prepare_statusLine();
+    prepare_server_name();
+    prepare_date();
+    prepare_location();
+    prepare_body();
+    prepare_meta_body_data();
+}
 
 
 void   responsePreparation::prepare_error_response()
@@ -292,27 +313,42 @@ void        responsePreparation::change_status_line(const char *status_code)
     _response.insert(_response.begin(), status_line.begin(), status_line.end());
 }
 
-#include <unistd.h>
-
-
-bool             responsePreparation::check_if_cgi(std::string file_path)
+bool        responsePreparation::file_is_deletable(const std::string& file_path)
 {
-    static std::string cgi_path = "www/cgi/";
+    // check if that file exits and it is the same one as the one in the random zone
+    
+    //if not, return 403 forbidden
+    static std::string random_path = "www/random/";
+    static std::vector<std::string> random_files =  utility::get_directory_files (random_path);
 
-
-    //check if the path leads to the right cgi script
-
-    size_t pos = file_path.rfind("/");
-    if (cgi_path == )
-    // if (file_path.find(cgi_path) != std::string::npos)
-    // {
-    //     std::string cgi_script = file_path.substr(file_path.find(cgi_path) + cgi_path.size());
-    //     std::string cgi_script_path = cgi_path + cgi_script;
-    //     if (access(cgi_script_path.c_str(), F_OK) == -1)
-    //         change_status_line(NOT_FOUND);
-    //     else if (access(cgi_script_path.c_str(), X_OK) == -1)
-    //         change_status_line(FORBIDDEN);
-    //     return true;
-    // }
+    for (size_t i = 0; i < random_files.size(); i++)
+        if (random_files[i] == file_path)
+            return true;
+    
     return false;
 }
+
+// #include <unistd.h>
+
+
+// bool             responsePreparation::check_if_cgi(std::string file_path)
+// {
+//     static std::string cgi_path = "www/cgi/";
+
+
+//     //check if the path leads to the right cgi script
+
+//     size_t pos = file_path.rfind("/");
+//     // if (cgi_path == )
+//     // if (file_path.find(cgi_path) != std::string::npos)
+//     // {
+//     //     std::string cgi_script = file_path.substr(file_path.find(cgi_path) + cgi_path.size());
+//     //     std::string cgi_script_path = cgi_path + cgi_script;
+//     //     if (access(cgi_script_path.c_str(), F_OK) == -1)
+//     //         change_status_line(NOT_FOUND);
+//     //     else if (access(cgi_script_path.c_str(), X_OK) == -1)
+//     //         change_status_line(FORBIDDEN);
+//     //     return true;
+//     // }
+//     return false;
+// }

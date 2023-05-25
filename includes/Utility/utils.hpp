@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/16 00:29:52 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 14:20:52 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ struct utility
     
     static std::map<std::string, std::string>   decode_form_data_format(const std::string& form);
     
+    static std::vector <std::string>            get_directory_files(const std::string& path);
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

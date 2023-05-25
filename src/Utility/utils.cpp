@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/23 17:06:46 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 14:28:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,4 +425,35 @@ std::map<std::string, std::string>   utility::decode_form_data_format(const std:
         form_map[decoded_key] = decoded_value;
     }
     return form_map;
+}
+
+std::vector <std::string>            utility::get_directory_files(const std::string& path)
+{
+    DIR *dir;
+    struct dirent *ent;
+    std::vector <std::string> files;
+    if ((dir = opendir (path.c_str())) != NULL) {
+        while ((ent = readdir (dir)) != NULL) {
+            files.push_back(ent->d_name);
+        }
+        closedir (dir);
+    } else {
+        /* could not open directory */
+        perror ("");
+        return files;
+    }
+    return files;
+}
+
+
+bool                    utility::arePathsSame(const char* path1, const char* path2) {
+    struct stat stat1, stat2;
+
+    if (stat(path1, &stat1) != 0 || stat(path2, &stat2) != 0) {
+        // Error occurred while accessing file metadata
+        return false;
+    }
+
+    // Compare the device and inode numbers of the files
+    return (stat1.st_dev == stat2.st_dev) && (stat1.st_ino == stat2.st_ino);
 }

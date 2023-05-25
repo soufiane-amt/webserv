@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/24 12:08:34 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/25 11:15:18 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void    CGI::setEnvCgi()
     addToEnvVector(this->_env, "CONTENT_TYPE", getContentTypeFromReq());
     addToEnvVector(this->_env, "CONTENT_LENGTH", getContentLength());
     addToEnvVector(this->_env, "DOCUMENT_ROOT", getRootDirectory());
+    //get or post (body)
     addToEnvVector(this->_env, "QUERY_STRING", getQueryStr());
     addToEnvVector(this->_env, "SCRIPT_FILENAME", getCGIScriptName());
 }
@@ -114,6 +115,7 @@ void    CGI::handleCGI()
 			std::string body = getHTTPBody();
             //null terminate the string in char *
         	std::fprintf(tempStore, "%s", body.c_str());
+            std::fseek(tempStore, 0, SEEK_SET);
     	}
 
 		dup2(fileno(tempStore), 0);
@@ -158,6 +160,6 @@ void    CGI::handleCGI()
 	freeConvertedArray(cgiEnv,getSize);
 	freeConvertedArray(cgiExec,getSize);
 
-    //parse the cgiResp
+    //parse the cgiResp, and generate HTTP Response (HEADER + BODY)
     
 }

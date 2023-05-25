@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/24 22:10:21 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/25 13:58:14 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,14 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		}
 		else if (it->at(0) == '#')
 		{
-			kv.key = TOKEN_COMMENTS;
+			while (*it != "\n")
+			{
+				kv.key = TOKEN_COMMENTS;
+				kv.value = *it;
+				tokens.push_back(kv);
+				it++;
+			}
+			kv.key = TOKEN_NL;
 			kv.value = *it;
 			tokens.push_back(kv);
 		}

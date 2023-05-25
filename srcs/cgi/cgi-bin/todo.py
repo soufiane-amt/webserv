@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 import cgitb
 cgitb.enable()
@@ -41,7 +41,13 @@ if __name__ == "__main__":
     task = form.getvalue("task")
 
     # Set content type
-    print("Content-type: text/html\n")
+    print("Content-type: text/html\r\n")
+    print("\r\n")
+    print ("<html>")
+    print ("<head>")
+    print ("<title>To do list cgi script</title>")
+    print ("</head>")
+    print ("<body>")
 
     # Load existing to-do list
     tasks = []
@@ -61,3 +67,6 @@ if __name__ == "__main__":
     # Generate HTML response
     generate_input_form()
     generate_todo_list(name, tasks)
+
+    print ("</body>")
+    print ("</html>")

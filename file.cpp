@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:47:23 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 14:15:16 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 18:18:54 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void listFiles(const std::string& directoryPath) {
     if (dir) {
         struct dirent* entry;
         while ((entry = readdir(dir)) != nullptr) {
-            if (entry->d_type == DT_REG) {
+            // if (entry->d_type == DT_REG) {
                 std::cout << entry->d_name << std::endl;
-            }
+            // }
         }
         closedir(dir);
     } else {

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 18:04:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 18:09:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ struct simpleConfPars
     locations["/command"]["root"] = "./www";
     locations["/command"]["index"] = "command.html";
 
-    locations["/random"]["root"] = "./www/random/";
+    locations["/random"]["root"] = "./www/random";
     // locations["/random"]["index"] = "page.html";
     locations["/random"]["autoindex"] = "on";
     

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 18:03:24 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 18:34:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@
 
 responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
+    std::cout << "########" << _request.header["URI"]<< "#######"<<std::endl;
     _init();
     // check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
         exceute_get();
-    // else if (_request.header["Method"] == "POST")
-    //     exceute_post();
-    // else if (_request.header["Method"] == "DELETE")
-    //     exceute_delete();
+    else if (_request.header["Method"] == "POST")
+        exceute_post();
+    else if (_request.header["Method"] == "DELETE")
+        exceute_delete();
 }
 
 
@@ -206,9 +207,12 @@ bool        responsePreparation::file__delet_is_allowed(const std::string& file_
     static std::vector<std::string> random_files =  utility::get_directory_files (random_path);
 
     for (size_t i = 0; i < random_files.size(); i++)
-        if (utility::arePathsSame(random_path.append(random_files[i]).c_str(), file_path.c_str()))
+    {
+        std::cout << "__+__" << random_path + random_files[i] <<std::endl;
+        if (utility::arePathsSame((random_path + random_files[i]).c_str(), file_path.c_str()))
             return true;
-    
+    }
+    std::cout << "+++++++++++<<<<<>>>>>++++++++++++++\n";
     return false;
 }
 
@@ -229,6 +233,7 @@ void    responsePreparation::exceute_delete()
         prepare_server_name();
         prepare_date();
         prepare_location();
+        add_CRLF();
     }
     else
         prepare_error_response();

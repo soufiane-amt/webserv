@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 14:28:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 18:03:54 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,11 +449,9 @@ std::vector <std::string>            utility::get_directory_files(const std::str
 bool                    utility::arePathsSame(const char* path1, const char* path2) {
     struct stat stat1, stat2;
 
-    if (stat(path1, &stat1) != 0 || stat(path2, &stat2) != 0) {
-        // Error occurred while accessing file metadata
+    if (stat(path1, &stat1) != 0 || stat(path2, &stat2) != 0) 
         return false;
-    }
-
     // Compare the device and inode numbers of the files
     return (stat1.st_dev == stat2.st_dev) && (stat1.st_ino == stat2.st_ino);
 }
+

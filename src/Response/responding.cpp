@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 14:30:30 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 18:03:24 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,27 +197,41 @@ void    responsePreparation::exceute_post()
 
 
 
+bool        responsePreparation::file__delet_is_allowed(const std::string& file_path)
+{
+    // check if that file exits and it is the same one as the one in the random zone
+    
+    //if not, return 403 forbidden
+    static std::string random_path = "www/random/";
+    static std::vector<std::string> random_files =  utility::get_directory_files (random_path);
+
+    for (size_t i = 0; i < random_files.size(); i++)
+        if (utility::arePathsSame(random_path.append(random_files[i]).c_str(), file_path.c_str()))
+            return true;
+    
+    return false;
+}
+
 void    responsePreparation::exceute_delete()
 {
     //Check if the file to delete is the sameone in random/ zone
-    //if yes, then delete it
-    //else, return 403 forbidden
-    
-    if ()
+    //here I check if the request to delete a file is allowed by my glorious server
+    if (file__delet_is_allowed(_request.header.at("URI")))
     {
-        std::string command;
-        command = "rm " + _request.header["URI"];
-        system(command.c_str());
-        _statusCode.set_status_code(OK);
+        if (std::remove(_request.header.at("URI").c_str()) != 0)
+            this->_statusCode = StatusCode(INTERNAL_SERVER_ERROR);
     }
     else
-        _statusCode.set_status_code(FORBIDDEN);
-    prepare_statusLine();
-    prepare_server_name();
-    prepare_date();
-    prepare_location();
-    prepare_body();
-    prepare_meta_body_data();
+        this->_statusCode = StatusCode(FORBIDDEN);
+    if (_statusCode.get_status_code() == OK)
+    {
+        prepare_statusLine();
+        prepare_server_name();
+        prepare_date();
+        prepare_location();
+    }
+    else
+        prepare_error_response();
 }
 
 
@@ -311,21 +325,6 @@ void        responsePreparation::change_status_line(const char *status_code)
     _response.erase(_response.begin(), _find_in_response(CRLF));
     std::string status_line = "HTTP/1.1 " + std::string(status_code);
     _response.insert(_response.begin(), status_line.begin(), status_line.end());
-}
-
-bool        responsePreparation::file_is_deletable(const std::string& file_path)
-{
-    // check if that file exits and it is the same one as the one in the random zone
-    
-    //if not, return 403 forbidden
-    static std::string random_path = "www/random/";
-    static std::vector<std::string> random_files =  utility::get_directory_files (random_path);
-
-    for (size_t i = 0; i < random_files.size(); i++)
-        if (random_files[i] == file_path)
-            return true;
-    
-    return false;
 }
 
 // #include <unistd.h>

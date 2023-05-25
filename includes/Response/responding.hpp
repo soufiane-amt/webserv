@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 14:29:02 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 17:33:23 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class responsePreparation
         void             change_status_line(const char *status_code);
 
         // bool             check_if_cgi(std::string file_path);
-        bool             file_is_deletable(const std::string& file_path);
+        bool             file__delet_is_allowed(const std::string& file_path);
         bool             arePathsSame(const char* path1, const char* path2);
 };
 

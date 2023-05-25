@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 19:12:34 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/25 19:17:56 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,12 +434,9 @@ std::vector <std::string>            utility::get_directory_files(const std::str
     std::vector <std::string> files;
     if ((dir = opendir (path.c_str())) != NULL) {
         while ((ent = readdir (dir)) != NULL) {
-            if (ent->d_name[0] != '.' || (ent->d_name[0] == '.' && ent->d_name[1] != '.')) // ignore hidden files
-            {
-                std::cout << "((((()))))" << ent->d_name[0] << std::endl;
+            if (ent->d_name[0] != '.' || (ent->d_name[0] == '.' &&
+                         ent->d_name[1] != '.' && strlen(ent->d_name) != 1)) // ignore hidden files or ./..
                 files.push_back(ent->d_name);
-                
-            }
         }
         closedir (dir);
     } else {

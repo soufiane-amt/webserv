@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/25 13:58:14 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/25 15:45:18 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		else if (*it == "}")
 		{
 			kv.key = TOKEN_C_BRACE;
+			kv.value = *it;
+			tokens.push_back(kv);
+		}
+		else if (*it == ";")
+		{
+			kv.key = TOKEN_SEMICOLON;
 			kv.value = *it;
 			tokens.push_back(kv);
 		}
@@ -179,8 +185,8 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	}
 	else if ((it - 1)->value == "return")
 	{
-		if (it->key != TOKEN_D_VALUE2 && (it + 1)->key != TOKEN_D_VALUE
-			&& (it + 2)->key != TOKEN_SEMICOLON)
+		if (it->key != TOKEN_D_VALUE2 || (it + 1)->key != TOKEN_D_VALUE
+			|| (it + 2)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 		int	number = 0;
 		std::istringstream iss(it->value);

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/15 17:20:34 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/24 15:58:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ class responsePreparation
         std::string      get_mime_type(const std::string& filename);
 
         response_t::iterator    _find_in_response(const std::string& str);
-        void             init_dir_listing();
+        void             _init();
         void             change_status_line(const char *status_code);
+
+        bool             check_if_cgi(std::string file_path);
 };
 
 #endif

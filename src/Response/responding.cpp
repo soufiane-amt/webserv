@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/23 10:38:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/24 16:03:43 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
-    init_dir_listing();
+    _init();
+    check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
         prepare_error_response();
     else if (_request.header["Method"] == "GET")
@@ -241,11 +242,13 @@ std::string responsePreparation::get_mime_type(const std::string& filename) {
 }
 
 
-void responsePreparation::init_dir_listing()
+void responsePreparation::_init()
 {
     _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                         utility::search_directive("autoindex", parser.get_server_locations(0)[_request.targeted_Location]) == "on");
     _allowed_methods = utility::search_directive("allow", parser.get_server_locations(0)[_request.targeted_Location]);
+    // _execute_cgi    = (_request.header.at("URI") == "www/cgi/" + FIRST_SCRIPT || _request.header.at("URI") == "www/cgi/" + SECOND_SCRIPT)
+    // std::cout << _request.header.at("URI") << std::endl;
 }
 
 void responsePreparation::prepare_eTag()
@@ -287,4 +290,29 @@ void        responsePreparation::change_status_line(const char *status_code)
     _response.erase(_response.begin(), _find_in_response(CRLF));
     std::string status_line = "HTTP/1.1 " + std::string(status_code);
     _response.insert(_response.begin(), status_line.begin(), status_line.end());
+}
+
+#include <unistd.h>
+
+
+bool             responsePreparation::check_if_cgi(std::string file_path)
+{
+    static std::string cgi_path = "www/cgi/";
+
+
+    //check if the path leads to the right cgi script
+
+    size_t pos = file_path.rfind("/");
+    if (cgi_path == )
+    // if (file_path.find(cgi_path) != std::string::npos)
+    // {
+    //     std::string cgi_script = file_path.substr(file_path.find(cgi_path) + cgi_path.size());
+    //     std::string cgi_script_path = cgi_path + cgi_script;
+    //     if (access(cgi_script_path.c_str(), F_OK) == -1)
+    //         change_status_line(NOT_FOUND);
+    //     else if (access(cgi_script_path.c_str(), X_OK) == -1)
+    //         change_status_line(FORBIDDEN);
+    //     return true;
+    // }
+    return false;
 }

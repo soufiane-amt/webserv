@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/25 16:11:11 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:33:01 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
-			|| *it == "index" || *it == "upload" || *it == "max_body_size")
+			|| *it == "index" || *it == "upload")
 		{
 			kv.key = TOKEN_DIRECTIVE;
 			kv.value = *it;
@@ -281,7 +281,7 @@ void Config::directive_check(key_val_it &t_it, location_t &locations, directive_
 	}
 	else if (it->key == TOKEN_C_BRACE)
 	{
-		if ((it + 1)->key != TOKEN_NL)
+		if ((it + 1)->key != TOKEN_NL && (it + 1)->key != TOKEN_COMMENTS)
 			throw Config::Error_config_file();
 		(*i)--;
 		if (*i == 0)

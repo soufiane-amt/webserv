@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/25 15:45:18 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:11:11 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it)
 {
 	std::string	temp;
+	int	i = 0;
 
 	t_it++;
 	for (; t_it->key != TOKEN_SERVER && t_it != it; t_it++)
@@ -243,6 +244,7 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 			{
 				if (t_it->key == TOKEN_DIRECTIVE)
 				{
+					i = 1;
 					if (locations[temp].find(t_it->value) != locations[temp].end())
 						throw Config::Error_config_file();
 					if ((t_it + 2)->key == TOKEN_SEMICOLON)
@@ -254,6 +256,9 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 				}
 				t_it++;
 			}
+			if (i == 0)
+				throw Config::Error_config_file();
+			i = 0;
 		}
 	}
 }

@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    todo.py                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/25 15:46:02 by fech-cha          #+#    #+#              #
+#    Updated: 2023/05/25 15:46:05 by fech-cha         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 #!/usr/bin/python
 
 import cgitb
@@ -41,7 +53,7 @@ if __name__ == "__main__":
     task = form.getvalue("task")
 
     # Set content type
-    print("Content-type: text/html\r\n")
+    print("Content-type: text/html\r\n\r\n")
     print("\r\n")
     print ("<html>")
     print ("<head>")

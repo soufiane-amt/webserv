@@ -6,7 +6,7 @@
 #    By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/25 15:46:02 by fech-cha          #+#    #+#              #
-#    Updated: 2023/05/25 15:46:05 by fech-cha         ###   ########.fr        #
+#    Updated: 2023/05/25 19:41:45 by fech-cha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,10 +65,13 @@ if __name__ == "__main__":
     tasks = []
     try:
         with open("todo.txt", "r") as file:
+            #read content of the file
+            content = file.readlines()
             for line in file:
-                line = line.strip()
-                if line:
-                    tasks.append(line)
+                if line not in content:
+                    with open("todo.txt", "a") as file:
+                        if line:
+                            tasks.append(line);
     except IOError:
         pass
 

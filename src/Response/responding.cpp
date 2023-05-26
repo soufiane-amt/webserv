@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 14:42:54 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:46:27 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
-    std::cout << "########" << _request.header["URI"]<< "#######"<<std::endl;
     _init();
     // check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
@@ -157,6 +156,12 @@ void responsePreparation::prepare_body() //I will change this to cases later
 
 void    responsePreparation::exceute_get()
 {
+    if (utility::ressource_is_cgi(_request.header["URI"]))
+    {
+        set_env_variables_for_cgi();
+        // exceute_cgi();
+        return;
+    }
     prepare_statusLine();
     prepare_server_name();
     prepare_date();
@@ -175,7 +180,14 @@ void    responsePreparation::exceute_get()
 
 void    responsePreparation::exceute_post()
 {
-    // exceute_cgi();
+    if (utility::ressource_is_cgi(_request.header["URI"]))
+    {
+        set_env_variables_for_cgi();
+        // exceute_cgi();
+        return;
+    }
+    _statusCode = StatusCode(NOT_FOUND);
+    prepare_error_response();
 }
 
 
@@ -202,6 +214,7 @@ void    responsePreparation::exceute_delete()
 {
     //Check if the file to delete is the sameone in random/ zone
     //here I check if the request to delete a file is allowed by my glorious server
+
     if (file__delet_is_allowed(_request.header.at("URI")))
     {
         if (std::remove(_request.header.at("URI").c_str()) != 0)
@@ -315,6 +328,33 @@ void        responsePreparation::change_status_line(const char *status_code)
     std::string status_line = "HTTP/1.1 " + std::string(status_code);
     _response.insert(_response.begin(), status_line.begin(), status_line.end());
 }
+
+
+/*    addToEnvVector(this->_env, "SERVER_NAME", getServerNameFromReq());
+    addToEnvVector(this->_env, "SERVER_SOFTWARE", "webserv");
+    addToEnvVector(this->_env, "SERVER_PORT", getPortFromReq());
+    addToEnvVector(this->_env, "REQUEST_METHOD", getReqMeth());
+    addToEnvVector(this->_env, "GATEWAY_INTERFACE", "CGI");
+    addToEnvVector(this->_env, "SERVER_PROTOCOL", "HTTP1.1");
+    addToEnvVector(this->_env, "CONTENT_TYPE", getContentTypeFromReq());
+    addToEnvVector(this->_env, "CONTENT_LENGTH", getContentLength());
+    addToEnvVector(this->_env, "DOCUMENT_ROOT", getRootDirectory());
+    //get or post (body)
+    addToEnvVector(this->_env, "QUERY_STRING", getQueryStr());
+    addToEnvVector(this->_env, "SCRIPT_FILENAME", getCGIScriptName());
+*/
+
+void        responsePreparation::set_env_variables_for_cgi()
+{
+    const char* port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]).c_str();
+    
+    setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
+    setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
+    setenv("SCRIPT_FILENAME", _request.header.at("QUERY_STRING").c_str(), 1);
+    setenv("SERVER_PORT", port, 1);
+}
+
+
 
 // #include <unistd.h>
 

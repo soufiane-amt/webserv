@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 14:42:38 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:19:27 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void    clientRequestParser::check_the_absoluteURI ()
 
 void    clientRequestParser::parseFirstLine ()
 {
-
     std::vector<std::string> firstLineParts = utility::split(_tokens[0], SP);
     if (firstLineParts.size() != 3)
         throw StatusCode(BAD_REQUEST);

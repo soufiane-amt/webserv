@@ -6,11 +6,41 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/25 16:33:01 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:15:28 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
+
+
+Config& Config::operator= (const Config& copy)
+{
+	this->servers = copy.servers;
+	return *this;
+}
+
+void	Config::server_print()
+{
+	for (std::vector<std::pair<directive_t, location_t> >::iterator it = servers.begin(); it != servers.end(); ++it) {
+        directive_t& directives = it->first;
+        location_t& locations = it->second;
+
+        std::cout << "Directive_t content:" << std::endl;
+        for (directive_t::iterator dir_it = directives.begin(); dir_it != directives.end(); ++dir_it) {
+            std::cout << "Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
+        }
+
+        std::cout << "Location_t content:" << std::endl;
+        for (location_t::iterator loc_it = locations.begin(); loc_it != locations.end(); ++loc_it) {
+            std::cout << "Key: " << loc_it->first << std::endl;
+            directive_t& temp_dir = loc_it->second;
+            for (directive_t::iterator dir_it = temp_dir.begin(); dir_it != temp_dir.end(); ++dir_it) {
+                std::cout << "    Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
+            }
+        }
+    }
+}
+
 
 std::string	Config::lstrtrim(std::string &str)
 {
@@ -360,24 +390,6 @@ void Config::server_check(std::vector<key_val> &tokens)
 			throw Config::Error_config_file();
 	}
 	brace_counter(tokens);
-	// for (std::vector<std::pair<directive_t, location_t> >::iterator it = servers.begin(); it != servers.end(); ++it) {
-    //     directive_t& directives = it->first;
-    //     location_t& locations = it->second;
-
-    //     std::cout << "Directive_t content:" << std::endl;
-    //     for (directive_t::iterator dir_it = directives.begin(); dir_it != directives.end(); ++dir_it) {
-    //         std::cout << "Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
-    //     }
-
-    //     std::cout << "Location_t content:" << std::endl;
-    //     for (location_t::iterator loc_it = locations.begin(); loc_it != locations.end(); ++loc_it) {
-    //         std::cout << "Key: " << loc_it->first << std::endl;
-    //         directive_t& temp_dir = loc_it->second;
-    //         for (directive_t::iterator dir_it = temp_dir.begin(); dir_it != temp_dir.end(); ++dir_it) {
-    //             std::cout << "    Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
-    //         }
-    //     }
-    // }
 }
 
 Config::Config(std::ifstream &file)

@@ -6,12 +6,15 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/19 17:51:26 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:13:11 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
 #include "utils.hpp"
+
+std::ifstream	file;
+Config	test;
 
 int	check_file_name(std::string config, std::string end_char)
 {
@@ -24,33 +27,44 @@ int	check_file_name(std::string config, std::string end_char)
 	return (0);
 }
 
+int	ft_parsing(int ac, char *av)
+{
+	if (ac != 2)
+	{
+		std::cerr << "Bad arguments" << std::endl;
+		return (1);
+	}
+	std::string		config = av;
+	std::ifstream file (config);
+	
+	std::string		end_char = ".conf";
+
+	if (file)
+	{
+		if (check_file_name(config, end_char))
+			return (1);
+	}
+	else
+	{
+		std::cout << "there is no config file" << std::endl;
+		return (1);
+	}
+	try
+	{
+		Config test2(file);
+		test = test2;
+		test.server_print();
+	}
+	catch(std::exception &e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
-
-	if (ac == 2)
-	{
-		std::string		config = av[1];
-		std::ifstream	file(config);
-		std::string		end_char = ".conf";
-
-		if (file)
-		{
-			if (check_file_name(config, end_char))
-				return (1);
-		}
-		else
-		{
-			std::cout << "there is no config file" << std::endl;
-			return (1);
-		}
-		try
-		{
-			Config	test(file);
-		}
-		catch(std::exception &e)
-		{
-			std::cerr << e.what() << '\n';
-		}
-	}
+	if (ft_parsing(ac, av[1]))
+		return (1);
 	return (0);
 }

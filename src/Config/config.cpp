@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/26 17:15:28 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:18:58 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it)
 {
 	std::string	temp;
-	int	i = 0;
+	size_t	i = 0;
 
 	t_it++;
 	for (; t_it->key != TOKEN_SERVER && t_it != it; t_it++)
@@ -267,9 +267,15 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 			if (locations.find(t_it->value) != locations.end())
 				throw Config::Error_config_file();
 			temp = t_it->value;
-			if (temp.back() == '/' && temp.size() > 1)
+			i = temp.length();
+			for (size_t l = temp.length(); l > 1 && temp.back() == '/'; l--)
+			{
+ 				if (l + 2 == i || l - 1 == 1)
+					throw Config::Error_config_file();
 				temp.pop_back();
+			}
 			t_it++;
+			i = 0;
 			while (t_it->key != TOKEN_C_BRACE)
 			{
 				if (t_it->key == TOKEN_DIRECTIVE)

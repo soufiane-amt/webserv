@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 17:33:23 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 11:30:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 #include "exception.hpp"
 
 
-
 //Status-Line /***********you should use different classes for this************/
 
 class responsePreparation
 {
     private:
         typedef std::vector<char>     response_t;
+        typedef int                   response_category_t;
     
         http_message_t          _request;
         StatusCode              _statusCode;

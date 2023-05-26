@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 18:34:16 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 11:31:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void responsePreparation::prepare_allow()
 }
 
 
-void responsePreparation::prepare_body() //I'm gonna assume for now that the uri is a file
+void responsePreparation::prepare_body() //I will change this to cases later 
 {
     std::string appropriate_page ;
 
@@ -142,6 +142,11 @@ void responsePreparation::prepare_body() //I'm gonna assume for now that the uri
     {
         appropriate_page = utility::list_directory(_request.header["URI"], _request.targeted_Location);
         _response.insert(_response.end(), appropriate_page.begin(), appropriate_page.end());
+    }
+    else if (_request.header["Method"] == "DELETE")
+    {
+        std::vector <char> tmp = utility::get_file_content("www/delete_msg.html");
+        _response.insert(_response.end(), tmp.begin(), tmp.end());
     }
     else
     {
@@ -170,30 +175,7 @@ void    responsePreparation::exceute_get()
 
 void    responsePreparation::exceute_post()
 {
-    //output an std::map of the form data
-    // std::map<std::string, std::string> form_data = utility::decode_x_www_form_urlencoded_format(_request.body);
-
-    // for(std::map<std::string, std::string>::iterator it = form_data.begin(); it != form_data.end(); ++it)
-    // {
-    //     std::cout << it->first << " => " << it->second << '\n';
-    // }
-    // std::string command;
-    // command = _request.body.substr(_request.body.find('=') + 1);
-    // command[command.find('+')] = ' ';
-    // system(command.c_str());
-    
-    // prepare_statusLine();
-    // add_CRLF();
-    // std::vector <char> tmp = utility::get_file_content("www/command.html");
-    // _response.insert(_response.end(), tmp.begin(), tmp.end());
-    
-    // prepare_server_name();
-    // prepare_date();
-    
-    // prepare_location();
-    // prepare_body();
-    // prepare_meta_body_data();
-
+    exceute_cgi();
 }
 
 
@@ -234,6 +216,8 @@ void    responsePreparation::exceute_delete()
         prepare_date();
         prepare_location();
         add_CRLF();
+        prepare_body();
+        prepare_meta_body_data();
     }
     else
         prepare_error_response();

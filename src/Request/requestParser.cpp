@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 11:49:09 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 14:42:38 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,15 @@ void    clientRequestParser::parseFirstLine ()
     if (firstLineParts.size() != 3)
         throw StatusCode(BAD_REQUEST);
     _request.header["Method"] = firstLineParts[0];
+    
+    _request.header["QUERY_STRING"] = utility::get_query_string(firstLineParts[1]);
+    std::cout << "********QUERY_STRING: " << _request.header["QUERY_STRING"] << std::endl;
+    utility::remove_string_queries(firstLineParts[1]);
+    
     _request.header["URI"] = firstLineParts[1];
+    
     check_the_absoluteURI ();
+    
     _request.header["Protocol"] = firstLineParts[2];
     
 }

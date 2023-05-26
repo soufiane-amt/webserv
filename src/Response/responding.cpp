@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 11:31:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 14:42:54 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void    responsePreparation::exceute_get()
 
 void    responsePreparation::exceute_post()
 {
-    exceute_cgi();
+    // exceute_cgi();
 }
 
 

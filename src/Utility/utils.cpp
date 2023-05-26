@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 10:48:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:15:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ std::string     utility::list_directory(std::string directory,  std::string targ
     // Output the HTML header
     listing_file += "<html><head><title>Directory Listing</title></head><body>\n";
     listing_file += "<h1>Directory Listing</h1><hr>\n";
-    if (direct.back() != '/')
+    if (!direct.empty() && direct.back() != '/')
         direct += "/";
     // Output the list of files and directories in the directory as links
     while ((ent = readdir(dir)) != NULL) {
@@ -429,6 +429,11 @@ std::map<std::string, std::string>   utility::decode_form_data_format(const std:
         return form_map;
     }
 
+
+/* ************************************************************************** */
+                            // utility::get_directory_files :
+/* ************************************************************************** */
+
 std::vector <std::string>            utility::get_directory_files(const std::string& path)
 {
     DIR *dir;
@@ -450,6 +455,10 @@ std::vector <std::string>            utility::get_directory_files(const std::str
 }
 
 
+/* ************************************************************************** */
+                            // utility::arePathsSame :
+/* ************************************************************************** */
+
 bool                    utility::arePathsSame(const char* path1, const char* path2) {
     struct stat stat1, stat2;
 
@@ -459,3 +468,67 @@ bool                    utility::arePathsSame(const char* path1, const char* pat
     return (stat1.st_dev == stat2.st_dev) && (stat1.st_ino == stat2.st_ino);
 }
 
+
+std::vector<std::string>    utility::addPrefixToVector(std::vector<std::string> vec, const std::string& prefix) 
+{
+    for (std::vector<std::string>::iterator it = vec.begin(); it != vec.end(); ++it)
+        *it = prefix + *it;
+    return vec;
+}
+
+
+/* ************************************************************************** */
+                            // utility::ressource_is_cgi :
+/* ************************************************************************** */
+
+
+void                    utility::remove_string_queries (std::string& path)
+{
+    size_t pos = path.find("?");
+    if (pos != std::string::npos)
+        path = path.substr(0, pos);
+}
+
+
+/* ************************************************************************** */
+                            // utility::get_query_string :
+/* ************************************************************************** */
+
+std::string            utility::get_query_string(std::string path)
+{
+    size_t pos = path.find("?");
+    if (pos != std::string::npos)
+        return path.substr(pos + 1);
+    return "";
+}
+
+// bool isQueryString(const std::string& str) 
+// {
+//     if (str.empty())
+//         return false;
+
+//     if (str[0] != '?')
+//         return false;
+
+//     std::vector<std::string> parameters = utility::split(str.substr(1), "&");
+
+//     for (std::vector<std::string>::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+//         if (it->empty() || it->find('=') == std::string::npos)
+//             return false;
+//     return true;
+// }
+
+
+//this function is used to check if the requested ressource is a cgi file
+//it returns true if the ressource is a cgi file, false otherwise
+//It also checks if the query string inluded with cgi if there is any is valid
+bool                    utility::ressource_is_cgi(std::string path)
+{
+    static std::vector<std::string> cgi_files =  addPrefixToVector(get_directory_files("./cgi_files/"), "./cgi_files/");
+    
+    remove_string_queries(path);
+    for (std::vector<std::string>::iterator it = cgi_files.begin(); it != cgi_files.end(); ++it)
+        if (arePathsSame(path.c_str(), it->c_str()))
+            return true;
+    return false;
+}

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 10:40:01 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 15:05:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ struct simpleConfPars
     
     // directives["return"] = "302 https://www.youtube.com/";
     directives["root"] = "./www";
-    directives["root"] = "index.html";
+    // directives["root"] = "index.html";
     directives["autoindex"] = "on";
     // directives["allow"] = "POST";
     
@@ -82,7 +82,7 @@ struct simpleConfPars
     // locations["/"]["max_body_size"] = "-1";
     locations["/"]["autoindex"] = "on";
 
-    locations["/"]["root"] = "./www/";
+    locations["/"]["root"] = "./www";
         // locations["/"]["index"] = "index.html";
     // locations["/"]["allow"] = "POST";
     // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
@@ -182,6 +182,13 @@ struct utility
     
     static bool                                 arePathsSame(const char* path1, const char* path2);
     
+    static std::vector <std::string>            addPrefixToVector(std::vector<std::string> v, const std::string& pref);
+    
+    static bool                                 ressource_is_cgi(std::string   path);
+
+    static std::string                          get_query_string(std::string   uri);
+
+    static void                                 remove_string_queries (std::string& path);
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:04:50 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/08 00:22:13 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 13:26:28 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@
 #define HTTP_VERSION_NOT_SUPPORTED "505 HTTP Version Not Supported"
 
 
+/* ************************************************************************** */
+                            // CGI FILES :
+/* ************************************************************************** */
 
+
+#define CGI_FILES "./www/cgi_files/cgi1.php"
+#define CGI_FILES2 "./www/cgi_files/cgi2.php"
 
 #endif

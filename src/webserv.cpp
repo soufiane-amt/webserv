@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/23 16:44:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 16:51:25 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void    tempServer (int port)
 int main (int argc, char **argv)
 {
     (void)argc;
+    parser = arg[1];
     if (argc != 2)
     {
         std::cout << "Usage: ./webserv [port]" << std::endl;

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 15:15:35 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 16:30:11 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -524,7 +524,12 @@ std::string            utility::get_query_string(std::string path)
 //It also checks if the query string inluded with cgi if there is any is valid
 bool                    utility::ressource_is_cgi(std::string path)
 {
-    static std::vector<std::string> cgi_files =  addPrefixToVector(get_directory_files("./cgi_files/"), "./cgi_files/");
+    static std::vector<std::string> cgi_files =  addPrefixToVector(get_directory_files("./www/cgi_files/"), "./www/cgi_files/");
+    std::cout << "++++GOOD+++" << std::endl;
+    for (size_t i = 0; i < cgi_files.size(); i++)
+    {
+        std::cout << "cgi file : " << cgi_files[i] << std::endl;
+    }
     
     remove_string_queries(path);
     for (std::vector<std::string>::iterator it = cgi_files.begin(); it != cgi_files.end(); ++it)

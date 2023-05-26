@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 15:46:27 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 16:27:29 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void    responsePreparation::exceute_get()
 {
     if (utility::ressource_is_cgi(_request.header["URI"]))
     {
+        std::cout << "+++++++++++++++++|||||||++++++++++++++\n";
         set_env_variables_for_cgi();
         // exceute_cgi();
         return;
@@ -346,12 +347,20 @@ void        responsePreparation::change_status_line(const char *status_code)
 
 void        responsePreparation::set_env_variables_for_cgi()
 {
-    const char* port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]).c_str();
+    std::string port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]);
     
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
-    setenv("SCRIPT_FILENAME", _request.header.at("QUERY_STRING").c_str(), 1);
-    setenv("SERVER_PORT", port, 1);
+    std::string script_name = _request.header.at("URI");
+    setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
+    setenv("SERVER_PORT", port.c_str(), 1);
+    //now I will print them all
+
+    std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;
+    std::cout << "QUERY_STRING: " << getenv("QUERY_STRING") << std::endl;
+    std::cout << "SCRIPT_FILENAME: " << getenv("SCRIPT_FILENAME") << std::endl;
+    std::cout << "SERVER_PORT: " << getenv("SERVER_PORT") << std::endl;
+    
 }
 
 

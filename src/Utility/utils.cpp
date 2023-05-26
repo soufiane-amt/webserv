@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 19:17:56 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 10:48:40 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,9 +242,11 @@ std::string     utility::list_directory(std::string directory,  std::string targ
     // Output the HTML header
     listing_file += "<html><head><title>Directory Listing</title></head><body>\n";
     listing_file += "<h1>Directory Listing</h1><hr>\n";
-    
+    if (direct.back() != '/')
+        direct += "/";
     // Output the list of files and directories in the directory as links
     while ((ent = readdir(dir)) != NULL) {
+            std::cout << "=====>" << direct  + std::string(ent->d_name) << std::endl;
         if (ent->d_type == DT_DIR) {
             // Output a link for a directory
             listing_file += "<a href=\"" + direct  + std::string(ent->d_name) + "/\">" + std::string(ent->d_name) + "/</a><br>\n";

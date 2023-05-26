@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/25 18:09:35 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 10:40:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,11 @@ struct simpleConfPars
     // locations["/"]["max_body_size"] = "-1";
     locations["/"]["autoindex"] = "on";
 
-    locations["/"]["root"] = "./www";
+    locations["/"]["root"] = "./www/";
         // locations["/"]["index"] = "index.html";
     // locations["/"]["allow"] = "POST";
     // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
-
+    //the location must delete "/" but root must keep it
     locations["/command"]["root"] = "./www";
     locations["/command"]["index"] = "command.html";
 

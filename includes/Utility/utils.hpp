@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 15:43:22 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 18:16:41 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #include <exception>
 #include <cctype>
@@ -33,6 +35,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+class Config;
 /* ************************************************************************** */
                             // Typedefs :
 /* ************************************************************************** */
@@ -59,89 +62,90 @@ struct http_message_t
 
 
 //For tests :
-struct simpleConfPars
-{
-    simpleConfPars ()
-    {
+// struct simpleConfPars
+// {
+//     simpleConfPars ()
+//     {
 
-    directive_t directives;
-    location_t locations;//autoindex on
+//     directive_t directives;
+//     location_t locations;//autoindex on
     
-    directives["listen"] = "80";
-    directives["server_name"] = "example.com";
-    // directives["max_body_size"] = "-1";
+//     directives["listen"] = "80";
+//     directives["server_name"] = "example.com";
+//     // directives["max_body_size"] = "-1";
     
-    // directives["return"] = "302 https://www.youtube.com/";
-    directives["root"] = "./www";
-    // directives["root"] = "index.html";
-    directives["autoindex"] = "on";
-    // directives["allow"] = "POST";
+//     // directives["return"] = "302 https://www.youtube.com/";
+//     directives["root"] = "./www";
+//     // directives["root"] = "index.html";
+//     directives["autoindex"] = "on";
+//     // directives["allow"] = "POST";
     
-    // locations["/"]["index"] = "index.html";
-    // locations["/"]["index"] = "index.html";
-    // locations["/"]["max_body_size"] = "-1";
-    locations["/"]["autoindex"] = "on";
+//     // locations["/"]["index"] = "index.html";
+//     // locations["/"]["index"] = "index.html";
+//     // locations["/"]["max_body_size"] = "-1";
+//     locations["/"]["autoindex"] = "on";
 
-    locations["/"]["root"] = "./www";
-        // locations["/"]["index"] = "index.html";
-    // locations["/"]["allow"] = "POST";
-    // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
-    //the location must delete "/" but root must keep it
-    locations["/command"]["root"] = "./www";
-    locations["/command"]["index"] = "command.html";
+//     locations["/"]["root"] = "./www";
+//         // locations["/"]["index"] = "index.html";
+//     // locations["/"]["allow"] = "POST";
+//     // locations["/"]["return"] = "302 /Users/samajat/Desktop/webserv/login.html";
+//     //the location must delete "/" but root must keep it
+//     locations["/command"]["root"] = "./www";
+//     locations["/command"]["index"] = "command.html";
 
-    locations["/random"]["root"] = "./www/random";
-    // locations["/random"]["index"] = "page.html";
-    locations["/random"]["autoindex"] = "on";
+//     locations["/random"]["root"] = "./www/random";
+//     // locations["/random"]["index"] = "page.html";
+//     locations["/random"]["autoindex"] = "on";
     
-    locations["/youtube"]["return"] = "302 https://www.youtube.com/";
-    // locations["/images"]["autoindex"] = "on";
+//     locations["/youtube"]["return"] = "302 https://www.youtube.com/";
+//     // locations["/images"]["autoindex"] = "on";
 
     
-    locations["/upl"]["root"] = "./www/upload";
-    locations["/upl"]["upload"] = "upload_store";
+//     locations["/upl"]["root"] = "./www/upload";
+//     locations["/upl"]["upload"] = "upload_store";
     
-    // directives["error_page"] = "404 /404.html";
-    // locations["/404.html"]["root"] = "./www/error_pages";
-    server.push_back(make_pair(directives, locations));
-    }
+//     // directives["error_page"] = "404 /404.html";
+//     // locations["/404.html"]["root"] = "./www/error_pages";
+//     server.push_back(make_pair(directives, locations));
+//     }
 
-    location_t get_server_locations (int server_id)
-    {
-        return (server[server_id].second);
-    }
+//     location_t get_server_locations (int server_id)
+//     {
+//         return (server[server_id].second);
+//     }
     
-    std::string get_server_directives (int server_id, std::string directive)
-    {
-        return (server[server_id].first.at(directive));
-    }
+//     std::string get_server_directives (int server_id, std::string directive)
+//     {
+//         return (server[server_id].first.at(directive));
+//     }
     
 
-    std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string uri, std::string directive_key)
-    {
-        location_t::iterator it = server[server_id].second.find(uri);
-        if (it != server[server_id].second.end())
-        {
-            directive_t::iterator it2 = it->second.find(directive_key);
-            if (it2 == it->second.end())
-            {
-                directive_t::iterator d_itr =  server[server_id].first.find(directive_key);
-                if (d_itr == server[server_id].first.end())
-                    return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
-                else
-                    return (std::pair<bool, directive_t::iterator>(true, d_itr));
-            }
-            else
-                return (std::pair<bool, directive_t::iterator>(true, it2));
-        }
-        return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
-    }
-    private:
-    server_t server;
+//     std::pair <bool,  directive_t::iterator> get_directive (int server_id, std::string uri, std::string directive_key)
+//     {
+//         location_t::iterator it = server[server_id].second.find(uri);
+//         if (it != server[server_id].second.end())
+//         {
+//             directive_t::iterator it2 = it->second.find(directive_key);
+//             if (it2 == it->second.end())
+//             {
+//                 directive_t::iterator d_itr =  server[server_id].first.find(directive_key);
+//                 if (d_itr == server[server_id].first.end())
+//                     return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
+//                 else
+//                     return (std::pair<bool, directive_t::iterator>(true, d_itr));
+//             }
+//             else
+//                 return (std::pair<bool, directive_t::iterator>(true, it2));
+//         }
+//         return (std::pair<bool, directive_t::iterator>(false, server[server_id].first.end()));
+//     }
+//     private:
+//     server_t server;
     
-};
+// };
 
-extern simpleConfPars parser;
+// extern simpleConfPars parser;
+extern Config parser;
 
 
 
@@ -189,6 +193,8 @@ struct utility
     static std::string                          get_query_string(std::string   uri);
 
     static void                                 remove_string_queries (std::string& path);
+    
+	static void split2(std::string str, std::string delimiter, std::vector<std::string> &tokens);
     private:
     //trim methods :
     static std::string              left_trim(const std::string &str, const std::string &delimiter);
@@ -202,7 +208,6 @@ struct utility
     
 };
 
-
-
+#include "config.hpp"
 
 #endif

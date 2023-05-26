@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 .DS_Store
 .vscode
 a.out
 *.o
 .gitignore
+=======
+test*
+.vscode
+*.o
+>>>>>>> config

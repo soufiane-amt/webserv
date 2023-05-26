@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 16:51:25 by samajat          ###   ########.fr       */
+/*   Updated: 2023/05/26 18:22:38 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "responding.hpp"
 #include "errorManager.hpp"
 #include <fcntl.h>
+
 
 std::string msg= "GET / HTTP/1.1\r\n"
             "host: 192.241.213.46:6880\r\n"
@@ -44,6 +45,55 @@ std::string msg= "GET / HTTP/1.1\r\n"
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+
+
+Config	parser;
+
+int	check_file_name(std::string config, std::string end_char)
+{
+	if (config.length() <= end_char.length()
+		|| config.substr(config.length() - end_char.length()) != end_char)
+	{
+		std::cout << "error in file name" << std::endl;
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_parsing(int ac, char *av)
+{
+	if (ac != 2)
+	{
+		std::cerr << "Bad arguments" << std::endl;
+		return (1);
+	}
+	std::string		config = av;
+	std::ifstream file (config);
+	
+	std::string		end_char = ".conf";
+
+	if (file)
+	{
+		if (check_file_name(config, end_char))
+			return (1);
+	}
+	else
+	{
+		std::cout << "there is no config file" << std::endl;
+		return (1);
+	}
+	try
+	{
+		Config parser2(file);
+		parser = parser2;
+		parser.server_print();
+	}
+	catch(std::exception &e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	return (0);
+}
 
 
 std::vector<char>    request_response(std::string msg)
@@ -124,8 +174,8 @@ void    tempServer (int port)
 
 int main (int argc, char **argv)
 {
-    (void)argc;
-    parser = arg[1];
+	if (ft_parsing(argc, argv[1]))
+		return (1);
     if (argc != 2)
     {
         std::cout << "Usage: ./webserv [port]" << std::endl;
@@ -133,7 +183,9 @@ int main (int argc, char **argv)
     }
     try
     {
-        tempServer(atoi(argv[1]));
+		int port;
+		std::cin >> port;
+        tempServer(port);
     }
     catch(const std::exception& e)
     {

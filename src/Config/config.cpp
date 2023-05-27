@@ -6,12 +6,11 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/27 15:34:26 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:59:01 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.hpp"
-
 
 Config& Config::operator= (const Config& copy)
 {
@@ -197,14 +196,18 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 0 || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "autoindex")
 	{
 		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "root")
@@ -213,14 +216,18 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		if (it->value.back() == '/' && it->value.size() > 1)
 			it->value.pop_back();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "index" || (it - 1)->value == "server_name")
 	{
 		if (it->value.at(0) == '/' || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 		else if (i == 2 && (it - 1)->value == "server_name")
 			throw Config::Error_config_file();
@@ -236,8 +243,10 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 100 || number > 599)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
-			directives[(it - 1)->value] = it->value + " " + (it + 1)->value;
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
+			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "allow")
 	{

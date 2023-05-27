@@ -107,3 +107,46 @@ e.g: Host: servername
 it contains a plain text, html page , image, or any binary file and any format support of MEMI supported by the user-agent(browser)
 
 
+http different versions:
+
+HTTP/1.0:
+
+Connection: In HTTP/1.0, a separate connection is established for each request-response cycle. 
+After the response is received, the connection is closed.
+
+Persistent Connections: HTTP/1.0 does not have built-in support for persistent connections. 
+This means that for each request, a new connection must be established, which can result in increased latency.
+Request Pipelining: HTTP/1.0 does not support request pipelining. This means that the client has to wait for the response of one request before sending the next request.
+
+Caching: Caching mechanisms in HTTP/1.0 are limited compared to later versions. It primarily relies on the "If-Modified-Since" header to determine if a resource has been modified since it was last requested.
+
+HTTP/1.1:
+
+Connection: HTTP/1.1 introduced persistent connections, allowing multiple requests to be sent over the same connection. 
+This reduces the overhead of establishing new connections for each request.
+
+Request Pipelining: HTTP/1.1 supports request pipelining, which means multiple requests can be sent without waiting for the response of each individual request. 
+This helps in reducing latency and improving performance.
+
+Chunked Transfer Encoding: HTTP/1.1 introduced the chunked transfer encoding mechanism, which allows the server to send data in chunks instead of sending the entire response at once. This enables better streaming and dynamic content delivery.
+
+Host Header: HTTP/1.1 added the Host header, which allows multiple domains to be hosted on the same IP address, improving server efficiency.
+Caching: HTTP/1.1 enhanced caching mechanisms by introducing cache control headers, such as "Cache-Control" and "ETag", providing more granular control over caching behavior.
+
+
+HTTP/2:
+
+Connection: HTTP/2 uses a binary framing layer that allows multiplexing of multiple requests and responses over a single connection. This eliminates the need for multiple connections and reduces latency.
+Request Prioritization: HTTP/2 introduces request and response prioritization. It allows the client to assign priorities to different requests, ensuring that critical resources are delivered faster.
+Server Push: HTTP/2 enables server push, where the server can proactively send resources to the client before they are requested. This can significantly improve page load times.
+Header Compression: HTTP/2 introduces header compression, which reduces the overhead of header information, resulting in improved performance.
+Stream Dependencies: HTTP/2 allows streams to depend on each other, enabling more efficient handling of dependencies between different resources.
+Security: While HTTPS is optional in HTTP/1.x, HTTP/2 mandates the use of encryption over TLS (Transport Layer Security).
+HTTP/2 is designed to be more efficient, faster, and better suited for modern web applications. Its features, such as multiplexing, prioritization, and server push, make it ideal for delivering complex web pages and reducing latency. However, it's important to note that HTTP/1.1 is still widely used, and the adoption of HTTP/2 depends on server and client support.
+
+
+
+HTTP Messages:
+
+
+

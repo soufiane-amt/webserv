@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/26 19:18:58 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/27 15:34:26 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,16 +166,28 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 {
 	if ((it - 1)->value == "listen")
 	{
+		if (directives.find("listen") != directives.end())
+			throw Config::Error_config_file();
+		std::vector<std::string> unique_values;
 		int	number = 0;
-		std::istringstream iss(it->value);
-		if (!(iss >> number))
-			throw Config::Error_config_file();
-		else if (number < 0 || number > 65535 || (it + 1)->key != TOKEN_SEMICOLON)
-			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
-			directives[(it - 1)->value] = it->value;
-		else
-			throw Config::Error_config_file();
+		while (it->key != TOKEN_SEMICOLON)
+		{
+			std::istringstream iss(it->value);
+			if (!(iss >> number))
+				throw Config::Error_config_file();
+			if (std::find(unique_values.begin(), unique_values.end(), it->value) == unique_values.end()
+				&& number >= 0 && number <= 65535)
+			{
+				unique_values.push_back(it->value);
+				if (i == 1)
+					directives["listen"] += it->value + " ";
+				else
+					throw Config::Error_config_file();
+			}
+			else
+				throw Config::Error_config_file();
+			it++;
+		}
 	}
 	else if ((it - 1)->value == "max_body_size")
 	{

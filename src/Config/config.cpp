@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/28 17:05:06 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:56:39 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ Config& Config::operator= (const Config& copy)
 
 void	Config::server_print()
 {
-	for (std::vector<std::pair<directive_t, location_t> >::iterator it = servers.begin(); it != servers.end(); ++it) {
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
         directive_t& directives = it->first;
         location_t& locations = it->second;
 
@@ -320,6 +321,20 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 	}
 }
 
+void Config::fill_servers(directive_t &directives, location_t &locations)
+{
+	bool	already_exists = false;
+
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
+		if (it->first["server_name"] == directives["server_name"]
+			&& it->first["listen"] == directives["listen"])
+			already_exists = true;
+	}
+	if (!already_exists)
+		servers.push_back(std::pair<directive_t, location_t>(directives, locations));
+}
+
 void Config::directive_check(key_val_it &t_it, location_t &locations, directive_t &directives, key_val_it &it, int *i)
 {
 	if (it->key == TOKEN_DIRECTIVE)
@@ -348,7 +363,7 @@ void Config::directive_check(key_val_it &t_it, location_t &locations, directive_
 			fill_locations(t_it, locations, it);
 			if (directives.size() == 0 && locations.size() == 0)
 				throw Config::Error_config_file();
-			servers.push_back(std::pair<directive_t, location_t>(directives, locations));
+			fill_servers(directives, locations);
 			directives.clear();
 			locations.clear();
 		}

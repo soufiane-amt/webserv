@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/27 21:59:01 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:05:06 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,7 @@ void Config::directive_check(key_val_it &t_it, location_t &locations, directive_
 		(*i)--;
 		if (*i == 0)
 		{
-			if (directives.find("listen") == directives.end())
+			if (directives.find("listen") == directives.end() || directives.find("server_name") == directives.end())
 				throw Config::Error_config_file();
 			fill_locations(t_it, locations, it);
 			if (directives.size() == 0 && locations.size() == 0)

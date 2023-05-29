@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 13:30:50 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/29 23:23:24 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,49 +71,19 @@ int polling::closeConnections(int fd)
 
 int     polling::sendAll(int fd, char *buff, int *len)
 {
-    int total = 0; //checking how many bytes we've sent
-    int rest = *len; //rest of the data
     int check;
-
-    while (total < *len)
-    {
-        check = send(fd, buff + total, rest, 0);
-        if (check == -1)
-            break;
-        total += check; //update the total of bytes sent
-        rest -= check; //update how nuch bytes are left
-    }
-    *len = total; //actual number of bytes sent
-
-    return (check == -1 ? -1 : 0); //-1 on failure, 0 on success
+    
+    check = send(fd, buff, 1024, 0);
+    return (check);
 }
 
 
 //from tcp/ip programming fig 2.27, also check page 53-54
 int     polling::recvAll(int fd, char *buff, int len)
 {
-    // std::string store;
-    int cnt = 0;
-    int rc = 0;
-
-    cnt = len;
-    while (cnt > 0)
-    {
-        rc = recv(fd, buff, cnt, 0);
-        if (rc == -1)
-            break;
-        if (rc == 0)
-            return (len - cnt);
-        buff += rc;
-        cnt -= rc;
-    }
+    int check;
+    check = recv(fd, buff, 1024, 0);
     return (len);
-
-    //BUFFER_SIZE should be set the in the object and it should be the size of the message sent
-    // while (recd < BUFFER_SIZE)
-    // {
-        // int rest = 
-    // }
 }
 
 void    polling::handlePoll(tcpServer &sock, char *resp)

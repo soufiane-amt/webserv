@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 13:30:57 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:52:46 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ tcpServer::tcpServer(polling &pl)
     memset(&this->webservAddr, 0, sizeof(this->webservAddr)); //empty the struct
     this->webservAddr.sin_family = AF_INET; //IPv4
     this->webservAddr.sin_port = htons(HTTP_PORT); //convert port to network byte order(short)
-    this->webservAddr.sin_addr.s_addr = htonl(INADDR_ANY); // convert IP@ to network byte order (long) /any network interface available on the hos 
+    this->webservAddr.sin_addr.s_addr = htonl(INADDR_ANY); // convert IP@ to network byte order (long) /any network interface available on the host 
 
     //create socket
-    this->sockfd = socket(AF_INET, SOCK_STREAM,IPPROTO_TCP);
+    this->sockfd = socket(PF_INET, SOCK_STREAM,IPPROTO_TCP);
     tcpServer::testSysCall(tcpServer::getAcceptFd());
 
     //set the socket to be non-blocking

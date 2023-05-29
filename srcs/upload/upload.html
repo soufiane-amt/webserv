@@ -1,15 +1,33 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Upload File</title>
-    <form method="post" enctype="multipart/form-data" action="http://localhost:6969/upload">
-        <div>
-            <label for="file">File</label>
-            <input id="file" type="file" name="uploadedFile"/>
-        </div>
-        <div>
-            <button>Upload</button>
-        </div>
-    </form>
-</head>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Upload File</title>
+        <style>
+            button{
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+            button:hover {
+                background-color: #45a049;
+        }
+        </style>
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data" action="http://localhost:6969/upload">
+            <div>
+                <label for="file">File: </label>
+                <input id="file" type="file" name="uploadedFile"/>
+            </div>
+            <br>
+            <div>
+                <button>Upload</button>
+            </div>
+        </form>
+    </body>
+</html>
 

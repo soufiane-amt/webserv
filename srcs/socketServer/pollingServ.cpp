@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   myServ.cpp                                         :+:      :+:    :+:   */
+/*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/30 11:18:58 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:33:29 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/fech-cha/Desktop/webserv/inc/myServ.hpp"
+#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 polling::polling(void)
 {

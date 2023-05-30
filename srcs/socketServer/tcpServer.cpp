@@ -6,11 +6,11 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 19:52:46 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:36:20 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/fech-cha/Desktop/webserv/inc/myServ.hpp"
+#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 tcpServer::tcpServer(polling &pl)
 {

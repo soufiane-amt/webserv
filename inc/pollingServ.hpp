@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   myServ.hpp                                         :+:      :+:    :+:   */
+/*   pollingServ.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 20:07:36 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:33:56 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MYSERV_HPP
-# define MYSERV_HPP
+#ifndef POLLINGSERV_HPP
+# define POLLINGSERV_HPP
 
 #include "tcpServer.hpp"
 #include "appendClientSide.hpp"

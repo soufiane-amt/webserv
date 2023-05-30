@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/30 11:18:10 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:35:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 //close / keep-alive option
 
-#include "myServ.hpp"
+#include "pollingServ.hpp"
 
 # define HTTP_PORT 6969
 # define BACKLOG 100

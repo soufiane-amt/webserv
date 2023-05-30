@@ -6,14 +6,14 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 20:07:27 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:36:40 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef APPENDCIENTSIDE_HPP
 # define APPENDCIENTSIDE_HPP
 
-
+#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 
 #endif

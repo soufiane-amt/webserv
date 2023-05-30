@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 13:30:44 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 13:03:32 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int main(void)
         if (poll_count  == -1)
         {
             perror("poll");
-            exit(EXIT_FAILURE);
+            // exit(EXIT_FAILURE);
+            continue;
         }
         else
         {

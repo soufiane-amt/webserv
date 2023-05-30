@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 23:23:24 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 11:18:58 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int     polling::sendAll(int fd, char *buff, int *len)
 {
     int check;
     
-    check = send(fd, buff, 1024, 0);
+    check = send(fd, buff, BUFFER_SIZE, 0);
     return (check);
 }
 
@@ -82,7 +82,7 @@ int     polling::sendAll(int fd, char *buff, int *len)
 int     polling::recvAll(int fd, char *buff, int len)
 {
     int check;
-    check = recv(fd, buff, 1024, 0);
+    check = recv(fd, buff, BUFFER_SIZE, 0);
     return (len);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 15:42:28 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/30 11:18:10 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define BACKLOG 100
 
 //temp buff size
-# define BUFFER_SIZE 1024
+# define BUFFER_SIZE 1000
 
 class   polling;
 class tcpServer

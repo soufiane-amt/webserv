@@ -6,14 +6,16 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/30 14:36:20 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 01:42:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
-tcpServer::tcpServer(polling &pl)
+tcpServer::tcpServer(polling &pl, int port, std::string host)
 {
+    (void)port;
+    (void)host;
     std::cout << "Socket default constructor and initializer." << std::endl;
     //init len of structs
     this->webservAddrlen = sizeof(this->webservAddr);
@@ -22,6 +24,7 @@ tcpServer::tcpServer(polling &pl)
     memset(&this->webservAddr, 0, sizeof(this->webservAddr)); //empty the struct
     this->webservAddr.sin_family = AF_INET; //IPv4
     this->webservAddr.sin_port = htons(HTTP_PORT); //convert port to network byte order(short)
+    //should take host and convert (inet_addr(host))
     this->webservAddr.sin_addr.s_addr = htonl(INADDR_ANY); // convert IP@ to network byte order (long) /any network interface available on the host 
 
     //create socket
@@ -43,6 +46,9 @@ tcpServer::tcpServer(polling &pl)
 
     //make the socket listen for connections
     tcpServer::listenRequest();
+
+    //push socket to socket list
+    pl.pushSocket(this->sockfd);
 
     //push the socket fd to poll()
     pl.pushFd(this->sockfd, POLLIN);

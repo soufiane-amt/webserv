@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 02:12:33 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 03:10:55 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ polling::~polling(void)
     
 }
 
-void    polling::pushSocket(int fd)
-{
-    this->_sockets.push_back(fd);
-}
-
 void    polling::pushFd(int sockfd, int event)
 {
     struct pollfd tmp;
@@ -36,6 +31,30 @@ void    polling::pushFd(int sockfd, int event)
     tmp.revents = 0;
     this->_pollfds.push_back(tmp);
 }
+
+void    polling::pushClient(appendClient &client)
+{
+    this->_clients.push_back(client);
+}
+
+void    polling::acceptConnection(appendClient &client, int fd)
+{
+    int newFd = accept(fd, 0, 0);
+    if (newFd < 0)
+    {
+        perror("accept");
+        //maybe exit or set error status
+    }
+    client.setClientFd(fd);
+    this->pushFd(client.getClientFd(), POLLIN);
+    this->_clients.push_back(client);
+}
+
+void    polling::pushSocket(int fd)
+{
+    this->_sockets.push_back(fd);
+}
+
 
 int polling::callPoll(struct pollfd *fds, nfds_t nfds, int timeout)
 {
@@ -96,6 +115,7 @@ void    polling::handlePoll(char *resp)
 {
     for (size_t i = 0; i < this->_pollfds.size(); i++)
     {
+        
         pollfd& pfd = this->_pollfds[i];
         
         //check if someone ready to read/connect
@@ -105,15 +125,12 @@ void    polling::handlePoll(char *resp)
             //check if i < _socket.size()
             if (pfd.fd == this->_sockets[i])
             {
-                sock.acceptConnection();
-                if (sock.getAcceptFd() == -1)
-                    perror ("accept");
-                else
-                {
-                    this->pushFd(sock.getAcceptFd(), POLLIN);
-                    sock.retrieveClientAdd(); // print the ip of the connection later
-                    std::cout << "New server connection on socket : " << sock.getAcceptFd() << std::endl;
-                }
+                appendClient    newClient;
+                this->acceptConnection(newClient, this->_sockets[i]);
+
+                //print logs of new connection
+                // sock.retrieveClientAdd(); // print the ip of the connection later
+                std::cout << "New server connection on socket : " << newClient.getClientFd() << std::endl;
             }
             else //just regular client
             {

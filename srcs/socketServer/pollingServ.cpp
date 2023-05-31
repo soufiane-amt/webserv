@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 03:10:55 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 04:23:26 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,18 @@ polling::polling(void)
 
 polling::~polling(void)
 {
+    
+}
+
+int     polling::findClientFd(std::vector<appendClient> &client, int fd)
+{
+    std::vector<appendClient>::iterator it;
+    
+    it = std::find(client.begin(), client.end(), fd);
+    if (it != client.end())
+        return (it->getClientFd());
+    else
+        return (-1);
     
 }
 
@@ -132,7 +144,7 @@ void    polling::handlePoll(char *resp)
                 // sock.retrieveClientAdd(); // print the ip of the connection later
                 std::cout << "New server connection on socket : " << newClient.getClientFd() << std::endl;
             }
-            else //just regular client
+            else //just regular client ready to recieve 
             {
                 int count = polling::recvAll(pfd.fd, (char *)sock.getBuffer(), BUFFER_SIZE);
                 //request need to go through the parser

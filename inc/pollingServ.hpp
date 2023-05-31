@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 02:45:15 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 04:18:43 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class   polling
         int     recvAll(int fd, char *buf, int len);
         void    pushServer(tcpServer &server);
         void    pushClient(appendClient &client);
+        int     findClientFd(std::vector<appendClient> &client, int fd);
         
         //getters
         nfds_t  getSize(void) const;

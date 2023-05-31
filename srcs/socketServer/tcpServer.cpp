@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 01:42:39 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 02:55:27 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     tcpServer::testSysCall(tcpServer::getAcceptFd());
 
     //set the socket to be non-blocking
-    fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
+    fcntl(getSockFd(), F_SETFL, O_NONBLOCK);
     
     std::cout << "Socket created succesfully." << std::endl;
     
@@ -45,13 +45,13 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     std::cout << "Socket succesfully bound to address." << std::endl;
 
     //make the socket listen for connections
-    tcpServer::listenRequest();
+    tcpServer::listenConnection();
 
     //push socket to socket list
-    pl.pushSocket(this->sockfd);
+    pl.pushSocket(getSockFd());
 
     //push the socket fd to poll()
-    pl.pushFd(this->sockfd, POLLIN);
+    pl.pushFd(getSockFd(), POLLIN);
 
 }
 
@@ -103,17 +103,11 @@ const char*   tcpServer::getBuffer(void) const
     return (buffer);
 }
 
-void    tcpServer::listenRequest(void)
+void    tcpServer::listenConnection(void)
 {
     int check = listen(getSockFd(), BACKLOG);
     tcpServer::testSysCall(check);
     std::cout << "Server listening for connections ... " << std::endl;
-}
-
-void    tcpServer::acceptConnection(void)
-{
-    this->clientAddrlen = sizeof(this->clientAddr);
-    this->acceptSockFd = accept(getSockFd(), (struct sockaddr *)&this->clientAddr, (socklen_t *)&this->clientAddrlen);
 }
 
 void    tcpServer::closeConnection(void)

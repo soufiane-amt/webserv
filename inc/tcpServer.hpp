@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/30 19:42:33 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 02:58:11 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ class tcpServer
         ~tcpServer();
         void    testSysCall(int fd);
         void    rerunServ(void);
-        void    listenRequest(void);
-        void    acceptConnection(void);
+        void    listenConnection(void);
         void    closeConnection(void);
         void    sendReq(int sockfd, const void *buf, int len, int flags);
         void    recvReq(int sockfd, void *buf, int len, int flags);

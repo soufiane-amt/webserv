@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/30 14:33:29 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 02:12:33 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,18 @@ polling::~polling(void)
     
 }
 
+void    polling::pushSocket(int fd)
+{
+    this->_sockets.push_back(fd);
+}
+
 void    polling::pushFd(int sockfd, int event)
 {
     struct pollfd tmp;
 
     tmp.fd = sockfd;
     tmp.events = event;
+    tmp.revents = 0;
     this->_pollfds.push_back(tmp);
 }
 
@@ -86,16 +92,18 @@ int     polling::recvAll(int fd, char *buff, int len)
     return (len);
 }
 
-void    polling::handlePoll(tcpServer &sock, char *resp)
+void    polling::handlePoll(char *resp)
 {
-    for (unsigned int i = 0; i < this->_pollfds.size() ; i++)
+    for (size_t i = 0; i < this->_pollfds.size(); i++)
     {
         pollfd& pfd = this->_pollfds[i];
+        
         //check if someone ready to read/connect
         if (pfd.revents & POLLIN)
         {
-            //handle new connections
-            if (pfd.fd == sock.getSockFd())
+            //handle new connections 
+            //check if i < _socket.size()
+            if (pfd.fd == this->_sockets[i])
             {
                 sock.acceptConnection();
                 if (sock.getAcceptFd() == -1)
@@ -141,5 +149,8 @@ void    polling::handlePoll(tcpServer &sock, char *resp)
                 }
             }
         }
+        //client hang up
+        if (pfd.revents & POLLHUP)
+            polling::closeConnections(pfd.fd);
     }
 }

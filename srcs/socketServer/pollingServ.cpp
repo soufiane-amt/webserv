@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 04:23:26 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 04:41:58 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int     polling::findClientFd(std::vector<appendClient> &client, int fd)
     it = std::find(client.begin(), client.end(), fd);
     if (it != client.end())
         return (it->getClientFd());
-    else
-        return (-1);
+    return (-1);
     
 }
 
@@ -146,37 +145,50 @@ void    polling::handlePoll(char *resp)
             }
             else //just regular client ready to recieve 
             {
-                int count = polling::recvAll(pfd.fd, (char *)sock.getBuffer(), BUFFER_SIZE);
-                //request need to go through the parser
+                // int count = polling::recvAll(pfd.fd, (char *)sock.getBuffer(), BUFFER_SIZE);
+                // //request need to go through the parser
 
-                //error or connection closed 
-                if (count <= 0)
+                // //error or connection closed 
+                // if (count <= 0)
+                // {
+                //     if (count == 0)
+                //     {
+                //         //connection closed
+                //         std::cout << "Server: socket  " << pfd.fd <<  " closed." << std::endl;
+                //     }
+                //     else
+                //         perror ("recv");
+                //     polling::closeConnections(pfd.fd);
+                // }
+                int check = polling::findClientFd(this->_clients, pfd.fd);
+                if (check != -1)
                 {
-                    if (count == 0)
-                    {
-                        //connection closed
-                        std::cout << "Server: socket  " << pfd.fd <<  " closed." << std::endl;
-                    }
-                    else
-                        perror ("recv");
-                    polling::closeConnections(pfd.fd);
+                    //start receiving
+
+                    //client Fd executed the recv and now ready to send
+                    pfd.events = POLLOUT;
                 }
-                else
-                {
-                    //got data from client
-                    sock.printLogs();
-                    //send a response/generate HTTP response
-                    int tmpLen = strlen(resp);
-                    //check the len of the resp is it the same
-                    int test2 = polling::sendAll(pfd.fd, resp, &tmpLen);
-                    if (test2 == -1)
-                    {
-                        perror("send");
-                        std::cout << "We only sent: " << tmpLen << " because of the error!" << std::endl;
-                    }
-                    polling::closeConnections(pfd.fd);
-                }
+                // else
+                // {
+                //     //got data from client
+                //     sock.printLogs();
+                //     //send a response/generate HTTP response
+                //     int tmpLen = strlen(resp);
+                //     //check the len of the resp is it the same
+                //     int test2 = polling::sendAll(pfd.fd, resp, &tmpLen);
+                //     if (test2 == -1)
+                //     {
+                //         perror("send");
+                //         std::cout << "We only sent: " << tmpLen << " because of the error!" << std::endl;
+                //     }
+                //     polling::closeConnections(pfd.fd);
+                // }
             }
+        }
+        //data ready to be sent 
+        else if (pfd.revents & POLLOUT)
+        {
+            
         }
         //client hang up
         if (pfd.revents & POLLHUP)

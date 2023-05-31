@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 02:55:27 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 03:35:19 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,20 +114,6 @@ void    tcpServer::closeConnection(void)
 {
     close(this->acceptSockFd);
     close(this->sockfd);
-}
-
-void    tcpServer::sendReq(int sockfd, const void *buf, int len, int flags)
-{
-    this->sendRes = send(sockfd, buf, len, flags);
-    //close sockfd of the connection
-    close(sockfd);
-    tcpServer::testSysCall(this->sendRes);
-}
-
-void    tcpServer::recvReq(int sockfd, void *buf, int len, int flags)
-{
-    this->recvRes = recv(sockfd, buf, len, flags);
-    tcpServer::testSysCall(this->recvRes);
 }
 
 void    tcpServer::retrieveClientAdd(void)

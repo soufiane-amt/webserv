@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 03:50:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 04:53:00 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 #include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 
+# define endOfBody 69
+
 class appendClient
 {
     private:
+        int         _check;
         int         _clientFd;
         std::string _header;
         std::string _body;
@@ -34,6 +37,8 @@ class appendClient
         //getters & setters
         int     getClientFd(void);
         void    setClientFd(int fd);
+        int     getStatus(void);
+        void    setStatus(int update);
 
 };
 

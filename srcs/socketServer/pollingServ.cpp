@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/31 04:41:58 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:50:19 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,31 +97,6 @@ int polling::closeConnections(int fd)
     return (0);
 }
 
-
-//check keep-alive section in page 79
-//timing of the connection (heartbeat)
-//message structure
-//checking for client termination page 92
-//using keeo-alives in setsockopt page 94
-//Understand How to Time Out a connect Call page 183
-
-int     polling::sendAll(int fd, char *buff, int *len)
-{
-    int check;
-    
-    check = send(fd, buff, BUFFER_SIZE, 0);
-    return (check);
-}
-
-
-//from tcp/ip programming fig 2.27, also check page 53-54
-int     polling::recvAll(int fd, char *buff, int len)
-{
-    int check;
-    check = recv(fd, buff, BUFFER_SIZE, 0);
-    return (len);
-}
-
 void    polling::handlePoll(char *resp)
 {
     for (size_t i = 0; i < this->_pollfds.size(); i++)
@@ -160,11 +135,12 @@ void    polling::handlePoll(char *resp)
                 //         perror ("recv");
                 //     polling::closeConnections(pfd.fd);
                 // }
-                int check = polling::findClientFd(this->_clients, pfd.fd);
-                if (check != -1)
+                int checkRecv = polling::findClientFd(this->_clients, pfd.fd);
+                if (checkRecv != -1)
                 {
-                    //start receiving
-
+                    //start receiving for the specific client
+                    this->_clients[checkRecv].recvReq(checkRecv);
+                    
                     //client Fd executed the recv and now ready to send
                     pfd.events = POLLOUT;
                 }
@@ -188,7 +164,13 @@ void    polling::handlePoll(char *resp)
         //data ready to be sent 
         else if (pfd.revents & POLLOUT)
         {
-            
+            int checkSend = polling::findClientFd(this->_clients, pfd.fd);
+            if (checkSend != -1)
+            {
+                this->_clients[checkSend].sendReq(checkSend);
+
+                //depends on the send close the conection
+            }
         }
         //client hang up
         if (pfd.revents & POLLHUP)

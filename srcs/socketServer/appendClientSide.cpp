@@ -51,7 +51,7 @@ void    appendClient::setStatus(int update)
     this->_check = update;
 }
 
-void    appendClient::sendReq(int sockfd, const void *buf, int len, int flags)
+void    appendClient::sendReq(int sockfd)
 {
     this->sendRes = send(sockfd, buf, len, flags);
     //close sockfd of the connection
@@ -59,7 +59,7 @@ void    appendClient::sendReq(int sockfd, const void *buf, int len, int flags)
     appendClient::testSysCall(this->sendRes);
 }
 
-void    appendClient::recvReq(int sockfd, void *buf, int len, int flags)
+void    appendClient::recvReq(int sockfd)
 {
     this->recvRes = recv(sockfd, buf, len, flags);
     appendClient::testSysCall(this->recvRes);

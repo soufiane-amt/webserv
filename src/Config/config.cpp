@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/28 18:56:39 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:20:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 			if (it->back() == ';')
 			{
 				it->pop_back();
+				if (it->back() == ';')
+					throw Config::Error_config_file();
 				kv.key = TOKEN_D_VALUE;
 				kv.value = *it;
 				tokens.push_back(kv);

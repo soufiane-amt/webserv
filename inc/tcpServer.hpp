@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/23 11:23:07 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/31 03:48:06 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,17 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
+#include <algorithm>
 
 //close / keep-alive option
 
-#include "myServ.hpp"
+#include "pollingServ.hpp"
 
-# define HTTP_PORT 80
+# define HTTP_PORT 6969
 # define BACKLOG 100
 
 //temp buff size
-# define BUFFER_SIZE 1024
+# define BUFFER_SIZE 1000
 
 class   polling;
 class tcpServer
@@ -59,15 +60,12 @@ class tcpServer
 
         
     public:
-        tcpServer(polling &pl);
+        tcpServer(polling &pl, int port, std::string host);
         ~tcpServer();
         void    testSysCall(int fd);
         void    rerunServ(void);
-        void    listenRequest(void);
-        void    acceptConnection(void);
+        void    listenConnection(void);
         void    closeConnection(void);
-        void    sendReq(int sockfd, const void *buf, int len, int flags);
-        void    recvReq(int sockfd, void *buf, int len, int flags);
 
         //still not clear about this part
         void    printLogs(void);

@@ -6,11 +6,11 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/25 11:15:18 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:30:24 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cgiProgram.hpp"
+#include "/Users/fech-cha/Desktop/webserv/inc/cgiProgram.hpp"
 
     //idk if we gonna need this one
 	// HTTP_COOKIE="//get the cookie from the header 

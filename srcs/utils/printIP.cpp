@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cgiProgram.hpp                                     :+:      :+:    :+:   */
+/*   printIP.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/13 16:32:57 by fech-cha         ###   ########.fr       */
+/*   Created: 2023/05/29 16:46:08 by fech-cha          #+#    #+#             */
+/*   Updated: 2023/05/29 18:34:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CGIPROGRAM_HPP
-# define CGIPROGRAM_HPP
+#include <arpa/inet.h>
+#include <stdio.h>
+# define INET_ADDRSTRLEN 5000
 
-#include <string>
-#include <iostream>
-#include <unistd.h>
-
-//prototype for executing CGI
-
-class CGI
+int main()
 {
-    private:
-        std::string _name;
-        std::string _output;
-    public:
-        CGI();
-        ~CGI();
-        void    handleCGI();
-};
+    struct sockaddr_in sa; 
 
-#endif
+    //from printable to binary
+    inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr));
+
+    //from binary to printable
+    char ip_address[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(sa.sin_addr), ip_address, INET_ADDRSTRLEN);
+
+    printf("%s\n", ip_address);
+
+    return (0);
+}
+
+  

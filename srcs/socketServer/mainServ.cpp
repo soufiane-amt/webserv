@@ -6,17 +6,15 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/04/10 02:41:13 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:24:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "myServ.hpp"
+#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 #include <fstream>
 
 int main(void)
-{
-   std::ofstream file("test.html");
-   
+{  
     char resp[] = "HTTP/1.1 200 OK\r\n"
     "Server: webserver-cpp\r\n"
     "Content-type: text/html\r\n\r\n"
@@ -27,7 +25,12 @@ int main(void)
     polling pl;
     
     //create socket object and bind it (socket could take args depends on the config)
-    tcpServer sock(pl);
+    //socket should take ports amd host from config
+    //for each socket, push it's fd to poll list
+    //loop through servers
+    tcpServer sock(pl, HTTP_PORT, INADDR_ANY);
+    pl.pushServer(sock);
+    
     
     while (1)
     {
@@ -37,12 +40,13 @@ int main(void)
         if (poll_count  == -1)
         {
             perror("poll");
-            exit(EXIT_FAILURE);
+            // exit(EXIT_FAILURE);
+            continue;
         }
         else
         {
             //handle I/O events
-            pl.handlePoll(sock, resp);        
+            pl.handlePoll(resp);        
         }
     }
     

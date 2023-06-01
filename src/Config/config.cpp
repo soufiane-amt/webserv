@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/26 18:27:55 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:28:13 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ location_t	Config::get_server_locations(int server_id)
 
 void	Config::server_print()
 {
-	for (std::vector<std::pair<directive_t, location_t> >::iterator it = servers.begin(); it != servers.end(); ++it) {
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
         directive_t& directives = it->first;
         location_t& locations = it->second;
 
@@ -147,6 +148,8 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 			if (it->back() == ';')
 			{
 				it->pop_back();
+				if (it->back() == ';')
+					throw Config::Error_config_file();
 				kv.key = TOKEN_D_VALUE;
 				kv.value = *it;
 				tokens.push_back(kv);
@@ -176,16 +179,28 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 {
 	if ((it - 1)->value == "listen")
 	{
+		if (directives.find("listen") != directives.end())
+			throw Config::Error_config_file();
+		std::vector<std::string> unique_values;
 		int	number = 0;
-		std::istringstream iss(it->value);
-		if (!(iss >> number))
-			throw Config::Error_config_file();
-		else if (number < 0 || number > 65535 || (it + 1)->key != TOKEN_SEMICOLON)
-			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
-			directives[(it - 1)->value] = it->value;
-		else
-			throw Config::Error_config_file();
+		while (it->key != TOKEN_SEMICOLON)
+		{
+			std::istringstream iss(it->value);
+			if (!(iss >> number))
+				throw Config::Error_config_file();
+			if (std::find(unique_values.begin(), unique_values.end(), it->value) == unique_values.end()
+				&& number >= 0 && number <= 65535)
+			{
+				unique_values.push_back(it->value);
+				if (i == 1)
+					directives["listen"] += it->value + " ";
+				else
+					throw Config::Error_config_file();
+			}
+			else
+				throw Config::Error_config_file();
+			it++;
+		}
 	}
 	else if ((it - 1)->value == "max_body_size")
 	{
@@ -195,14 +210,18 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 0 || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "autoindex")
 	{
 		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "root")
@@ -211,14 +230,18 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		if (it->value.back() == '/' && it->value.size() > 1)
 			it->value.pop_back();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "index" || (it - 1)->value == "server_name")
 	{
 		if (it->value.at(0) == '/' || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 		else if (i == 2 && (it - 1)->value == "server_name")
 			throw Config::Error_config_file();
@@ -234,8 +257,10 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 100 || number > 599)
 			throw Config::Error_config_file();
-		if (i == 1 && directives.find((it - 1)->value) == directives.end())
-			directives[(it - 1)->value] = it->value + " " + (it + 1)->value;
+		if (directives.find((it - 1)->value) != directives.end())
+			throw Config::Error_config_file();
+		else if (i == 1)
+			directives[(it - 1)->value] = it->value;
 	}
 	else if ((it - 1)->value == "allow")
 	{
@@ -267,7 +292,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it)
 {
 	std::string	temp;
-	int	i = 0;
+	size_t	i = 0;
 
 	t_it++;
 	for (; t_it->key != TOKEN_SERVER && t_it != it; t_it++)
@@ -277,9 +302,15 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 			if (locations.find(t_it->value) != locations.end())
 				throw Config::Error_config_file();
 			temp = t_it->value;
-			if (temp.back() == '/' && temp.size() > 1)
+			i = temp.length();
+			for (size_t l = temp.length(); l > 1 && temp.back() == '/'; l--)
+			{
+ 				if (l + 2 == i || l - 1 == 1)
+					throw Config::Error_config_file();
 				temp.pop_back();
+			}
 			t_it++;
+			i = 0;
 			while (t_it->key != TOKEN_C_BRACE)
 			{
 				if (t_it->key == TOKEN_DIRECTIVE)
@@ -301,6 +332,20 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 			i = 0;
 		}
 	}
+}
+
+void Config::fill_servers(directive_t &directives, location_t &locations)
+{
+	bool	already_exists = false;
+
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
+		if (it->first["server_name"] == directives["server_name"]
+			&& it->first["listen"] == directives["listen"])
+			already_exists = true;
+	}
+	if (!already_exists)
+		servers.push_back(std::pair<directive_t, location_t>(directives, locations));
 }
 
 void Config::directive_check(key_val_it &t_it, location_t &locations, directive_t &directives, key_val_it &it, int *i)
@@ -326,12 +371,12 @@ void Config::directive_check(key_val_it &t_it, location_t &locations, directive_
 		(*i)--;
 		if (*i == 0)
 		{
-			if (directives.find("listen") == directives.end())
+			if (directives.find("listen") == directives.end() || directives.find("server_name") == directives.end())
 				throw Config::Error_config_file();
 			fill_locations(t_it, locations, it);
 			if (directives.size() == 0 && locations.size() == 0)
 				throw Config::Error_config_file();
-			servers.push_back(std::pair<directive_t, location_t>(directives, locations));
+			fill_servers(directives, locations);
 			directives.clear();
 			locations.clear();
 		}

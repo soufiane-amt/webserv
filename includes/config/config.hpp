@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/05/26 18:18:46 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:28:46 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class	Config
 		void	brace_counter(std::vector<key_val> &tokens);
 		void	fill_locations(key_val_it &t_it, location_t &locations, key_val_it &it);
 		location_t	get_server_locations(int server_id);
+		void	fill_servers(directive_t &directives, location_t &locations);
 };
 
 #endif

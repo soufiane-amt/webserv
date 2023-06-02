@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/01 18:20:24 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:04:24 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 {
 	if ((it - 1)->value == "listen")
 	{
-		if (directives.find("listen") != directives.end())
+		if (directives.find("listen") != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		std::vector<std::string> unique_values;
 		int	number = 0;
@@ -199,7 +199,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 0 || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (directives.find((it - 1)->value) != directives.end())
+		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
@@ -208,7 +208,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	{
 		if ((it->value != "on" && it->value != "off") || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (directives.find((it - 1)->value) != directives.end())
+		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
@@ -219,7 +219,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		if (it->value.back() == '/' && it->value.size() > 1)
 			it->value.pop_back();
-		if (directives.find((it - 1)->value) != directives.end())
+		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
@@ -228,7 +228,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	{
 		if (it->value.at(0) == '/' || (it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (directives.find((it - 1)->value) != directives.end())
+		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
@@ -246,7 +246,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			throw Config::Error_config_file();
 		else if (number < 100 || number > 599)
 			throw Config::Error_config_file();
-		if (directives.find((it - 1)->value) != directives.end())
+		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;

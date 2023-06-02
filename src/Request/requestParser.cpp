@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 15:19:27 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/02 16:01:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void    clientRequestParser::check_the_absoluteURI ()
     if (pos != std::string::npos)
     {
         _request.header["host"] = URI.substr(0, pos);
-         URI.erase(0, pos);
+        URI.erase(0, pos);
         return;
     }
     throw StatusCode(BAD_REQUEST);
@@ -117,9 +117,7 @@ void    clientRequestParser::parseHeader ()
     {
         std::cerr << "the problem is here" << '\n';
     }
-
     
-        /* code */
     
 }
 

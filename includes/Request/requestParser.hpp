@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/04/01 21:15:19 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/02 16:14:14 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ class clientRequestParser
     http_message_t        &getRequest ();
     const header_t&       getHeader();
     std::string           getBody();
-    // std::string        getMethod();
-    // std::string        getURI();
-    // std::string        getProtocol();
-    // std::string        getPort();
+    int                   getContentLength();//this function returns the content length specified in the header if there is any, otherwise it returns -1 as a sign of the abscence of the header
     
     //confirmation functions
     bool    hasBody ();

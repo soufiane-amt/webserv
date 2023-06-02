@@ -146,7 +146,49 @@ HTTP/2 is designed to be more efficient, faster, and better suited for modern we
 
 
 
-HTTP Messages:
 
 
 
+Accept headers
+Accept headers give the client a way to tell servers their preferences and capabilities:
+what they want, what they can use, and, most importantly, what they don’t want.
+Servers can then use this extra information to make more intelligent decisions about
+what to send. Accept headers benefit both sides of the connection. Clients get what
+they want, and servers don’t waste their time and bandwidth sending something the
+client can’t use. Table 3-14 lists the various accept headers.
+
+
+Accept Tells the server what media types are okay to send
+Accept-Charset Tells the server what charsets are okay to send
+Accept-Encoding Tells the server what encodings are okay to send
+Accept-Language Tells the server what languages are okay to send
+TEa Tells the server what extension transfer codings are okay to use
+
+
+Conditional request headers
+Sometimes, clients want to put some restrictions on a request. For instance, if the client already has a copy of a document, it might want to ask a server to send the document only if it is different from the copy the client already has. Using conditional
+request headers, clients can put such restrictions on requests, requiring the server to
+make sure that the conditions are true before satisfying the request. Table 3-15 lists
+the various conditional request headers.
+
+
+Header Description
+Expect Allows a client to list server behaviors that it requires for a request
+If-Match Gets the document if the entity tag matches the current entity tag for the documenta
+a See Chapter 7 for more on entity tags. The tag is basically an identifier for a version of the resource.
+If-Modified-Since Restricts the request unless the resource has been modified since the specified date
+If-None-Match Gets the document if the entity tags supplied do not match those of the current document
+If-Range Allows a conditional request for a range of a document
+If-Unmodified-Since Restricts the request unless the resource hasnot been modified since the specified date
+Range Requests a specific range of a resource, if the server supports range requests.
+
+
+
+Response Headers
+Response messages have their own set of response headers. Response headers provide clients with extra information, such as who is sending the response, the capabilities of the responder, or even special instructions regarding the response. These
+headers help the client deal with the response and make better requests in the future.
+Table 3-18 lists the response informational headers.
+
+
+
+TCP Connections.

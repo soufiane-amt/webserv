@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/02 16:01:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/02 16:57:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,15 @@ const header_t& clientRequestParser::getHeader()
 std::string clientRequestParser::getBody()
 {
     return (_request.body);
+}
+
+int         clientRequestParser::getContentLength()
+{
+    header_t    &header = _request.header;
+
+    if (header.find("Content-Length") == header.end())
+        return (-1);
+    return (std::atoi(header["Content-Length"].c_str()));
 }
 
 void    clientRequestParser::displayRequest ()

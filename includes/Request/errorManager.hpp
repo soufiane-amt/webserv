@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/02 18:22:11 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/02 18:33:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ class errorManager
 
     
     //mini methods
-    static bool                 __request_content_length(header_t& header)
+    static bool                 __request_has_content_length(header_t& header)
     {
         return (header.find("Content-Length") != header.end());
     }
-    static bool                 __request_content_type(header_t& header)
+    static bool                 __request_has_content_type(header_t& header)
     {
         return (header.find("Content-Type") != header.end());
     }
@@ -64,7 +64,7 @@ class errorManager
     }
     static bool                 _request_has_meta_data(header_t& header)
     {
-        return (__request_content_length(header) || __request_content_type(header) 
+        return (__request_has_content_length(header) || __request_has_content_type(header) 
                             || __request_transfer_encoded(header));
     }
 };

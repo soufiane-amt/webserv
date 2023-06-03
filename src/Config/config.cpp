@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/02 16:04:24 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:53:54 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
-			|| *it == "index" || *it == "upload")
+			|| *it == "index" || *it == "upload" || *it == "path_info")
 		{
 			kv.key = TOKEN_DIRECTIVE;
 			kv.value = *it;
@@ -215,7 +215,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	}
 	else if ((it - 1)->value == "root")
 	{
-		if (it->value.at(0) != '/' || (it + 1)->key != TOKEN_SEMICOLON)
+		if ((it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 		if (it->value.back() == '/' && it->value.size() > 1)
 			it->value.pop_back();
@@ -251,6 +251,12 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
+	else if ((it - 1)->value == "path_info")
+	{
+		if (it->key != TOKEN_D_VALUE2 || (it + 1)->key != TOKEN_D_VALUE
+			|| (it + 2)->key != TOKEN_SEMICOLON || i == 1)
+			throw Config::Error_config_file();
+	}
 	else if ((it - 1)->value == "allow")
 	{
 		std::vector<std::string> unique_values;
@@ -263,7 +269,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 					unique_values.push_back(it->value);
 					if (i == 1 && directives["allow"].size() < 16)
 						directives["allow"] += it->value + " ";
-					else
+					else if (i != 2)
 						throw Config::Error_config_file();
 				}
 				else
@@ -305,10 +311,12 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 				if (t_it->key == TOKEN_DIRECTIVE)
 				{
 					i = 1;
-					if (locations[temp].find(t_it->value) != locations[temp].end())
+					if (locations[temp].find(t_it->value) != locations[temp].end() && t_it->value != "path_info")
 						throw Config::Error_config_file();
 					if ((t_it + 2)->key == TOKEN_SEMICOLON)
 						locations[temp][t_it->value] = (t_it + 1)->value;
+					else if ((t_it + 3)->key == TOKEN_SEMICOLON && t_it->value == "path_info")
+						locations[temp][t_it->value] += (t_it + 1)->value + " " + (t_it + 2)->value + " ";
 					else if ((t_it + 3)->key == TOKEN_SEMICOLON)
 						locations[temp][t_it->value] = (t_it + 1)->value + " " + (t_it + 2)->value;
 					else if ((t_it + 4)->key == TOKEN_SEMICOLON)

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/01 16:50:19 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/03 05:33:38 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,45 +120,15 @@ void    polling::handlePoll(char *resp)
             }
             else //just regular client ready to recieve 
             {
-                // int count = polling::recvAll(pfd.fd, (char *)sock.getBuffer(), BUFFER_SIZE);
-                // //request need to go through the parser
-
-                // //error or connection closed 
-                // if (count <= 0)
-                // {
-                //     if (count == 0)
-                //     {
-                //         //connection closed
-                //         std::cout << "Server: socket  " << pfd.fd <<  " closed." << std::endl;
-                //     }
-                //     else
-                //         perror ("recv");
-                //     polling::closeConnections(pfd.fd);
-                // }
                 int checkRecv = polling::findClientFd(this->_clients, pfd.fd);
                 if (checkRecv != -1)
                 {
                     //start receiving for the specific client
-                    this->_clients[checkRecv].recvReq(checkRecv);
+                    this->_clients[checkRecv].recvHead();
                     
                     //client Fd executed the recv and now ready to send
                     pfd.events = POLLOUT;
                 }
-                // else
-                // {
-                //     //got data from client
-                //     sock.printLogs();
-                //     //send a response/generate HTTP response
-                //     int tmpLen = strlen(resp);
-                //     //check the len of the resp is it the same
-                //     int test2 = polling::sendAll(pfd.fd, resp, &tmpLen);
-                //     if (test2 == -1)
-                //     {
-                //         perror("send");
-                //         std::cout << "We only sent: " << tmpLen << " because of the error!" << std::endl;
-                //     }
-                //     polling::closeConnections(pfd.fd);
-                // }
             }
         }
         //data ready to be sent 

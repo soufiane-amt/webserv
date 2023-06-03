@@ -16,12 +16,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <vector>
-const int BUFFER_SIZE = 1024;
 
 #include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 
-appendClient::appendClient(): _checkHead(0), _checkBody(0), _clientFd(-69)
+appendClient::appendClient(): _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0)
 {
     
 }
@@ -61,147 +60,176 @@ void    appendClient::setBodyStatus(int Body)
     this->_checkBody = Body;
 }
 
-void    appendClient::sendReq(int sockfd)
+std::string appendClient::getHeader()
 {
-    this->sendRes = send(sockfd, buf, len, flags);
-    //close sockfd of the connection
-    close(sockfd);
-    appendClient::testSysCall(this->sendRes);
+    return (this->_header);
 }
 
-void    appendClient::recvReq(int sockfd)
+std::string appendClient::getBody()
+{
+    return (this->_body);
+}
+
+void    appendClient::setBody(std::string body)
+{
+    this->_body.append(body);
+}
+
+std::string appendClient::getRestOfRes(int size)
+{
+
+}
+
+void    appendClient::sendReq(int sockfd)
+{
+    int check;
+    check = send(sockfd, getResponse().c_str(), getResponse.size(), 0);
+    if (check < 0)
+    {
+        // error
+    }
+    this->response.erase(0, check);
+    if (this->response.size() == 0)
+    {
+        this->_responseStatus = closeConnect;
+    }
+    if (this->_responseStatus == closeConnect)
+        //close connection
+}
+
+void    appendClient::copyReq(char *req, int size)
+{
+    int i = 0;
+    if (!this->_tmp.empty())
+        this->_tmp.erase();
+    while (i < size)
+    {
+        this->_tmp.push_back(req[i]);
+        i++;
+    }
+}
+
+std::string::size_type appendClient::checkCRLForChunk(std::string test)
+{
+    std::string::size_type pos = this->_header.find(test);
+    if (pos != std::string::npos)
+        return (pos);
+    return (-1);
+}
+
+void    appendClient::getBodyRest()
+{
+    //check pos of CRLF and get the beginning of the body
+    std::string::size_type pos = this->_header.find(CRLF);
+
+    if (pos != std::string::npos)
+    {
+        //extract body
+        std::string res = this->_header.substr(pos + 4);
+        this->_body.append(res);
+        this->_header.erase(pos);
+    }
+}
+
+void    appendClient::recvBody(std::string req)
+{
+    this->setBody(req);
+    if (this->_bodyType == contentlength)
+    {
+        if (getContentLengthValue <= this->_body.size())
+        {
+            this->_responseStatus = responseGo;
+        }
+    }
+    else if (this->_bodyType == chunked)
+    {
+        if (this->checkCRLForChunk(lastChunk))
+        {
+            this->parseChunked(req);
+            this->_responseStatus = responseGo;
+        }
+        else
+            this->parseChunked(req);
+    }
+    else
+    {
+        //error
+    }
+    
+}
+
+void    appendClient::recvHead()
 {
     int check;
     char tmp[BUFFER_SIZE];
-    check = recv(sockfd, tmp, BUFFER_SIZE, 0);
-    appendClient::testSysCall(this->recvRes);
+    check = recv(this->_clientFd, tmp, BUFFER_SIZE, 0);
+    if (check < 0)
+    {
+        perror("recv");
+        //exit or return 
+    }
+    appendClient::copyReq(tmp, BUFFER_SIZE);
+    if (this->getHeadStatus() == endOfHeader)
+    {
+        appendClient::recvBody(this->_tmp);
+    }
+    else if (this->getHeadStatus() != endOfHeader)
+    {
+        this->_header.append(this->_tmp);
+
+        //check for CRLF at the end of the string
+        if (this->checkCRLForChunk(CRLF) >= 0)
+            {
+                this->setHeadStatus(endOfHeader);
+                this->getBodyRest();
+                //pass it to parser
+                this->_header.parse();
+                //check body type , if bodytype is not chunked, content length => error
+                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
+            {
+                this->parseChunked(this->_body);
+                this->_responseStatus = responseGo;
+            }
+            }
+        else //error cases
+        {
+            //exit or return or throw exception
+        }
+    }
+    if (this->_responseStatus == responseGo)
+    {
+        //get response and send it 
+    }
 }
 
+void    appendClient::parseChunked(std::string& chunkedData)
+{
+    std::istringstream stream(chunkedData);
+    std::ostringstream output;
+    
+    size_t check;
 
+    while (!stream.eof()) {
+        std::string line;
+        std::getline(stream, line);
 
-// struct Client {
-//     int socket;
-//     std::string request;
-// };
+        // Parse the chunk size
+        size_t chunkSize = strtoul(line.c_str(), NULL, 16);
 
-// std::string receiveHttpRequest(int clientSocket) {
-//     std::vector<char> buffer(BUFFER_SIZE, '\0');
-//     std::string request;
+        if (chunkSize == 0) {
+            // Reached the end of the chunked data
+            break;
+        }
 
-//     // Read until the end of the request header
-//     while (true) {
-//         ssize_t bytesRead = recv(clientSocket, &buffer[0], buffer.size() - 1, 0);
+        // Read and append the chunk data
+        char* buffer = new char[chunkSize + 1];
+        stream.read(buffer, chunkSize);
+        buffer[chunkSize] = '\0';
 
-//         if (bytesRead == -1) {
-//             std::cerr << "Error in recv\n";
-//             return "";
-//         } else if (bytesRead == 0) {
-//             // Client disconnected
-//             return "";
-//         } else {
-//             buffer[bytesRead] = '\0';
-//             request += &buffer[0];
+        this->_body.append(buffer);
+        delete[] buffer;
 
-//             // Check if the full request header has been received
-//             std::size_t found = request.find("\r\n\r\n");
-//             if (found != std::string::npos) {
-//                 // Process the complete request header
-//                 break;
-//             }
-
-//             // Check if the buffer is full
-//             if (bytesRead == BUFFER_SIZE - 1) {
-//                 buffer.resize(buffer.size() + BUFFER_SIZE);
-//             }
-//         }
-//     }
-
-//     // Check if the request has a "Content-Length" header
-//     std::size_t contentLengthPos = request.find("Content-Length:");
-//     if (contentLengthPos != std::string::npos) {
-//         std::size_t startPos = contentLengthPos + sizeof("Content-Length:");
-//         std::size_t endPos = request.find("\r\n", startPos);
-//         std::string contentLengthStr = request.substr(startPos, endPos - startPos);
-//         int contentLength = std::atoi(contentLengthStr.c_str());
-
-//         // Read the request body based on the content length
-//         while (request.length() < contentLength + found + sizeof("\r\n\r\n")) {
-//             std::vector<char> buffer(BUFFER_SIZE, '\0');
-//             ssize_t bytesRead = recv(clientSocket, &buffer[0], buffer.size() - 1, 0);
-
-//             if (bytesRead == -1) {
-//                 std::cerr << "Error in recv\n";
-//                 return "";
-//             } else if (bytesRead == 0) {
-//                 // Client disconnected
-//                 return "";
-//             } else {
-//                 buffer[bytesRead] = '\0';
-//                 request += &buffer[0];
-//             }
-//         }
-//     }
-
-//     // Check if the request has "Transfer-Encoding: chunked" header
-//     std::size_t chunkedEncodingPos = request.find("Transfer-Encoding: chunked");
-//     if (chunkedEncodingPos != std::string::npos) {
-//         std::string requestBody;
-//         std::size_t bodyStartPos = request.find("\r\n\r\n") + sizeof("\r\n\r\n");
-
-//         // Read each chunk of the request body
-//         while (true) {
-//             std::vector<char> chunkSizeStr(BUFFER_SIZE, '\0');
-//             ssize_t bytesRead = recv(clientSocket, &chunkSizeStr[0], chunkSizeStr.size() - 1, 0);
-
-//             if (bytesRead == -1) {
-//                 std::cerr << "Error in recv\n";
-//                 return "";
-//             } else if (bytesRead == 0) {
-//                 // Client disconnected
-//                 return "";
-//             } else {
-//                 chunkSizeStr[bytesRead] = '\0';
-//                 int chunkSize = std::strtol(&chunkSizeStr[0], nullptr, 16);
-//                             if (chunkSize == 0)
-//                 break;
-
-//             std::vector<char> chunkData(chunkSize + 2, '\0'); // Add 2 for CRLF
-//             bytesRead = recv(clientSocket, &chunkData[0], chunkData.size() - 1, 0);
-
-//             if (bytesRead == -1) {
-//                 std::cerr << "Error in recv\n";
-//                 return "";
-//             } else if (bytesRead == 0) {
-//                 // Client disconnected
-//                 return "";
-//             } else {
-//                 chunkData[bytesRead] = '\0';
-//                 requestBody += &chunkData[0];
-
-//                 // Read the CRLF after each chunk
-//                 std::vector<char> crlf(2, '\0');
-//                 bytesRead = recv(clientSocket, &crlf[0], crlf.size() - 1, 0);
-
-//                 if (bytesRead == -1) {
-//                     std::cerr << "Error in recv\n";
-//                     return "";
-//                 } else if (bytesRead == 0) {
-//                     // Client disconnected
-//                     return "";
-//                 } else {
-//                     // Check for the final CRLF indicating the end of the request body
-//                     if (crlf[0] != '\r' || crlf[1] != '\n') {
-//                         std::cerr << "Invalid chunk format\n";
-//                         return "";
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     // Append the request body to the complete request
-//     request += requestBody;
-// }
-
-// return request;
-// )
+        // Skip the trailing CRLF
+        stream.ignore(2);
+    }
+}

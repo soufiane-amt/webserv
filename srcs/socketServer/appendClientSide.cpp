@@ -206,15 +206,24 @@ void    appendClient::parseChunked(std::string& chunkedData)
 {
     std::istringstream stream(chunkedData);
     std::ostringstream output;
-    
-    size_t check;
 
     while (!stream.eof()) {
         std::string line;
-        std::getline(stream, line);
+        char sizeBuffer[9];  // Maximum hexadecimal chunk size length is 8 characters
 
-        // Parse the chunk size
-        size_t chunkSize = strtoul(line.c_str(), NULL, 16);
+        // Read the chunk size line
+        stream.getline(sizeBuffer, 9, '\r');
+
+        // Check if the chunk size line is valid
+        if (stream.gcount() <= 0 || sizeBuffer[stream.gcount() - 1] != '\n') {
+            throw std::runtime_error("Invalid chunk size syntax.");
+        }
+
+        // Consume the newline character
+        stream.ignore(1);
+
+        sizeBuffer[stream.gcount() - 1] = '\0';
+        size_t chunkSize = strtoul(sizeBuffer, NULL, 16);
 
         if (chunkSize == 0) {
             // Reached the end of the chunked data
@@ -224,12 +233,28 @@ void    appendClient::parseChunked(std::string& chunkedData)
         // Read and append the chunk data
         char* buffer = new char[chunkSize + 1];
         stream.read(buffer, chunkSize);
+
+        if (stream.gcount() != static_cast<std::streamsize>(chunkSize)) {
+            // Error: Failed to read the expected number of bytes for the chunk
+            delete[] buffer;
+            throw std::runtime_error("Failed to read chunk data.");
+        }
+
         buffer[chunkSize] = '\0';
 
-        this->_body.append(buffer);
+        output << buffer;
         delete[] buffer;
 
         // Skip the trailing CRLF
-        stream.ignore(2);
+        char crlf[2];
+        stream.read(crlf, 2);
+
+        if (stream.gcount() != 2 || crlf[0] != '\r' || crlf[1] != '\n') {
+            // Error: Invalid trailing CRLF
+            throw std::runtime_error("Invalid trailing CRLF.");
+        }
     }
+
+    return output.str();
+}
 }

@@ -6,18 +6,16 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/03 06:00:28 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:42:35 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TCPSERVER_HPP
 # define TCPSERVER_HPP
 
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <cstdlib>
-#include <iostream>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -26,12 +24,14 @@
 #include <netdb.h>  
 #include <string.h>
 #include <cstring>
-#include <unistd.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
 #include <poll.h>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <csignal>
+#include <unistd.h>
 
 //close / keep-alive option
 

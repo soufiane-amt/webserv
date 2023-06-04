@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/29 13:30:24 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:27:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 	// HTTP_COOKIE="//get the cookie from the header 
 
     //cgiExec = usr/bin/executable + path
+
+void    handleSignalTimeout(int signal)
+{
+    if (signal == SIGALRM)
+    {
+        std::cout << "Timeout occured!" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+}
+
 CGI::CGI()
 {
 
@@ -133,6 +143,8 @@ void    CGI::handleCGI()
             return;
         }
         //alarm 
+        signal(SIGALRM, handleSignalTimeout);
+        alarm(5);
 
         // char *const args[] = {"python3", "cgi_exemple.py", NULL};
         if (execve(cgiExec[0], cgiExec, cgiEnv) < 0)

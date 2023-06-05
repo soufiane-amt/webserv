@@ -6,13 +6,12 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/04 16:27:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:04:48 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/fech-cha/Desktop/webserv/inc/cgiProgram.hpp"
+#include "cgiProgram.hpp"
 
-    //idk if we gonna need this one
 	// HTTP_COOKIE="//get the cookie from the header 
 
     //cgiExec = usr/bin/executable + path
@@ -54,7 +53,6 @@ void    CGI::setEnvCgi()
     addToEnvVector(this->_env, "CONTENT_TYPE", getContentTypeFromReq());
     addToEnvVector(this->_env, "CONTENT_LENGTH", getContentLength());
     addToEnvVector(this->_env, "DOCUMENT_ROOT", getRootDirectory());
-    //get or post (body)
     addToEnvVector(this->_env, "QUERY_STRING", getQueryStr());
     addToEnvVector(this->_env, "SCRIPT_FILENAME", getCGIScriptName());
 }
@@ -71,11 +69,6 @@ void    CGI::setCGIpath()
     this->_cgi.push_back(path);
 }
 
-//check cgi scripts extensions
-void    CGI::checkCGI()
-{
-    
-}
 
 void    CGI::handleCGI()
 {
@@ -168,9 +161,10 @@ void    CGI::handleCGI()
 	dup2(tmp, 0);
 	close(tmp);
 
-    int getSize;
-	freeConvertedArray(cgiEnv,getSize);
-	freeConvertedArray(cgiExec,getSize);
+    //free allocated memory
+    // int getSize;
+	// freeConvertedArray(cgiEnv,getSize);
+	// freeConvertedArray(cgiExec,getSize);
 
     //parse the cgiResp, and generate HTTP Response (HEADER + BODY)
     

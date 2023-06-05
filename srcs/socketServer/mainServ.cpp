@@ -6,19 +6,15 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/01 16:24:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:47:16 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
-#include <fstream>
+#include "pollingServ.hpp"
 
 int main(void)
 {  
-    char resp[] = "HTTP/1.1 200 OK\r\n"
-    "Server: webserver-cpp\r\n"
-    "Content-type: text/html\r\n\r\n"
-    "<html>hello, world</html>\r\n";
+   
     
     
     //create poll object to handle servers

@@ -6,19 +6,19 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 06:11:46 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:02:10 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef APPENDCIENTSIDE_HPP
-# define APPENDCIENTSIDE_HPP
+#ifndef APPENDCLIENTSIDE_HPP
+# define APPENDCLIENTSIDE_HPP
 
-#include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
+#include "pollingServ.hpp"
 # define chunked 1
 # define contentlength 2 
 
 class appendClient
-{
+{ 
     private:
         int         _checkHead;
         int         _checkBody;

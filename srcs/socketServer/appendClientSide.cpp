@@ -204,57 +204,51 @@ void    appendClient::recvHead()
 
 void    appendClient::parseChunked(std::string& chunkedData)
 {
-    std::istringstream stream(chunkedData);
-    std::ostringstream output;
+     int chunkflag = 0;
+    std::istringstream iss(chunkedData);
+    std::string res;
 
-    while (!stream.eof()) {
-        std::string line;
-        char sizeBuffer[9];  // Maximum hexadecimal chunk size length is 8 characters
+    std::string line;
+    std::size_t chunkSize;
+    std::string chunk = "";
 
-        // Read the chunk size line
-        stream.getline(sizeBuffer, 9, '\r');
-
-        // Check if the chunk size line is valid
-        if (stream.gcount() <= 0 || sizeBuffer[stream.gcount() - 1] != '\n') {
-            throw std::runtime_error("Invalid chunk size syntax.");
+    // Read and process each chunk
+    while (std::getline(iss, line)) {
+        if (chunkflag == 0)
+        {
+        std::istringstream chunkSizeStream(line);
+        if (!(chunkSizeStream >> std::hex >> chunkSize)) {
+            std::cerr << "Error: Invalid chunk size." << std::endl;
+            break ;
         }
-
-        // Consume the newline character
-        stream.ignore(1);
-
-        sizeBuffer[stream.gcount() - 1] = '\0';
-        size_t chunkSize = strtoul(sizeBuffer, NULL, 16);
+        else
+        {
+            chunkflag = 1;
+            continue;
+        }
+        }
 
         if (chunkSize == 0) {
-            // Reached the end of the chunked data
-            break;
+            break;  // Reached the end of the chunked data
         }
 
-        // Read and append the chunk data
-        char* buffer = new char[chunkSize + 1];
-        stream.read(buffer, chunkSize);
-
-        if (stream.gcount() != static_cast<std::streamsize>(chunkSize)) {
-            // Error: Failed to read the expected number of bytes for the chunk
-            delete[] buffer;
-            throw std::runtime_error("Failed to read chunk data.");
-        }
-
-        buffer[chunkSize] = '\0';
-
-        output << buffer;
-        delete[] buffer;
-
-        // Skip the trailing CRLF
-        char crlf[2];
-        stream.read(crlf, 2);
-
-        if (stream.gcount() != 2 || crlf[0] != '\r' || crlf[1] != '\n') {
-            // Error: Invalid trailing CRLF
-            throw std::runtime_error("Invalid trailing CRLF.");
+        if (chunkflag == 1)
+        {   
+            std::stringstream chunkStream(line);
+            chunkStream >> chunk;
+            if (chunk.size() != chunkSize)
+            {
+                std::cout << "Error size doesn't match" << std::endl;
+                break;
+            }
+            else
+            {
+                res.append(chunk);
+                chunk = "";
+            }
+            chunkflag = 0;
         }
     }
-
-    return output.str();
-}
+    this->_body.clear();
+    this->_body.append(res);
 }

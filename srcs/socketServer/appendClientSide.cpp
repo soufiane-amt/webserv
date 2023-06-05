@@ -20,7 +20,7 @@
 #include "/Users/fech-cha/Desktop/webserv/inc/pollingServ.hpp"
 
 
-appendClient::appendClient(): _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0)
+appendClient::appendClient(): _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0), _responseSent(0)
 {
     
 }
@@ -32,7 +32,7 @@ appendClient::~appendClient()
 
 void    appendClient::setClientFd(int fd)
 {
-    this->_clientFd = fd;
+    this->_clientFd.fd = fd;
 }
 
 int appendClient::getClientFd(void)
@@ -73,6 +73,16 @@ std::string appendClient::getBody()
 void    appendClient::setBody(std::string body)
 {
     this->_body.append(body);
+}
+
+int appendClient::getResponseStat()
+{
+    return (_responseStatus);
+}
+
+void appendClient::setResponseStat(int stat)
+{
+    this->_responseStatus = stat;
 }
 
 std::string appendClient::getRestOfRes(int size)

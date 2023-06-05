@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/03 05:33:38 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 06:13:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ void    polling::pushClient(appendClient &client)
 
 void    polling::acceptConnection(appendClient &client, int fd)
 {
+    int check = 1;
     int newFd = accept(fd, 0, 0);
     if (newFd < 0)
     {
         perror("accept");
         //maybe exit or set error status
     }
+    setsockopt(newFd, SOL_SOCKET, SO_NOSIGPIPE, &check, sizeof(check));
     client.setClientFd(fd);
     this->pushFd(client.getClientFd(), POLLIN);
     this->_clients.push_back(client);
@@ -82,37 +84,31 @@ nfds_t  polling::getSize(void) const
     return (this->_pollfds.size());
 }
 
-int polling::closeConnections(int fd)
+int polling::closeConnections(int i)
 {
-    close(fd);
-    for (unsigned int i = 0; i < getSize(); i++)
-    {
-        pollfd& tmp = this->_pollfds[i];
-        if (tmp.fd == fd)
-        {
-            this->_pollfds.erase(this->_pollfds.begin() + i);       
-            return (1);
-        }
-    }
+    close(this->_pollfds[i].fd);
+    this->_clients.erase(this->_pollfds[i].fd);
+    this->_pollfds.erase(this->_pollfds.begin() + i);
+    
     return (0);
 }
 
 void    polling::handlePoll(char *resp)
 {
-    for (size_t i = 0; i < this->_pollfds.size(); i++)
+    for (size_t index = 0; index < this->_pollfds.size(); index++)
     {
         
-        pollfd& pfd = this->_pollfds[i];
+        pollfd& pfd = this->_pollfds[index];
         
         //check if someone ready to read/connect
         if (pfd.revents & POLLIN)
         {
             //handle new connections 
-            //check if i < _socket.size()
-            if (pfd.fd == this->_sockets[i])
+            //check if index < _socket.size()
+            if (pfd.fd == this->_sockets[index])
             {
                 appendClient    newClient;
-                this->acceptConnection(newClient, this->_sockets[i]);
+                this->acceptConnection(newClient, this->_sockets[index]);
 
                 //print logs of new connection
                 // sock.retrieveClientAdd(); // print the ip of the connection later
@@ -138,12 +134,12 @@ void    polling::handlePoll(char *resp)
             if (checkSend != -1)
             {
                 this->_clients[checkSend].sendReq(checkSend);
-
-                //depends on the send close the conection
             }
+            if (this->_clients.getResponseStat() == 1)
+                polling::closeConnections(index);
         }
         //client hang up
         if (pfd.revents & POLLHUP)
-            polling::closeConnections(pfd.fd);
+            polling::closeConnections(index);
     }
 }

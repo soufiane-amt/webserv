@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/03 06:00:04 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 06:11:46 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ class appendClient
         int         _clientFd;
         int         _bodyType;
         int         _responseStatus;
+        int         _responseSent;
+        std::vector<pollfd> _clientFd;
         std::string _tmp;
         std::string _header;
         std::string _body;
@@ -59,6 +61,9 @@ class appendClient
         std::string             getRestOfRes(int size);
         
         void    getBodyRest();
+         int getResponseStat();
+        void    setResponseStat(int stat);
+
 
 };
 

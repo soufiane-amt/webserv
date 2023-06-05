@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 16:27:29 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/05 16:11:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,8 +349,13 @@ void        responsePreparation::set_env_variables_for_cgi()
 {
     std::string port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]);
     
+    setenv("SERVER_NAME", parser.get_server_directives(0, "server_name").c_str(), 1);
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
+    
+    setenv("CONTENT-LENGTH", _request.header.at("Content-Length").c_str(), 1);
+    setenv("CONTENT-TYPE", _request.header.at("Content-Type").c_str(), 1);
+    
     std::string script_name = _request.header.at("URI");
     setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
     setenv("SERVER_PORT", port.c_str(), 1);
@@ -360,7 +365,8 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::cout << "QUERY_STRING: " << getenv("QUERY_STRING") << std::endl;
     std::cout << "SCRIPT_FILENAME: " << getenv("SCRIPT_FILENAME") << std::endl;
     std::cout << "SERVER_PORT: " << getenv("SERVER_PORT") << std::endl;
-    
+    //set cookies
+    //DOCUMENT_ROOT
 }
 
 

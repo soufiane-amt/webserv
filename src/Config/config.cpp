@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/02 15:55:50 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/06 22:11:56 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,29 @@ location_t	Config::get_server_locations(int server_id)
     {
         return (servers[server_id].first.at(directive));
     }
+
+void	Config::server_host(server_t &servers)
+{
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
+		directive_t& dir = it->first;
+		std::vector<std::string> ports;
+		for (directive_t::iterator ite = dir.begin(); ite != dir.end(); ite++)
+		{
+			if (ite->first == "listen")
+				ports = utility::split(ite->second, " ");
+			else if (ite->first == "server_name")
+			{
+				if (ports.size() > 0)
+				{
+					for (std::vector<std::string>::iterator iter = ports.begin(); iter != ports.end(); iter++)
+						host.insert(std::make_pair(*iter, ite->second));
+				}
+			}
+		}
+		ports.clear();
+	}
+}
 
 void	Config::server_print()
 {
@@ -137,7 +160,7 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
-			|| *it == "index" || *it == "upload")
+			|| *it == "index" || *it == "upload" || *it == "path_info")
 		{
 			kv.key = TOKEN_DIRECTIVE;
 			kv.value = *it;
@@ -262,6 +285,12 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
+	else if ((it - 1)->value == "path_info")
+	{
+		if (it->key != TOKEN_D_VALUE2 || (it + 1)->key != TOKEN_D_VALUE
+			|| (it + 2)->key != TOKEN_SEMICOLON || i == 1)
+			throw Config::Error_config_file();
+	}
 	else if ((it - 1)->value == "allow")
 	{
 		std::vector<std::string> unique_values;
@@ -274,7 +303,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 					unique_values.push_back(it->value);
 					if (i == 1 && directives["allow"].size() < 16)
 						directives["allow"] += it->value + " ";
-					else
+					else if (i != 2)
 						throw Config::Error_config_file();
 				}
 				else
@@ -316,10 +345,12 @@ void Config::fill_locations(key_val_it &t_it, location_t &locations, key_val_it 
 				if (t_it->key == TOKEN_DIRECTIVE)
 				{
 					i = 1;
-					if (locations[temp].find(t_it->value) != locations[temp].end())
+					if (locations[temp].find(t_it->value) != locations[temp].end() && t_it->value != "path_info")
 						throw Config::Error_config_file();
 					if ((t_it + 2)->key == TOKEN_SEMICOLON)
 						locations[temp][t_it->value] = (t_it + 1)->value;
+					else if ((t_it + 3)->key == TOKEN_SEMICOLON && t_it->value == "path_info")
+						locations[temp][t_it->value] += (t_it + 1)->value + " " + (t_it + 2)->value + " ";
 					else if ((t_it + 3)->key == TOKEN_SEMICOLON)
 						locations[temp][t_it->value] = (t_it + 1)->value + " " + (t_it + 2)->value;
 					else if ((t_it + 4)->key == TOKEN_SEMICOLON)
@@ -472,6 +503,7 @@ Config::Config(std::ifstream &file)
 	}
 	tokenize(lines, tokens);
 	server_check(tokens);
+	server_host(servers);
 }
 
 const char*	Config::Error_config_file::what() const throw()

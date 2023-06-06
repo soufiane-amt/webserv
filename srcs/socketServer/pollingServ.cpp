@@ -6,11 +6,33 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 18:08:44 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:56:32 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pollingServ.hpp"
+
+
+std::vector<char>    request_response(std::string msg)
+{
+    clientRequestParser test(msg);
+    http_message_t &_request = test.getRequest();
+
+    try
+    {
+            errorManager::isRequestValid(_request);
+            responsePreparation response(_request);
+        
+            return response.get_response();
+        
+    }
+    catch(const StatusCode& e)
+    {
+        responsePreparation response(_request, e);
+        return response.get_response();
+    }
+    return std::vector<char>();
+}
 
 polling::polling(void)
 {
@@ -155,6 +177,8 @@ void    polling::handlePoll()
                     //client Fd executed the recv and now ready to send
                     if (checkRecv->getResponseStat() == responseGo)
                         //parse request
+                        std::vector<char>   res = request_response(checkRecv->getHTTPRequest());
+                        checkRecv->setHTTPResponse(res);
                         pfd.events = POLLOUT;
                 }
             }

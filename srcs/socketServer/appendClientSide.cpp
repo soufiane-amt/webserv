@@ -20,7 +20,7 @@
 #include "pollingServ.hpp"
 
 
-appendClient::appendClient(): _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0), _responseSent(0)
+appendClient::appendClient():_contentLength(0),  _bodySize(0), _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0), _responseSent(0)
 {
     
 }
@@ -86,26 +86,24 @@ void appendClient::setResponseStat(int stat)
     this->_responseStatus = stat;
 }
 
-std::string appendClient::getRestOfRes(int size)
+std::string appendClient::getHTTPResponse()
 {
-
+    return (this->_httpRespond);
 }
 
 void    appendClient::sendReq(int sockfd)
 {
     int check;
-    check = send(sockfd, getResponse().c_str(), getResponse.size(), 0);
+    check = send(sockfd, getHTTPResponse().c_str(), this->_httpRespond.size(), 0);
     if (check < 0)
     {
         perror("send");
         // error
     }
-    if (this->response.size() > 0)
-        this->response.erase(0, check);
-    if (this->response.size() == 0)
+    if (this->_httpRespond.size() > 0)
+        this->_httpRespond.erase(0, check);
+    if (this->_httpRespond.size() == 0)
         this->setResponseStat(closeConnect);
-    // if (this->_responseStatus == closeConnect)
-        //close connection
 }
 
 void    appendClient::copyReq(char *req, int size)
@@ -149,6 +147,14 @@ void    appendClient::getBodyRest()
         for (std::string::size_type i = pos + 4; pos < this->_header.size(); i++)
             this->_body.push_back(this->_header[i]);
         this->_header.erase(pos + 4);
+        this->_bodySize = this->_body.size();
+        if (this->_contentLength > 0)
+            this->_contentLength -= this->_bodySize;
+        else
+        {
+            this->_checkBody = endOfBody;
+            this->_responseStatus = responseGo;
+        }
     }
 }
 
@@ -157,8 +163,8 @@ void    appendClient::recvBody(std::string req)
     this->setBody(req);
     if (this->_bodyType == contentLength)
     {
-        if (sizeOfContentLength > 0)
-            sizeOfContentLength -= this->_body.size();
+        if (this->_contentLength > 0)
+            this->_contentLength -= this->_body.size();
         else
             this->_responseStatus = responseGo;
     }
@@ -169,7 +175,14 @@ void    appendClient::recvBody(std::string req)
             this->parseChunked(this->_body);
             this->_responseStatus = responseGo;
         }
-    } 
+    }
+    else
+    {
+        this->_bodyType = nobody;
+        this->_body.erase();
+        this->setHTTPRequest();
+        this->_responseStatus = responseGo;
+    }
 }
 
 void    appendClient::getBodyType()
@@ -188,6 +201,31 @@ void    appendClient::setHTTPRequest()
     this->_httpRequest.append(this->_header);
     for (int i = 0; i < this->_body.size(); i++)
         this->_httpRequest.push_back(this->_body[i]);
+}
+
+void    appendClient::getContentLength()
+{
+   std::string::size_type contentLengthPos = this->_header.find("Content-Length:");
+    if (contentLengthPos != std::string::npos) {
+        contentLengthPos += 16; // Move to the end of "Content-Length: "
+        std::string::size_type endPos = this->_header.find("\r\n", contentLengthPos);
+        if (endPos != std::string::npos) {
+            std::string lengthStr = this->_header.substr(contentLengthPos, endPos - contentLengthPos);
+
+            // Check if the length string contains only digits
+            for (std::string::size_type i = 0; i < lengthStr.length(); ++i) {
+                if (!std::isdigit(lengthStr[i])) {
+                    throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
+                }
+            }
+            this->_contentLength = std::atol(lengthStr.c_str());
+        }
+    }
+    if (this->_contentLength = 0)
+    {
+        this->_checkBody = nobody;
+        this->_responseStatus = responseGo;
+    }
 }
 
 void    appendClient::recvHead()
@@ -213,8 +251,10 @@ void    appendClient::recvHead()
         if (this->checkCRLForChunk(CRLF) >= 0)
             {
                 this->setHeadStatus(endOfHeader);
+                this->getContentLength();
                 //check this
-                this->getBodyRest();
+                if (this->_contentLength > 0)
+                    this->getBodyRest();
                 //look for body type
                 this->getBodyType();
                 if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
@@ -227,10 +267,6 @@ void    appendClient::recvHead()
                 }
             }
             }
-        // else //error cases
-        // {
-        //     //exit or return or throw exception
-        // }
     }
 }
 

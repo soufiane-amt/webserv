@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 03:39:47 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:15:50 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "pollingServ.hpp"
 # define chunked 1
 # define contentLength 2 
+# define nobody 69
 # define closeConnect 3
 # define responseGo 1
 # define lastChunk "0\r\n\r\n"
@@ -28,6 +29,8 @@ class appendClient
     private:
     
         //checking flags
+        long        _contentLength;
+        long        _bodySize;
         int         _checkHead;
         int         _checkBody;
         int         _bodyType;
@@ -41,6 +44,7 @@ class appendClient
         std::string _header;
         std::string _body;
         std::string _httpRequest;
+        std::string _httpRespond;
     public:
         appendClient();
         ~appendClient();
@@ -69,14 +73,14 @@ class appendClient
         void                    parseChunked(std::string& chunkedData);
         void                    copyReq(char *req, int size);
         std::string::size_type  checkCRLForChunk(std::string test);
-        std::string             getRestOfRes(int size);
-        
+    
         void    getBodyType();
         void    getBodyRest();
         int     getResponseStat();
         void    setResponseStat(int stat);
         void    setHTTPRequest();
-
+        void    getContentLength();
+        std::string getHTTPResponse();
 
 };
 

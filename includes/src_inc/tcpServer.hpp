@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 22:39:12 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 03:39:32 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@
 
 #include "pollingServ.hpp"
 
-# define closeConnect 3
-# define responseGo 1
-# define lastChunk "0\r\n\r\n"
-# define CRLF "\r\n\r\n"
-# define endOfBody 69
-# define endOfHeader 420
+
 
 # define HTTP_PORT 6969
 # define BACKLOG 100

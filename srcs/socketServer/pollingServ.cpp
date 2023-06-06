@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 03:59:26 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:08:44 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void    polling::handlePoll()
                     
                     //client Fd executed the recv and now ready to send
                     if (checkRecv->getResponseStat() == responseGo)
+                        //parse request
                         pfd.events = POLLOUT;
                 }
             }

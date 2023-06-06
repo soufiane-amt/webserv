@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 17:02:10 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 03:39:47 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,32 @@
 
 #include "pollingServ.hpp"
 # define chunked 1
-# define contentlength 2 
+# define contentLength 2 
+# define closeConnect 3
+# define responseGo 1
+# define lastChunk "0\r\n\r\n"
+# define CRLF "\r\n\r\n"
+# define endOfBody 69
+# define endOfHeader 420
 
 class appendClient
 { 
     private:
+    
+        //checking flags
         int         _checkHead;
         int         _checkBody;
-        int         _clientFd;
         int         _bodyType;
         int         _responseStatus;
         int         _responseSent;
-        std::vector<pollfd> _clientFd;
+        
+        //fd of the client
+        int         _clientFd;
+        
         std::string _tmp;
         std::string _header;
         std::string _body;
+        std::string _httpRequest;
     public:
         appendClient();
         ~appendClient();
@@ -60,9 +71,11 @@ class appendClient
         std::string::size_type  checkCRLForChunk(std::string test);
         std::string             getRestOfRes(int size);
         
+        void    getBodyType();
         void    getBodyRest();
-         int getResponseStat();
+        int     getResponseStat();
         void    setResponseStat(int stat);
+        void    setHTTPRequest();
 
 
 };

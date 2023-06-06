@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:51:46 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 15:47:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 18:21:54 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int main(void)
 {  
-   
-    
-    
     //create poll object to handle servers
     polling pl;
     
@@ -42,7 +39,7 @@ int main(void)
         else
         {
             //handle I/O events
-            pl.handlePoll(resp);        
+            pl.handlePoll();        
         }
     }
     

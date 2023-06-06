@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 15:42:20 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:39:02 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,21 @@ int tcpServer::getSockName(void) const
     return (this->sockName);
 }
 
-const char*   tcpServer::getBuffer(void) const
-{
-    return (buffer);
-}
-
 void    tcpServer::listenConnection(void)
 {
     int check = listen(getSockFd(), BACKLOG);
     tcpServer::testSysCall(check);
     std::cout << "Server listening for connections ... " << std::endl;
+}
+
+std::vector<appendClient>& tcpServer::getClientsVec()
+{
+    return (this->_clients);
+}
+
+void    tcpServer::setClient(appendClient &client)
+{
+    this->_clients.push_back(client);
 }
 
 void    tcpServer::closeConnection(void)
@@ -130,11 +135,11 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-void    tcpServer::printLogs(void)
-{
+// void    tcpServer::printLogs(void)
+// {
 
-    char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];
-        sscanf(this->buffer, "%s %s %s", method, uri, version);
-        printf("[%s:%u] %s %s %s\n", inet_ntoa(this->clientAddr.sin_addr),
-               ntohs(this->clientAddr.sin_port), method, version, uri);
-}
+//     char method[BUFFER_SIZE], uri[BUFFER_SIZE], version[BUFFER_SIZE];
+//         sscanf(this->buffer, "%s %s %s", method, uri, version);
+//         printf("[%s:%u] %s %s %s\n", inet_ntoa(this->clientAddr.sin_addr),
+//                ntohs(this->clientAddr.sin_port), method, version, uri);
+// }

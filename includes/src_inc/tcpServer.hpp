@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/04 16:42:35 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:39:12 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@
 #include <csignal>
 #include <unistd.h>
 
-//close / keep-alive option
-
 #include "pollingServ.hpp"
 
 # define closeConnect 3
@@ -47,10 +45,10 @@
 # define HTTP_PORT 6969
 # define BACKLOG 100
 
-//temp buff size
 # define BUFFER_SIZE 1024
 
 class   polling;
+class   appendClient;
 class tcpServer
 {
     private:
@@ -67,8 +65,7 @@ class tcpServer
         int sendRes;
         int recvRes;
         int sockName;
-        char    buffer[BUFFER_SIZE];
-
+        std::vector<appendClient>   _clients;
         
     public:
         tcpServer(polling &pl, int port, std::string host);
@@ -80,16 +77,17 @@ class tcpServer
 
         //still not clear about this part
         void    printLogs(void);
-        void     retrieveClientAdd(void);
+        void    retrieveClientAdd(void);
         
         //getter functions
         int                 getSockFd(void) const;
         int                 getBindValue(void) const;
         int                 getAcceptFd(void) const;
         int                 getSockName(void) const;
-        const char                *getBuffer(void) const;
+        std::vector<appendClient>& getClientsVec();
 
         //setters
+        void    setClient(appendClient &client);
 };
 
 #endif

@@ -203,6 +203,11 @@ void    appendClient::setHTTPRequest()
         this->_httpRequest.push_back(this->_body[i]);
 }
 
+std::string appendClient::getHTTPRequest()
+{
+    return (this->_httpRequest);
+}
+
 void    appendClient::getContentLength()
 {
    std::string::size_type contentLengthPos = this->_header.find("Content-Length:");

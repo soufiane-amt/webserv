@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/28 18:53:31 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/06 21:40:01 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_parsing(int ac, char *av)
 	{
 		Config test2(file);
 		test = test2;
-		test.server_print();
+		// test.server_print();
 	}
 	catch(std::exception &e)
 	{

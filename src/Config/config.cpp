@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/03 21:53:54 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/06 22:05:58 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,29 @@ Config& Config::operator= (const Config& copy)
 {
 	this->servers = copy.servers;
 	return *this;
+}
+
+void	Config::server_host(server_t &servers)
+{
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	{
+		directive_t& dir = it->first;
+		std::vector<std::string> ports;
+		for (directive_t::iterator ite = dir.begin(); ite != dir.end(); ite++)
+		{
+			if (ite->first == "listen")
+				ports = utility::split(ite->second, " ");
+			else if (ite->first == "server_name")
+			{
+				if (ports.size() > 0)
+				{
+					for (std::vector<std::string>::iterator iter = ports.begin(); iter != ports.end(); iter++)
+						host.insert(std::make_pair(*iter, ite->second));
+				}
+			}
+		}
+		ports.clear();
+	}
 }
 
 void	Config::server_print()
@@ -469,6 +492,7 @@ Config::Config(std::ifstream &file)
 	}
 	tokenize(lines, tokens);
 	server_check(tokens);
+	server_host(servers);
 }
 
 const char*	Config::Error_config_file::what() const throw()

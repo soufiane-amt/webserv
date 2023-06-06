@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/06 22:11:56 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:39:23 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,15 @@ location_t	Config::get_server_locations(int server_id)
 	return (servers[server_id].second);
 }
 
-    std::string Config::get_server_directives (int server_id, std::string directive)
-    {
-        return (servers[server_id].first.at(directive));
-    }
+std::string Config::get_server_directives (int server_id, std::string directive)
+{
+    return (servers[server_id].first.at(directive));
+}
+
+std::multimap<std::string, std::string> &Config::get_host()
+{
+	return (host);
+}
 
 void	Config::server_host(server_t &servers)
 {

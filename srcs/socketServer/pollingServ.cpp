@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 01:01:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 03:59:26 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,8 @@ void    polling::handlePoll()
                     checkRecv->recvHead();
                     
                     //client Fd executed the recv and now ready to send
-                    pfd.events = POLLOUT;
+                    if (checkRecv->getResponseStat() == responseGo)
+                        pfd.events = POLLOUT;
                 }
             }
         }
@@ -163,10 +164,8 @@ void    polling::handlePoll()
             std::vector<tcpServer>::iterator rightServ = polling::findServer(this->_servers, pfd.fd);
             std::vector<appendClient>::iterator checkSend = polling::findClient(rightServ->getClientsVec(), pfd.fd);
             if (checkSend != rightServ->getClientsVec().end())
-            {
                 checkSend->sendReq(pfd.fd);
-            }
-            if (checkSend->getResponseStat() == 1)
+            if (checkSend->getResponseStat() == closeConnect)
                 polling::closeConnections(checkSend,pfd.events, index);
         }
         //client hang up

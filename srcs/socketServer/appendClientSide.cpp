@@ -86,7 +86,12 @@ void appendClient::setResponseStat(int stat)
     this->_responseStatus = stat;
 }
 
-std::string appendClient::getHTTPResponse()
+void    appendClient::setHTTPResponse(std::vector<char> res)
+{
+    this->_httpRespond = res;
+}
+
+std::vector<char> appendClient::getHTTPResponse()
 {
     return (this->_httpRespond);
 }
@@ -94,14 +99,15 @@ std::string appendClient::getHTTPResponse()
 void    appendClient::sendReq(int sockfd)
 {
     int check;
-    check = send(sockfd, getHTTPResponse().c_str(), this->_httpRespond.size(), 0);
+    char* hold = this->_httpRespond.data();
+    check = send(sockfd, hold, this->_httpRespond.size(), 0);
     if (check < 0)
     {
         perror("send");
         // error
     }
     if (this->_httpRespond.size() > 0)
-        this->_httpRespond.erase(0, check);
+        this->_httpRespond.erase(hold, hold + check);
     if (this->_httpRespond.size() == 0)
         this->setResponseStat(closeConnect);
 }

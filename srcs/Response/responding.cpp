@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/05 16:11:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/07 14:27:40 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void    responsePreparation::exceute_post()
     if (utility::ressource_is_cgi(_request.header["URI"]))
     {
         set_env_variables_for_cgi();
-        // exceute_cgi();
+        // execute_cgi();
         return;
     }
     _statusCode = StatusCode(NOT_FOUND);
@@ -347,6 +347,9 @@ void        responsePreparation::change_status_line(const char *status_code)
 
 void        responsePreparation::set_env_variables_for_cgi()
 {
+    std::string software = "webserv";
+    std::string gateway = "CGI";
+    std::string protocol = "HTTP1.1";
     std::string port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]);
     
     setenv("SERVER_NAME", parser.get_server_directives(0, "server_name").c_str(), 1);
@@ -359,12 +362,15 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::string script_name = _request.header.at("URI");
     setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
     setenv("SERVER_PORT", port.c_str(), 1);
+    setenv("SERVER_SOFTWARE", software.c_str(), 1);
+    setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
+    setenv("SERVER_PROTOCOL", protocol.c_str(),1);
     //now I will print them all
 
-    std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;
-    std::cout << "QUERY_STRING: " << getenv("QUERY_STRING") << std::endl;
-    std::cout << "SCRIPT_FILENAME: " << getenv("SCRIPT_FILENAME") << std::endl;
-    std::cout << "SERVER_PORT: " << getenv("SERVER_PORT") << std::endl;
+    // std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;
+    // std::cout << "QUERY_STRING: " << getenv("QUERY_STRING") << std::endl;
+    // std::cout << "SCRIPT_FILENAME: " << getenv("SCRIPT_FILENAME") << std::endl;
+    // std::cout << "SERVER_PORT: " << getenv("SERVER_PORT") << std::endl;
     //set cookies
     //DOCUMENT_ROOT
 }

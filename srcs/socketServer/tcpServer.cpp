@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/05 22:39:02 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:34:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     //define and init address structure of webserv
     memset(&this->webservAddr, 0, sizeof(this->webservAddr)); //empty the struct
     this->webservAddr.sin_family = AF_INET; //IPv4
-    this->webservAddr.sin_port = htons(HTTP_PORT); //convert port to network byte order(short)
+    this->webservAddr.sin_port = htons(port); //convert port to network byte order(short)
     //should take host and convert (inet_addr(host))
-    this->webservAddr.sin_addr.s_addr = htonl(INADDR_ANY); // convert IP@ to network byte order (long) /any network interface available on the host 
+    this->webservAddr.sin_addr.s_addr = inet_addr(host.c_str()); // convert IP@ to network byte order (long) /any network interface available on the host 
 
     //create socket
     this->sockfd = socket(PF_INET, SOCK_STREAM,IPPROTO_TCP);

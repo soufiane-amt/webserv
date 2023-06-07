@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/06 23:39:23 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/07 11:26:08 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,9 +509,4 @@ Config::Config(std::ifstream &file)
 	tokenize(lines, tokens);
 	server_check(tokens);
 	server_host(servers);
-}
-
-const char*	Config::Error_config_file::what() const throw()
-{
-	return "Error in config file";
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 18:20:25 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/02 20:19:54 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,27 @@ const std::string errorManager::_Methods[8] = {"GET", "POST", "DELETE", "OPTIONS
 
 
 
-void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts,  bool requestHasBody)
+void     errorManager::request_has_valid_headers(header_t& header, bool requestHasBody)
 {
-    // std::cout << "--------------"<< requestHasBody<<std::endl;
-    if ((!requestHasBody && Method == "POST") || 
-           (requestHasBody && (Method == "GET" || Method == "DELETE")))//Check if method is valid for the request body
-        throw StatusCode(BAD_REQUEST);
+    std::string Method = header["Method"];
 
+    if ((Method == "GET" || Method == "DELETE") && (requestHasBody || _request_has_meta_data(header)))
+        throw StatusCode(BAD_REQUEST);
+    if (Method == "PSOT" && !_request_has_meta_data(header))
+        throw StatusCode(BAD_REQUEST);
+    if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
+        throw StatusCode(BAD_REQUEST);
+    if (!_request_is_chunked(header) && Method == "POST" && !requestHasBody)
+        throw StatusCode(BAD_REQUEST);
+    if (Method == "POST" && (!__request_has_content_length(header) || !__request_has_content_type(header) ))
+        throw StatusCode(BAD_REQUEST);
+    if (Method == "POST" && __request_has_content_length(header) && _request_is_chunked(header) )
+        throw StatusCode(BAD_REQUEST);
+}
+
+
+void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts)
+{
     std::string allow_value = utility::search_directive ("allow", location_dirts);
     if (allow_value == "")
         return ;
@@ -127,6 +141,7 @@ void   errorManager::isHostValid(const header_t& header)
     header_t::const_iterator it = header.find("host");
     if (it ==  header.end() || it->second.empty())
         throw StatusCode(BAD_REQUEST);
+    //here I check if the host has a space in its value
     for (std::string::const_iterator iter = it->second.begin(); iter != it->second.end(); iter++)
         if (isspace(*iter))
             throw StatusCode(BAD_REQUEST);
@@ -146,7 +161,8 @@ bool     errorManager::isRequestValid(http_message_t &request)
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
     // std::cout << "header.find(\"Protocol\")->second" <<header.find("Protocol")->second <<std::endl;
-    isMethodValid(header.find("Method")->second, server_location[request.targeted_Location], !request.body.empty());
+    request_has_valid_headers(header, !request.body.empty());
+    isMethodValid(header.find("Method")->second, server_location[request.targeted_Location]);
     isProtocolValid(header.find("Protocol")->second);
 
     isHostValid(header);

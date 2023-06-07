@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/05 16:57:37 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 11:30:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    clientRequestParser::check_the_absoluteURI ()
     if (pos != std::string::npos)
     {
         _request.header["host"] = URI.substr(0, pos);
-         URI.erase(0, pos);
+        URI.erase(0, pos);
         return;
     }
     throw StatusCode(BAD_REQUEST);
@@ -114,9 +114,7 @@ void    clientRequestParser::parseHeader ()
     {
         std::cerr << "the problem is here" << '\n';
     }
-
     
-        /* code */
     
 }
 
@@ -134,6 +132,15 @@ const header_t& clientRequestParser::getHeader()
 std::string clientRequestParser::getBody()
 {
     return (_request.body);
+}
+
+int         clientRequestParser::getContentLength()
+{
+    header_t    &header = _request.header;
+
+    if (header.find("Content-Length") == header.end())
+        return (-1);
+    return (std::atoi(header["Content-Length"].c_str()));
 }
 
 void    clientRequestParser::displayRequest ()

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/06 23:39:27 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:29:47 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ class	Config
 		typedef	std::vector<key_val>::iterator key_val_it;
 		class Error_config_file : public std::exception
 		{
-			virtual const char *what() const throw();
+			virtual const char *what() const throw()
+			{
+				  return "Error in configuration file";
+			};
 		};
 		Config(){};
 		Config(std::ifstream &file);

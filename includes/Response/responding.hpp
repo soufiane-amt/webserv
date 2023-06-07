@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 15:26:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/07 11:13:05 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class responsePreparation
         bool             file__delet_is_allowed(const std::string& file_path);
 
         void             set_env_variables_for_cgi();
-        void             exceute_cgi();
+        void             execute_cgi();
 };
 
 #endif

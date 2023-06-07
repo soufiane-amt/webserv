@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 19:02:19 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:08:08 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define closeConnect 3
 # define responseGo 1
 # define lastChunk "0\r\n\r\n"
-# define CRLF "\r\n\r\n"
+# define myCRLF "\r\n\r\n"
 # define endOfBody 69
 # define endOfHeader 420
 
@@ -35,7 +35,7 @@ class appendClient
         int         _checkBody;
         int         _bodyType;
         int         _responseStatus;
-        int         _responseSent;
+        // int         _responseSent;
         
         //fd of the client
         int         _clientFd;

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 18:53:36 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:10:35 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "requestParser.hpp"
 #include "responding.hpp"
 #include "errorManager.hpp"
+#include "config.hpp"
+#include <vector>
 
 class tcpServer;
 class appendClient;

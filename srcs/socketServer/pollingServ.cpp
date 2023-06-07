@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 18:56:32 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:14:36 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ std::vector<tcpServer>::iterator   polling::findServer(std::vector<tcpServer> &s
 {
     std::vector<tcpServer>::iterator servIT;
 
-    for (servIT = this->_servers.begin(); servIT != this->_servers.end(); servIT++)
+    for (servIT = server.begin(); servIT != server.end(); servIT++)
     {    
         std::vector<appendClient>::iterator clientIT;
         for (clientIT = servIT->getClientsVec().begin(); clientIT != servIT->getClientsVec().end(); clientIT++)
@@ -64,7 +64,7 @@ std::vector<tcpServer>::iterator   polling::findServer(std::vector<tcpServer> &s
                 return (servIT);
         }
     }
-    return (this->_servers.end());
+    return (server.end());
 }
 
 //find the right client
@@ -177,8 +177,7 @@ void    polling::handlePoll()
                     //client Fd executed the recv and now ready to send
                     if (checkRecv->getResponseStat() == responseGo)
                         //parse request
-                        std::vector<char>   res = request_response(checkRecv->getHTTPRequest());
-                        checkRecv->setHTTPResponse(res);
+                        checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest()));
                         pfd.events = POLLOUT;
                 }
             }

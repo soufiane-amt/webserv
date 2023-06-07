@@ -20,7 +20,7 @@
 #include "pollingServ.hpp"
 
 
-appendClient::appendClient():_contentLength(0),  _bodySize(0), _checkHead(0), _checkBody(0), _clientFd(-69), _responseStatus(0), _responseSent(0)
+appendClient::appendClient():_contentLength(0),  _bodySize(0), _checkHead(0), _checkBody(0), _bodyType(0), _responseStatus(0),  _clientFd(-69)
 {
     
 }
@@ -72,7 +72,7 @@ std::string appendClient::getBody()
 
 void    appendClient::setBody(std::string body)
 {
-    for(int i = 0; i < body.size(); i++)
+    for(size_t i = 0; i < body.size(); i++)
         this->_body.push_back(body[i]);
 }
 
@@ -99,8 +99,8 @@ std::vector<char> appendClient::getHTTPResponse()
 void    appendClient::sendReq(int sockfd)
 {
     int check;
-    char* hold = this->_httpRespond.data();
-    check = send(sockfd, hold, this->_httpRespond.size(), 0);
+    std::vector<char>::iterator hold = this->_httpRespond.begin();
+    check = send(sockfd, this->_httpRespond.data(), this->_httpRespond.size(), 0);
     if (check < 0)
     {
         perror("send");
@@ -126,7 +126,7 @@ void    appendClient::copyReq(char *req, int size)
 
 std::string::size_type appendClient::checkCRLForChunk(std::string test)
 {
-    if (test == CRLF)
+    if (test == myCRLF)
     {
         std::string::size_type pos = this->_header.find(test);
         if (pos != std::string::npos)
@@ -144,7 +144,7 @@ std::string::size_type appendClient::checkCRLForChunk(std::string test)
 void    appendClient::getBodyRest()
 {
     //check pos of CRLF and get the beginning of the body
-    std::string::size_type pos = this->_header.find(CRLF);
+    std::string::size_type pos = this->_header.find(myCRLF);
 
     if (pos != std::string::npos)
     {
@@ -205,7 +205,7 @@ void    appendClient::getBodyType()
 void    appendClient::setHTTPRequest()
 {
     this->_httpRequest.append(this->_header);
-    for (int i = 0; i < this->_body.size(); i++)
+    for (size_t i = 0; i < this->_body.size(); i++)
         this->_httpRequest.push_back(this->_body[i]);
 }
 
@@ -232,7 +232,7 @@ void    appendClient::getContentLength()
             this->_contentLength = std::atol(lengthStr.c_str());
         }
     }
-    if (this->_contentLength = 0)
+    if (this->_contentLength == 0)
     {
         this->_checkBody = nobody;
         this->_responseStatus = responseGo;
@@ -259,7 +259,7 @@ void    appendClient::recvHead()
         this->_header.append(this->_tmp);
 
         //check for CRLF at the end of the string
-        if (this->checkCRLForChunk(CRLF) >= 0)
+        if (this->checkCRLForChunk(myCRLF) >= 0)
             {
                 this->setHeadStatus(endOfHeader);
                 this->getContentLength();

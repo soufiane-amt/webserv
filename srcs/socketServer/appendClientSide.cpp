@@ -27,7 +27,7 @@ appendClient::appendClient():_contentLength(0),  _bodySize(0), _checkHead(0), _c
 
 appendClient::~appendClient()
 {
-    
+    std::cout << "client destructor" << std::endl;
 }
  
 void    appendClient::setClientFd(int fd)
@@ -122,6 +122,8 @@ void    appendClient::copyReq(char *req, int size)
         this->_tmp.push_back(req[i]);
         i++;
     }
+    for (size_t j = 0 ; j < this->_tmp.size(); j++)
+        this->_header.push_back(this->_tmp[j]);
 }
 
 std::string::size_type appendClient::checkCRLForChunk(std::string test)
@@ -145,22 +147,17 @@ void    appendClient::getBodyRest()
 {
     //check pos of CRLF and get the beginning of the body
     std::string::size_type pos = this->_header.find(myCRLF);
-
     if (pos != std::string::npos)
     {
         //extract body
-        std::string res = this->_header.substr(pos + 4);
-        for (std::string::size_type i = pos + 4; pos < this->_header.size(); i++)
+        for (std::string::size_type i = pos + 4; i < this->_header.size(); i++)
             this->_body.push_back(this->_header[i]);
         this->_header.erase(pos + 4);
         this->_bodySize = this->_body.size();
         if (this->_contentLength > 0)
             this->_contentLength -= this->_bodySize;
         else
-        {
             this->_checkBody = endOfBody;
-            this->_responseStatus = responseGo;
-        }
     }
 }
 
@@ -172,7 +169,7 @@ void    appendClient::recvBody(std::string req)
         if (this->_contentLength > 0)
             this->_contentLength -= this->_body.size();
         else
-            this->_responseStatus = responseGo;
+            this->_checkBody = endOfBody;
     }
     else if (this->_bodyType == chunked)
     {
@@ -230,13 +227,17 @@ void    appendClient::getContentLength()
                 }
             }
             this->_contentLength = std::atol(lengthStr.c_str());
+            std::cout << "ContentLength is: " << this->_contentLength << std::endl;
         }
     }
-    if (this->_contentLength == 0)
-    {
+    else
         this->_checkBody = nobody;
-        this->_responseStatus = responseGo;
-    }
+}
+
+void    appendClient::filterHeader()
+{
+    size_t found = this->_header.find(myCRLF);
+    this->_header = (found != std::string::npos) ? this->_header.substr(0, found) : this->_header;
 }
 
 void    appendClient::recvHead()
@@ -250,34 +251,38 @@ void    appendClient::recvHead()
         //exit or return 
     }
     appendClient::copyReq(tmp, BUFFER_SIZE);
-    if (this->getHeadStatus() == endOfHeader)
+    if (this->getHeadStatus() == endOfHeader && this->_bodyType != nobody)
     {
+        this->getBodyType();
         appendClient::recvBody(this->_tmp);
     }
     else if (this->getHeadStatus() != endOfHeader)
     {
-        this->_header.append(this->_tmp);
-
         //check for CRLF at the end of the string
         if (this->checkCRLForChunk(myCRLF) >= 0)
             {
                 this->setHeadStatus(endOfHeader);
                 this->getContentLength();
-                //check this
-                if (this->_contentLength > 0)
-                    this->getBodyRest();
-                //look for body type
-                this->getBodyType();
-                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
-            {
-                this->parseChunked(this->_body);
-                if (this->_bodyType == endOfBody)
+                if (this->_bodyType == contentLength)
                 {
-                    this->setHTTPRequest();
-                    this->_responseStatus = responseGo;
+                    if (this->_contentLength > 0)
+                        this->getBodyRest();
                 }
+                else if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
+                    this->parseChunked(this->_body);
+                this->filterHeader();
             }
-            }
+    }
+    if (this->getHeadStatus() == endOfHeader && this->getBodyStatus() == nobody)
+    {
+        this->_header.append(myCRLF);
+        this->_httpRequest = this->_header;
+        this->_responseStatus = responseGo;
+    }
+    else if (this->getHeadStatus() == endOfHeader && this->getBodyStatus() == endOfBody)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+    {
+        this->setHTTPRequest();
+        this->_responseStatus = responseGo;
     }
 }
 

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/07 11:26:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:12:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 Config& Config::operator= (const Config& copy)
 {
 	this->servers = copy.servers;
+	this->host = copy.host;
 	return *this;
 }
 
@@ -31,7 +32,7 @@ std::string Config::get_server_directives (int server_id, std::string directive)
 
 std::multimap<std::string, std::string> &Config::get_host()
 {
-	return (host);
+	return (this->host);
 }
 
 void	Config::server_host(server_t &servers)
@@ -49,12 +50,13 @@ void	Config::server_host(server_t &servers)
 				if (ports.size() > 0)
 				{
 					for (std::vector<std::string>::iterator iter = ports.begin(); iter != ports.end(); iter++)
-						host.insert(std::make_pair(*iter, ite->second));
+						this->host.insert(std::make_pair(*iter, ite->second));
 				}
 			}
 		}
 		ports.clear();
 	}
+	
 }
 
 void	Config::server_print()

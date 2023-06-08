@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/07 15:08:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/07 19:33:32 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ class appendClient
         
         void    setHeadStatus(int head);
         void    setBodyStatus(int body);
+        void    filterHeader();
         
         std::string getHeader();
         std::string getBody();

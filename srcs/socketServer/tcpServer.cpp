@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/06 23:34:39 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:00:57 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
 tcpServer::~tcpServer()
 {
     std::cout << "Socket default deconstructor." << std::endl;
-    tcpServer::closeConnection();
+    // tcpServer::closeConnection();
 }
 
 void    tcpServer::testSysCall(int fd)

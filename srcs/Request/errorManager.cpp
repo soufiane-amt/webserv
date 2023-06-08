@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/02 20:19:54 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/07 23:12:55 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
 
     if ((Method == "GET" || Method == "DELETE") && (requestHasBody || _request_has_meta_data(header)))
         throw StatusCode(BAD_REQUEST);
-    if (Method == "PSOT" && !_request_has_meta_data(header))
+    if (Method == "POST" && !_request_has_meta_data(header))
         throw StatusCode(BAD_REQUEST);
     if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
         throw StatusCode(BAD_REQUEST);
@@ -156,6 +156,7 @@ void    errorManager::isBodySizeValid(const std::string& body,  directive_t& hea
 
 bool     errorManager::isRequestValid(http_message_t &request)
 {
+    // std::cout << "Check validity" << std::endl;
     location_t     server_location = parser.get_server_locations(0);
     header_t              &header         = request.header;
 

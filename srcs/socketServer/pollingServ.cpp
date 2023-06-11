@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/08 03:39:15 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/11 22:25:04 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ std::vector<char>    request_response(std::string msg)
     }
     return std::vector<char>();
 }
+
 
 polling::polling(void)
 {
@@ -81,14 +82,14 @@ void    polling::pushFd(int sockfd, int event)
 
 void    polling::acceptConnection(appendClient &client, int fd, tcpServer &serv)
 {
-    // int check = 1;
+    int check = 1;
     int newFd = accept(fd, 0, 0);
     if (newFd < 0)
     {
         perror("accept");
         //maybe exit or set error status
     }
-    // setsockopt(newFd, SOL_SOCKET, SO_NOSIGPIPE, &check, sizeof(check));
+    setsockopt(newFd, SOL_SOCKET, SO_NOSIGPIPE, &check, sizeof(check));
     client.setClientFd(newFd);
     this->pushFd(client.getClientFd(), POLLIN);
     serv.setClient(client);
@@ -115,20 +116,17 @@ nfds_t  polling::getSize(void) const
     return (this->_pollfds.size());
 }
 
-int polling::closeConnections(std::vector<appendClient>::iterator findClient,int fd, int index)
+int polling::closeConnections(std::vector<appendClient>::iterator findClient,int cfd, int index)
 {
-    std::cout << "Welcome to close!" << std::endl;
-    close(fd);
+    close(cfd);
     this->_pollfds.erase(this->_pollfds.begin() + index);
 
     std::vector<tcpServer>::iterator servIT;
     for (servIT = this->_servers.begin(); servIT != this->_servers.end(); servIT++)
     {
-        std::cout << "Welcome to close!" << std::endl;
         std::vector<appendClient>::iterator clientIT;
         for (clientIT = servIT->getClientsVec().begin(); clientIT != servIT->getClientsVec().end(); clientIT++)
         {
-            std::cout << "Welcome to close!" << std::endl;
             if (findClient->getClientFd() == clientIT->getClientFd())
             {
                 servIT->getClientsVec().erase(clientIT);
@@ -167,7 +165,6 @@ void    polling::handlePoll()
                 //client Fd executed the recv and now ready to send
                 if (checkRecv->getResponseStat() == responseGo)
                 {
-                    std::cout << checkRecv->getBody().size() << std::endl;
                     checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest()));
                     pfd.events = POLLOUT;
                 }
@@ -179,7 +176,7 @@ void    polling::handlePoll()
             std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd);
             checkSend->sendReq(pfd.fd);
             if (checkSend->getResponseStat() == closeConnect)
-                polling::closeConnections(checkSend,pfd.events, index);
+                polling::closeConnections(checkSend,pfd.fd, index);
         }
         //client hang up
         if (pfd.revents & POLLHUP)

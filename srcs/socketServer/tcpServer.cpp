@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/08 02:00:57 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/11 20:32:38 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 tcpServer::tcpServer(polling &pl, int port, std::string host)
 {
-    (void)port;
-    (void)host;
     std::cout << "Socket default constructor and initializer." << std::endl;
     //init len of structs
     this->webservAddrlen = sizeof(this->webservAddr);
@@ -24,15 +22,14 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     memset(&this->webservAddr, 0, sizeof(this->webservAddr)); //empty the struct
     this->webservAddr.sin_family = AF_INET; //IPv4
     this->webservAddr.sin_port = htons(port); //convert port to network byte order(short)
-    //should take host and convert (inet_addr(host))
     this->webservAddr.sin_addr.s_addr = inet_addr(host.c_str()); // convert IP@ to network byte order (long) /any network interface available on the host 
 
     //create socket
     this->sockfd = socket(PF_INET, SOCK_STREAM,IPPROTO_TCP);
-    tcpServer::testSysCall(tcpServer::getAcceptFd());
+    tcpServer::testSysCall(this->sockfd);
 
     //set the socket to be non-blocking
-    fcntl(getSockFd(), F_SETFL, O_NONBLOCK);
+    fcntl(this->sockfd, F_SETFL, O_NONBLOCK);
     
     std::cout << "Socket created succesfully." << std::endl;
     
@@ -40,25 +37,24 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     tcpServer::rerunServ();
     
     //bind socket to the address
-    this->bindRes = bind(getSockFd(), (struct sockaddr *)&this->webservAddr, this->webservAddrlen);
-    tcpServer::testSysCall(tcpServer::getBindValue());
+    this->bindRes = bind(this->sockfd, (struct sockaddr *)&this->webservAddr, this->webservAddrlen);
+    tcpServer::testSysCall(this->bindRes);
     std::cout << "Socket succesfully bound to address." << std::endl;
 
     //make the socket listen for connections
     tcpServer::listenConnection();
 
     //push socket to socket list
-    pl.pushSocket(getSockFd());
+    pl.pushSocket(this->sockfd);
 
     //push the socket fd to poll()
-    pl.pushFd(getSockFd(), POLLIN);
+    pl.pushFd(this->sockfd, POLLIN);
 
 }
 
 tcpServer::~tcpServer()
 {
-    std::cout << "Socket default deconstructor." << std::endl;
-    // tcpServer::closeConnection();
+    std::cout << "Socket default deconstructor of:" << this->sockfd << std::endl;
 }
 
 void    tcpServer::testSysCall(int fd)

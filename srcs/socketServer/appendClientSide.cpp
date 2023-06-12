@@ -20,7 +20,7 @@
 #include "pollingServ.hpp"
 
 
-appendClient::appendClient():_contentLength(0),  _bodySize(0), _checkHead(0), _checkBody(0), _bodyType(0), _responseStatus(0),  _clientFd(-69)
+appendClient::appendClient(): _contentLength(-1), _checkHead(-1), _checkBody(-1), _bodyType(-1), _responseStatus(-1),  _clientFd(-69)
 {
     
 }
@@ -122,8 +122,11 @@ void    appendClient::copyReq(char *req, int size)
         this->_tmp.push_back(req[i]);
         i++;
     }
-    for (size_t j = 0 ; j < this->_tmp.size(); j++)
-        this->_header.push_back(this->_tmp[j]);
+    if (this->getHeadStatus() != endOfHeader)
+    {
+        for (size_t j = 0 ; j < this->_tmp.size(); j++)
+            this->_header.push_back(this->_tmp[j]);
+    }
 }
 
 std::string::size_type appendClient::checkCRLForChunk(std::string test)
@@ -153,10 +156,7 @@ void    appendClient::getBodyRest()
         for (std::string::size_type i = pos + 4; i < this->_header.size(); i++)
             this->_body.push_back(this->_header[i]);
         this->_header.erase(pos + 4);
-        this->_bodySize = this->_body.size();
-        if (this->_contentLength > 0)
-            this->_contentLength -= this->_bodySize;
-        else
+        if (this->_contentLength <= this->_body.size())
             this->_checkBody = endOfBody;
     }
 }
@@ -166,9 +166,7 @@ void    appendClient::recvBody(std::string req)
     this->setBody(req);
     if (this->_bodyType == contentLength)
     {
-        if (this->_contentLength > 0)
-            this->_contentLength -= this->_body.size();
-        else
+        if (this->_contentLength <= this->_body.size())
             this->_checkBody = endOfBody;
     }
     else if (this->_bodyType == chunked)
@@ -223,21 +221,14 @@ void    appendClient::getContentLength()
             // Check if the length string contains only digits
             for (std::string::size_type i = 0; i < lengthStr.length(); ++i) {
                 if (!std::isdigit(lengthStr[i])) {
-                    throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
+                    // throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
                 }
             }
             this->_contentLength = std::atol(lengthStr.c_str());
-            std::cout << "ContentLength is: " << this->_contentLength << std::endl;
         }
     }
     else
         this->_checkBody = nobody;
-}
-
-void    appendClient::filterHeader()
-{
-    size_t found = this->_header.find(myCRLF);
-    this->_header = (found != std::string::npos) ? this->_header.substr(0, found) : this->_header;
 }
 
 void    appendClient::recvHead()
@@ -250,27 +241,28 @@ void    appendClient::recvHead()
         perror("recv");
         //exit or return 
     }
-    appendClient::copyReq(tmp, BUFFER_SIZE);
+    appendClient::copyReq(tmp, check);
     if (this->getHeadStatus() == endOfHeader && this->_bodyType != nobody)
     {
         this->getBodyType();
         appendClient::recvBody(this->_tmp);
     }
-    else if (this->getHeadStatus() != endOfHeader)
+    if (this->getHeadStatus() != endOfHeader)
     {
         //check for CRLF at the end of the string
         if (this->checkCRLForChunk(myCRLF) >= 0)
             {
                 this->setHeadStatus(endOfHeader);
+                if (this->getHeadStatus() == endOfHeader)
+                    this->getBodyType();
                 this->getContentLength();
                 if (this->_bodyType == contentLength)
                 {
                     if (this->_contentLength > 0)
                         this->getBodyRest();
                 }
-                else if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
+                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
                     this->parseChunked(this->_body);
-                this->filterHeader();
             }
     }
     if (this->getHeadStatus() == endOfHeader && this->getBodyStatus() == nobody)
@@ -337,3 +329,11 @@ void    appendClient::parseChunked(std::string& chunkedData)
     this->_body.append(res);
     this->_checkBody = endOfBody;
 }
+
+
+
+// Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575
+
+// -----------------------------974767299852498929531610575
+
+//  = lseek(fd, end)

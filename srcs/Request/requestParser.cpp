@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/07 11:30:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:44:06 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void    clientRequestParser::parseFirstLine ()
     _request.header["Method"] = firstLineParts[0];
     
     _request.header["QUERY_STRING"] = utility::get_query_string(firstLineParts[1]);
-    std::cout << "********QUERY_STRING: " << _request.header["QUERY_STRING"] << std::endl;
+    // std::cout << "********QUERY_STRING: " << _request.header["QUERY_STRING"] << std::endl;
     utility::remove_string_queries(firstLineParts[1]);
     
     _request.header["URI"] = firstLineParts[1];
@@ -145,8 +145,8 @@ int         clientRequestParser::getContentLength()
 
 void    clientRequestParser::displayRequest ()
 {
-    for (header_t::iterator it = _request.header.begin(); it != _request.header.end(); it++)
-        std::cout << it->first << " | " << it->second << std::endl;
-    std::cout << "the body is :" << _request.body << std::endl;
+    // for (header_t::iterator it = _request.header.begin(); it != _request.header.end(); it++)
+    //     std::cout << it->first << " | " << it->second << std::endl;
+    // std::cout << "the body is :" << _request.body << std::endl;
 }
 

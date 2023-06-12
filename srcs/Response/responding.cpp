@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/07 14:27:40 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:43:04 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void        responsePreparation::prepare_meta_body_data()
 void responsePreparation::prepare_allow()
 {
     
-        std::cout << _statusCode.get_status_code() <<"\n";
+        // std::cout << _statusCode.get_status_code() <<"\n";
     if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
     {
         std::string allow = "Allow: "+ _allowed_methods + CRLF;
@@ -158,7 +158,7 @@ void    responsePreparation::exceute_get()
 {
     if (utility::ressource_is_cgi(_request.header["URI"]))
     {
-        std::cout << "+++++++++++++++++|||||||++++++++++++++\n";
+        // std::cout << "+++++++++++++++++|||||||++++++++++++++\n";
         set_env_variables_for_cgi();
         // exceute_cgi();
         return;
@@ -203,11 +203,11 @@ bool        responsePreparation::file__delet_is_allowed(const std::string& file_
 
     for (size_t i = 0; i < random_files.size(); i++)
     {
-        std::cout << "__+__" << random_path + random_files[i] <<std::endl;
+        // std::cout << "__+__" << random_path + random_files[i] <<std::endl;
         if (utility::arePathsSame((random_path + random_files[i]).c_str(), file_path.c_str()))
             return true;
     }
-    std::cout << "+++++++++++<<<<<>>>>>++++++++++++++\n";
+    // std::cout << "+++++++++++<<<<<>>>>>++++++++++++++\n";
     return false;
 }
 

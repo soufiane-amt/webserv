@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/07 23:12:55 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/11 18:08:23 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
 
 void     errorManager::isProtocolValid(protocol_t protocol)
 {
-    std::cout << "protocol:" << protocol << std::endl;
+    // std::cout << "protocol:" << protocol << std::endl;
     if (protocol == _validProtocol)
         return ;
     if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )

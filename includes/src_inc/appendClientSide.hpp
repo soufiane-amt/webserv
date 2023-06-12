@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/07 19:33:32 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/12 04:16:51 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include "pollingServ.hpp"
 # define chunked 1
 # define contentLength 2 
-# define nobody 69
-# define closeConnect 3
-# define responseGo 1
+# define nobody 3
+# define closeConnect 4
+# define responseGo 5
 # define lastChunk "0\r\n\r\n"
 # define myCRLF "\r\n\r\n"
 # define endOfBody 69
@@ -29,13 +29,11 @@ class appendClient
     private:
     
         //checking flags
-        long        _contentLength;
-        long        _bodySize;
+        unsigned long        _contentLength;
         int         _checkHead;
         int         _checkBody;
         int         _bodyType;
         int         _responseStatus;
-        // int         _responseSent;
         
         //fd of the client
         int         _clientFd;
@@ -64,7 +62,6 @@ class appendClient
         
         void    setHeadStatus(int head);
         void    setBodyStatus(int body);
-        void    filterHeader();
         
         std::string getHeader();
         std::string getBody();

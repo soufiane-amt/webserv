@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/05/26 17:34:23 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/11 18:12:29 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -541,10 +541,10 @@ std::string            utility::get_query_string(std::string path)
 bool                    utility::ressource_is_cgi(std::string path)
 {
     static std::vector<std::string> cgi_files =  addPrefixToVector(get_directory_files("./www/cgi_files/"), "./www/cgi_files/");
-    std::cout << "++++GOOD+++" << std::endl;
+    // std::cout << "++++GOOD+++" << std::endl;
     for (size_t i = 0; i < cgi_files.size(); i++)
     {
-        std::cout << "cgi file : " << cgi_files[i] << std::endl;
+        // std::cout << "cgi file : " << cgi_files[i] << std::endl;
     }
     
     remove_string_queries(path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 15:21:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 16:56:28 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void    polling::pushServer(tcpServer &serv)
 
 
 //find the right server
-std::vector<appendClient>::iterator   polling::findClient(std::vector<tcpServer> &server, int fd)
+std::vector<appendClient>::iterator   polling::findClient(std::vector<tcpServer> &server, int fd, int *found)
 {
     std::vector<tcpServer>::iterator servIT;
     std::vector<appendClient>::iterator end;;
@@ -63,7 +63,10 @@ std::vector<appendClient>::iterator   polling::findClient(std::vector<tcpServer>
         for (clientIT = servIT->getClientsVec().begin(); clientIT != servIT->getClientsVec().end(); clientIT++)
         {
             if (clientIT->getClientFd() == fd)
+            {
+                *found = servIT->getIndex();
                 return (clientIT);
+            }
         }
         end = servIT->getClientsVec().end();
     }
@@ -140,6 +143,7 @@ int polling::closeConnections(std::vector<appendClient>::iterator findClient,int
 
 void    polling::handlePoll()
 {
+    int found = 0;
     for (size_t index = 0; index < this->_pollfds.size(); index++)
     {
         
@@ -160,14 +164,14 @@ void    polling::handlePoll()
             }
             else //just regular client ready to recieve 
             {   
-                std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd);
+                std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd, &found);
                 checkRecv->recvHead();
                 //client Fd executed the recv and now ready to send
                 if (checkRecv->getResponseStat() == responseGo)
                 {
                     std::cout << "Printing the request:" << std::endl;
                     std::cout << checkRecv->getHTTPRequest() << std::endl;
-                    checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest(), i));
+                    checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest(), found));
                     pfd.events = POLLOUT;
                 }
             }
@@ -175,7 +179,7 @@ void    polling::handlePoll()
         //data ready to be sent 
         else if (pfd.revents & POLLOUT)
         {
-            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd);
+            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd, &found);
             checkSend->sendReq(pfd.fd);
             if (checkSend->getResponseStat() == closeConnect)
                 polling::closeConnections(checkSend,pfd.fd, index);
@@ -183,7 +187,7 @@ void    polling::handlePoll()
         //client hang up
         if (pfd.revents & POLLHUP)
         {
-            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd);
+            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd, &found);
             polling::closeConnections(checkSend, pfd.fd, index);
         }
     }

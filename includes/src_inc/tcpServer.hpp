@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/12 02:50:24 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:55:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class tcpServer
         struct sockaddr_in  clientAddr;
         int                 clientAddrlen;
         
-        
+        int index;
         int sockfd;
         int bindRes;
         int acceptSockFd;
@@ -60,7 +60,7 @@ class tcpServer
         std::vector<appendClient>   _clients;
         
     public:
-        tcpServer(polling &pl, int port, std::string host);
+        tcpServer(polling &pl, int port, std::string host, int index);
         ~tcpServer();
         void    testSysCall(int fd);
         void    rerunServ(void);
@@ -72,6 +72,7 @@ class tcpServer
         void    retrieveClientAdd(void);
         
         //getter functions
+        int                 getIndex();
         int                 getSockFd(void) const;
         int                 getBindValue(void) const;
         int                 getAcceptFd(void) const;

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/08 01:59:29 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:55:50 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class   polling
         void    acceptConnection(appendClient &client, int fd, tcpServer &serv);
         int     closeConnections(std::vector<appendClient>::iterator clientIT,int fd, int index);
         void    pushServer(tcpServer &server);
-        std::vector<appendClient>::iterator findClient(std::vector<tcpServer> &server, int fd);
+        std::vector<appendClient>::iterator findClient(std::vector<tcpServer> &server, int fd, int *found);
         
         //getters
         nfds_t  getSize(void) const;

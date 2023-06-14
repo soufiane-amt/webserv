@@ -6,29 +6,28 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 15:21:48 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 16:32:44 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pollingServ.hpp"
 
 
-std::vector<char>    request_response(std::string msg)
+std::vector<char>    request_response(std::string msg, int targeted_serv)
 {
     clientRequestParser test(msg);
     http_message_t &_request = test.getRequest();
 
     try
     {
-            errorManager::isRequestValid(_request);
-            responsePreparation response(_request);
-
+            errorManager::isRequestValid(_request, targeted_serv);
+            responsePreparation response(_request, targeted_serv);
             return response.get_response();
         
     }
     catch(const StatusCode& e)
     {
-        responsePreparation response(_request, e);
+        responsePreparation response(_request,targeted_serv, e);
         return response.get_response();
     }
     return std::vector<char>();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 17:33:02 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 17:50:58 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,8 +181,8 @@ void    responsePreparation::exceute_get()
 void    responsePreparation::execute_cgi()
 {
     CGI cgi;
-    std::string body = get
-    cgi.handleCGI(std::string &body);
+    std::string body = _request.body;
+    cgi.handleCGI(_request.body);
 }
 
 void    responsePreparation::exceute_post()

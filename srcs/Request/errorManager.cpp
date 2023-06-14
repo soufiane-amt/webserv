@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/11 18:08:23 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:14:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,10 +154,10 @@ void    errorManager::isBodySizeValid(const std::string& body,  directive_t& hea
         throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 }
 
-bool     errorManager::isRequestValid(http_message_t &request)
+bool     errorManager::isRequestValid(http_message_t &request, int targeted_serv)
 {
     // std::cout << "Check validity" << std::endl;
-    location_t     server_location = parser.get_server_locations(0);
+    location_t     server_location = parser.get_server_locations(targeted_serv);
     header_t              &header         = request.header;
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);

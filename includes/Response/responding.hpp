@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/07 11:13:05 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:23:11 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ class responsePreparation
         bool                    _dir_listing_on;
 
         std::string             _allowed_methods;
-;
+
+        location_t              server_locations;
     public:
-        responsePreparation(const http_message_t& request, const  StatusCode& = StatusCode("200 OK"));
+        responsePreparation(const http_message_t& request, int targeted_serv, const  StatusCode& = StatusCode("200 OK"));
         
         response_t&         get_response() ;
         
@@ -71,7 +72,7 @@ class responsePreparation
         std::string      get_mime_type(const std::string& filename);
 
         response_t::iterator    _find_in_response(const std::string& str);
-        void                    _init();
+        void                    _init(int targeted_serv);
         void                    change_status_line(const char *status_code);
 
         bool             file__delet_is_allowed(const std::string& file_path);

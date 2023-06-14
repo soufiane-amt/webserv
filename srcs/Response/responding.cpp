@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/08 17:43:04 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:24:45 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include <string>
 
 
-responsePreparation::responsePreparation(const http_message_t& request, const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
+responsePreparation::responsePreparation(const http_message_t& request, int targeted_serv,const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
-    _init();
+    _init(targeted_serv);
     // check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
         prepare_error_response();
@@ -280,11 +280,12 @@ std::string responsePreparation::get_mime_type(const std::string& filename) {
 }
 
 
-void responsePreparation::_init()
+void responsePreparation::_init(int targeted_serv)
 {
+    server_locations = parser.get_server_locations(targeted_serv);
     _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                        utility::search_directive("autoindex", parser.get_server_locations(0)[_request.targeted_Location]) == "on");
-    _allowed_methods = utility::search_directive("allow", parser.get_server_locations(0)[_request.targeted_Location]);
+                        utility::search_directive("autoindex", server_locations[_request.targeted_Location]) == "on");
+    _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location]);
     // _execute_cgi    = (_request.header.at("URI") == "www/cgi/" + FIRST_SCRIPT || _request.header.at("URI") == "www/cgi/" + SECOND_SCRIPT)
     // std::cout << _request.header.at("URI") << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:48 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/02 18:33:05 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 16:31:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class errorManager
     static const std::string              _validProtocol;
     
     public:
-    static bool  isRequestValid(http_message_t& request);
+    static bool     isRequestValid(http_message_t &request, int targeted_serv);
     
 
     

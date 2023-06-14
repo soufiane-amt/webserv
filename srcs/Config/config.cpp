@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/07 18:12:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 19:06:21 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ std::string Config::get_server_directives (int server_id, std::string directive)
     return (servers[server_id].first.at(directive));
 }
 
-std::multimap<std::string, std::string> &Config::get_host()
+std::vector<std::pair<std::string, std::string> > &Config::get_host()
 {
 	return (this->host);
 }
@@ -50,7 +50,7 @@ void	Config::server_host(server_t &servers)
 				if (ports.size() > 0)
 				{
 					for (std::vector<std::string>::iterator iter = ports.begin(); iter != ports.end(); iter++)
-						this->host.insert(std::make_pair(*iter, ite->second));
+						host.push_back(std::pair<std::string, std::string>(*iter, ite->second));
 				}
 			}
 		}

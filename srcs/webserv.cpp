@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 16:50:10 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 19:08:18 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,15 @@ int main (int argc, char **argv, char **env)
         return 0;
     }
 	std::cout << "Welcome To Webserv1.0: " << std::endl;
-    std::multimap<std::string,std::string> &servs = parser.get_host();
-	std::multimap<std::string, std::string>::iterator it = servs.begin();
+    std::vector<std::pair<std::string, std::string> > servs = parser.get_host();
+	std::vector<std::pair<std::string, std::string> >::iterator it = servs.begin();
 	int index = 0;
 	for (;it != servs.end(); it++)
 	{
 		std::istringstream iss(it->first);
 		int port;
 		iss >> port;
+		std::cout << "Port: " << port << " host: " << it->second << " index: " << index << std::endl;
 		tcpServer sock(pl, port, it->second, index);
 		pl.pushServer(sock);
 		index++;

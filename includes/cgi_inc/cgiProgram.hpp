@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/05/24 11:44:34 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:11:15 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include <stdlib.h>
 
 //prototype for executing CGI
 
@@ -32,10 +33,8 @@ class CGI
         ~CGI();
         void    checkCGI();
         void    handleCGI();
-        //set env vars
-        void    setEnvCgi();
         //cgi directive in config file
-        void    setCGIpath();
+        void    setCGIpath(std::string filename);
 };
 
 char**  convert_vector_to_char_array(std::vector<std::string>& vec) ;

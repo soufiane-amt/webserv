@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 15:42:37 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 16:25:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,33 @@ CGI::~CGI()
     
 }
 
-//expect &req in arg
-void    CGI::setCGIpath()
-{   
-    //retrieve it from the config file
-    std::string exec = "/usr/local/bin/python3";
-    //retrieve path of the script
-    std::string path = "cgi-bin/todo.py";
-    
-    this->_cgi.push_back(exec);
-    this->_cgi.push_back(path);
+int hasPythonOrPhpExtension(const std::string& filename) {
+    std::string extension = filename.substr(filename.length() - 3);
+    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
+    if (extension == ".py")
+        return (1);
+    else if (extension == "php")
+        return (2);
+    return (-1);
+}
+
+
+
+void    CGI::setCGIpath(std::string filename)
+{   
+    if (hasPythonOrPhpExtension(filename) == 1) {
+        std::string exec = "/usr/local/bin/python3";
+        std::string path = "srcs/cgi/cgi-bin/" + filename;
     
+        this->_cgi.push_back(exec);
+        this->_cgi.push_back(path);
+    } 
+    else if (hasPythonOrPhpExtension(filename) == 2) {
+        std::cout << "The filename have a .php extension." << std::endl;
+    }
+    // else
+        //error case    
 }
 
 
@@ -59,13 +74,8 @@ void    CGI::handleCGI()
     //store output of cgi script
     std::string cgiResp;
 
-    //set cgi 
-    this->setCGIpath();
-  
+    
 
-    //convert cgi strings to char **
-    char    **cgiExec = convert_vector_to_char_array(this->_cgi);
-    (void)cgiExec;
     //cgiExec[0] = "python3" cgiExec[1] = "todo.py"
     
     //execution
@@ -109,7 +119,14 @@ void    CGI::handleCGI()
         //alarm 
         signal(SIGALRM, handleSignalTimeout);
         alarm(5);
+        
+        char *str = getenv("SCRIPT_FILENAME");
+        std::string filename(str);
+        this->setCGIpath(filename);
 
+        //convert cgi strings to char **
+        char    **cgiExec = convert_vector_to_char_array(this->_cgi);
+        
         // char *const args[] = {"python3", "cgi_exemple.py", NULL};
         if (execve(cgiExec[0], cgiExec, environ) < 0)
             exit(EXIT_FAILURE);

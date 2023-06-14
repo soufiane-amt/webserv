@@ -6,15 +6,39 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 17:28:07 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:32:17 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgiProgram.hpp"
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <vector>
 
 	// HTTP_COOKIE="//get the cookie from the header 
 
     //cgiExec = usr/bin/executable + path
+
+char** convert_vector_to_char_array(std::vector<std::string>& vec) 
+{
+    char** arr = new char*[vec.size() + 1];
+    for (size_t i = 0; i < vec.size(); ++i) {
+        arr[i] = new char[vec[i].size() + 1];
+        std::strcpy(arr[i], vec[i].c_str());
+    }
+    arr[vec.size()] = NULL;
+    return arr;
+}
+
+//avoid memory leaks
+void freeConvertedArray(char** array, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        delete[] array[i];
+    }
+    delete[] array;
+}
+
 
 void    handleSignalTimeout(int signal)
 {

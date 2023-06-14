@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/12 02:11:18 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 15:21:48 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void    polling::handlePoll()
                 {
                     std::cout << "Printing the request:" << std::endl;
                     std::cout << checkRecv->getHTTPRequest() << std::endl;
-                    checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest()));
+                    checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest(), i));
                     pfd.events = POLLOUT;
                 }
             }

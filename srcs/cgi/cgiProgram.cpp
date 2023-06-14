@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/12 20:11:02 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 15:42:37 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void    CGI::setCGIpath()
 
 void    CGI::handleCGI()
 {
+    extern char **environ;
     int check = 0;
     int fd[2];
 
@@ -63,7 +64,6 @@ void    CGI::handleCGI()
   
 
     //convert cgi strings to char **
-    // char    **cgiEnv = convert_vector_to_char_array(this->_env);
     char    **cgiExec = convert_vector_to_char_array(this->_cgi);
     (void)cgiExec;
     //cgiExec[0] = "python3" cgiExec[1] = "todo.py"
@@ -106,23 +106,12 @@ void    CGI::handleCGI()
 		dup2(fileno(tempStore), 0);
 		std::fclose(tempStore);
 
-        //The CGI should be run in the correct directory for relative path file access.
-        // changes the current working directory of the child process to the root directory of the server
-        //chdir to the root of the cgi
-
-        //location of the script
-        std::string location;
-        if (chdir(location.c_str()) < 0)
-        {
-            //set http return status to 502
-            return;
-        }
         //alarm 
         signal(SIGALRM, handleSignalTimeout);
         alarm(5);
 
         // char *const args[] = {"python3", "cgi_exemple.py", NULL};
-        if (execve(cgiExec[0], cgiExec, cgiEnv) < 0)
+        if (execve(cgiExec[0], cgiExec, environ) < 0)
             exit(EXIT_FAILURE);
     }
     waitpid(pid, &check, 0);

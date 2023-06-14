@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/07 19:31:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 15:18:50 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,15 @@ int main (int argc, char **argv, char **env)
 	std::cout << "Welcome To Webserv1.0: " << std::endl;
     std::multimap<std::string,std::string> &servs = parser.get_host();
 	std::multimap<std::string, std::string>::iterator it = servs.begin();
+	int count = 0;
 	for (;it != servs.end(); it++)
 	{
 		std::istringstream iss(it->first);
 		int port;
 		iss >> port;
-		tcpServer sock(pl, port, it->second);
+		tcpServer sock(pl, port, it->second, count);
 		pl.pushServer(sock);
+		count++;
 	}
 
 	 while (1)

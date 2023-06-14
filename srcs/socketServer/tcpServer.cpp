@@ -6,13 +6,13 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/11 20:32:38 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 16:55:19 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pollingServ.hpp"
 
-tcpServer::tcpServer(polling &pl, int port, std::string host)
+tcpServer::tcpServer(polling &pl, int port, std::string host, int index)
 {
     std::cout << "Socket default constructor and initializer." << std::endl;
     //init len of structs
@@ -24,6 +24,7 @@ tcpServer::tcpServer(polling &pl, int port, std::string host)
     this->webservAddr.sin_port = htons(port); //convert port to network byte order(short)
     this->webservAddr.sin_addr.s_addr = inet_addr(host.c_str()); // convert IP@ to network byte order (long) /any network interface available on the host 
 
+    this->index = index;
     //create socket
     this->sockfd = socket(PF_INET, SOCK_STREAM,IPPROTO_TCP);
     tcpServer::testSysCall(this->sockfd);
@@ -72,6 +73,11 @@ void    tcpServer::rerunServ(void)
     
     int check = setsockopt(getSockFd(), SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
     tcpServer::testSysCall(check);
+}
+
+int tcpServer::getIndex()
+{
+    return (this->index);
 }
 
 int tcpServer::getSockFd(void) const

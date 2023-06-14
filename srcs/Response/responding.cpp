@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 16:24:45 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 17:33:02 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "responding.hpp"
 #include <string>
@@ -179,12 +178,19 @@ void    responsePreparation::exceute_get()
         add_CRLF();
 }
 
+void    responsePreparation::execute_cgi()
+{
+    CGI cgi;
+    std::string body = get
+    cgi.handleCGI(std::string &body);
+}
+
 void    responsePreparation::exceute_post()
 {
     if (utility::ressource_is_cgi(_request.header["URI"]))
     {
         set_env_variables_for_cgi();
-        // execute_cgi();
+        execute_cgi();
         return;
     }
     _statusCode = StatusCode(NOT_FOUND);

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 16:25:03 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/14 17:28:07 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int hasPythonOrPhpExtension(const std::string& filename) {
     return (-1);
 }
 
-
-
 void    CGI::setCGIpath(std::string filename)
 {   
     if (hasPythonOrPhpExtension(filename) == 1) {
@@ -65,18 +63,11 @@ void    CGI::setCGIpath(std::string filename)
 }
 
 
-void    CGI::handleCGI()
+void    CGI::handleCGI(std::string &body)
 {
     extern char **environ;
     int check = 0;
     int fd[2];
-
-    //store output of cgi script
-    std::string cgiResp;
-
-    
-
-    //cgiExec[0] = "python3" cgiExec[1] = "todo.py"
     
     //execution
     int tmp = dup(0);
@@ -105,14 +96,13 @@ void    CGI::handleCGI()
     	if (tempStore) 
         {
             //get the body of the http request
-			std::string body = getHTTPBody();
             //null terminate the string in char *
         	std::fprintf(tempStore, "%s", body.c_str());
             
             //set the file position indicator of the temporary file back to the beginning
             std::fseek(tempStore, 0, SEEK_SET);
     	}
-
+        //make the body as input 
 		dup2(fileno(tempStore), 0);
 		std::fclose(tempStore);
 

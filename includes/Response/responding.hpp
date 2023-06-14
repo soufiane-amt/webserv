@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 16:23:11 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/14 17:32:43 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 #include "utils.hpp"
 #include "exception.hpp"
+#include "cgiProgram.hpp"
 
 
 //Status-Line /***********you should use different classes for this************/
-
 class responsePreparation
 {
     private:

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 17:27:45 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:30:16 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@
 class CGI
 {
     private:
-        std::string cgiResp;
         std::vector<std::string> _cgi;
     public:
         CGI();
         ~CGI();
-        void    handleCGI(std::string &body);
+        void    handleCGI(std::string &body, std::string &resp);
         void    setCGIpath(std::string filename);
 };
 

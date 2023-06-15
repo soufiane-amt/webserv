@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   requestParser.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/08 17:44:06 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/15 18:32:15 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
         throw StatusCode(BAD_REQUEST); 
 
     _tokens = utility::split(spl_request[0], CRLF);
-    if (spl_request.size() == 2 )
-        _request.body = spl_request[1];
+    for (size_t i = 1; i < spl_request.size(); i++)
+        for (size_t j = 0; j < spl_request[i].size(); j++)
+            _request.body.push_back(spl_request[i][j]);
     // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    

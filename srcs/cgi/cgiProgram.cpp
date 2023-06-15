@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 18:32:17 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:30:06 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void    CGI::setCGIpath(std::string filename)
 {   
     if (hasPythonOrPhpExtension(filename) == 1) {
         std::string exec = "/usr/local/bin/python3";
-        std::string path = "srcs/cgi/cgi-bin/" + filename;
+        std::string path = "./www/cgi_files" + filename;
     
         this->_cgi.push_back(exec);
         this->_cgi.push_back(path);
@@ -87,7 +87,7 @@ void    CGI::setCGIpath(std::string filename)
 }
 
 
-void    CGI::handleCGI(std::string &body)
+void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 {
     extern char **environ;
     int check = 0;
@@ -169,6 +169,9 @@ void    CGI::handleCGI(std::string &body)
 	// freeConvertedArray(cgiExec,getSize);
 
     //parse the cgiResp, and generate HTTP Response (HEADER + BODY)
+    
+    std::cout << "Printing Response:" <<std::endl;
     std::cout << cgiResp << std::endl;
+
     
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 16:14:53 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/15 18:44:23 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
         throw StatusCode(BAD_REQUEST);
     if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
         throw StatusCode(BAD_REQUEST);
+    std::cout << "here"<<requestHasBody << std::endl;
     if (!_request_is_chunked(header) && Method == "POST" && !requestHasBody)
         throw StatusCode(BAD_REQUEST);
     if (Method == "POST" && (!__request_has_content_length(header) || !__request_has_content_type(header) ))
@@ -112,7 +113,9 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         root += "/";
     if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::check_file_or_directory((root + header.at("URI"))) )
         throw StatusCode(NOT_FOUND);
+    
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
+    std::cout << "----++++>0" << header["URI"] <<  std::endl;
     if (!utility::check_file_or_directory(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)

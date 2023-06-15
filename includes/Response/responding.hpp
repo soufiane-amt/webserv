@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 17:32:43 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:02:57 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class responsePreparation
         std::string             _allowed_methods;
 
         location_t              server_locations;
+        int                     id;
     public:
         responsePreparation(const http_message_t& request, int targeted_serv, const  StatusCode& = StatusCode("200 OK"));
         

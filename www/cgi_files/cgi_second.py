@@ -6,7 +6,7 @@
 #    By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/25 15:45:47 by fech-cha          #+#    #+#              #
-#    Updated: 2023/05/25 18:24:11 by fech-cha         ###   ########.fr        #
+#    Updated: 2023/06/16 19:58:48 by fech-cha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,13 @@
 
 import cgi
 
-print ("Content-type: text/html\r\n\r\n")
+print("HTTP/1.1 200 OK\r")
+print("Content-type: text/html\r\n\r")
 print ("<html>")
 print ("<head><title> CGI Programming is fun </title></head>")
 print ("<body>")
 print ("<h1>Welcome To Webserv CGI Execution!</h1>")
 
-# for i in range(69):
-#     print ("<h2>1337 Future is Loading!</h2>")
 
 form = cgi.FieldStorage();
 

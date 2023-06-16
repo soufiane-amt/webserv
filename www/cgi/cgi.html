@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CGI Execution</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f1f1f1;
+            }
+            
+            h1 {
+                text-align: center;
+            }
+            
+            form {
+                max-width: 400px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 4px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+            
+            button {
+                display: block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 4px;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+            
+            button:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Execute CGI</h1>
+        <form method="post" enctype="multipart/form-data" action="../cgi_files/cgi_exemple.py">
+            <br>
+            <div>
+                <button>CGI</button>
+            </div>
+        </form>
+    </body>
+</html>

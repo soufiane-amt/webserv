@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/15 17:30:06 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/16 18:20:06 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,7 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 
     //parse the cgiResp, and generate HTTP Response (HEADER + BODY)
     
-    std::cout << "Printing Response:" <<std::endl;
-    std::cout << cgiResp << std::endl;
-
+    // std::cout << "Printing Response:" <<std::endl;
+    // std::cout << cgiResp << std::endl;
     
 }

@@ -205,6 +205,8 @@ void    appendClient::getBodyType()
     } else if (transfer_chunked != std::string::npos){
         this->_bodyType = chunked;
     }
+    else
+        this->_bodyType = nobody;
 }
 
 void    appendClient::setHTTPRequest()
@@ -237,8 +239,6 @@ void    appendClient::getContentLength()
             this->_contentLength = std::atol(lengthStr.c_str());
         }
     }
-    else
-        this->_checkBody = nobody;
 }
 
 void    appendClient::recvHead()
@@ -265,9 +265,9 @@ void    appendClient::recvHead()
                 this->setHeadStatus(endOfHeader);
                 if (this->getHeadStatus() == endOfHeader)
                     this->getBodyType();
-                this->getContentLength();
                 if (this->_bodyType == contentLength)
                 {
+                    this->getContentLength();
                     if (this->_contentLength > 0)
                         this->getBodyRest();
                 }
@@ -275,7 +275,7 @@ void    appendClient::recvHead()
                     this->parseChunked(this->_body);
             }
     }
-    if (this->getHeadStatus() == endOfHeader && this->getBodyStatus() == nobody)
+    if (this->getHeadStatus() == endOfHeader && this->_bodyType == nobody)
     {
         this->_header.append(myCRLF);
         this->_httpRequest = this->_header;
@@ -339,11 +339,3 @@ void    appendClient::parseChunked(std::string& chunkedData)
     this->_body.append(res);
     this->_checkBody = endOfBody;
 }
-
-
-
-// Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575
-
-// -----------------------------974767299852498929531610575
-
-//  = lseek(fd, end)

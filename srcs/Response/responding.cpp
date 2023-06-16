@@ -374,12 +374,15 @@ void        responsePreparation::set_env_variables_for_cgi()
         setenv("CONTENT-LENGTH", _request.header.at("Content-Length").c_str(), 1);
         std::cout << "------------========\n";
         setenv("CONTENT-TYPE", _request.header.at("Content-Type").c_str(), 1);
+        setenv("UPLOAD_DIR",  parser.get_server_directives(id, "upload").c_str(),1);
         /* code */
     }
     catch(const std::exception& e)
     {
         setenv("CONTENT-LENGTH", "", 1);
         setenv("CONTENT-TYPE", "", 1);
+        setenv("UPLOAD_DIR", "", 1);
+        
     }
     
     
@@ -389,8 +392,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("SERVER_SOFTWARE", software.c_str(), 1);
     setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
-    std::cout << parser.get_server_directives(id, "upload").c_str() <<"{{{{{{{{{{}}}"<< std::endl;
-    setenv("UPLOAD_DIR",  parser.get_server_directives(id, "upload").c_str(),1);
+    // std::cout << parser.get_server_directives(id, "upload").c_str() <<"{{{{{{{{{{}}}"<< std::endl;
     //now I will print them all
 
     // std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;

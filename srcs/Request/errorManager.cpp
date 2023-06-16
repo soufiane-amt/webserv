@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/15 18:44:23 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/16 21:12:57 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
         throw StatusCode(BAD_REQUEST);
     if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
         throw StatusCode(BAD_REQUEST);
-    std::cout << "here"<<requestHasBody << std::endl;
     if (!_request_is_chunked(header) && Method == "POST" && !requestHasBody)
         throw StatusCode(BAD_REQUEST);
     if (Method == "POST" && (!__request_has_content_length(header) || !__request_has_content_type(header) ))
@@ -115,7 +114,6 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         throw StatusCode(NOT_FOUND);
     
     header["URI"] = root + header.at("URI").substr(targetLocat.size());
-    std::cout << "----++++>0" << header["URI"] <<  std::endl;
     if (!utility::check_file_or_directory(header.at("URI")) )
         throw StatusCode(NOT_FOUND);
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
@@ -159,12 +157,10 @@ void    errorManager::isBodySizeValid(const std::string& body,  directive_t& hea
 
 bool     errorManager::isRequestValid(http_message_t &request, int targeted_serv)
 {
-    // std::cout << "Check validity" << std::endl;
     location_t     server_location = parser.get_server_locations(targeted_serv);
     header_t              &header         = request.header;
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
-    // std::cout << "header.find(\"Protocol\")->second" <<header.find("Protocol")->second <<std::endl;
     request_has_valid_headers(header, !request.body.empty());
     isMethodValid(header.find("Method")->second, server_location[request.targeted_Location]);
     isProtocolValid(header.find("Protocol")->second);

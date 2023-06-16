@@ -6,6 +6,7 @@ import os
 form = cgi.FieldStorage()
 
 if 'file' in form:
+    print ("----WAch Dkhlti l fichier ")
     # Get the uploaded file
     file_item = form['file']
     upload_dir = os.environ['UPLOAD_DIR']

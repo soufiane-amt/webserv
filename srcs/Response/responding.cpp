@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/15 18:52:26 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/16 15:52:41 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,7 +389,8 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("SERVER_SOFTWARE", software.c_str(), 1);
     setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
-    // setenv("UPLOAD_DIR", protocol.c_str(),1);
+    std::cout << parser.get_server_directives(id, "upload").c_str() <<"{{{{{{{{{{}}}"<< std::endl;
+    setenv("UPLOAD_DIR",  parser.get_server_directives(id, "upload").c_str(),1);
     //now I will print them all
 
     // std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;

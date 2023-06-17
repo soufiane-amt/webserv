@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:02 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/14 16:55:03 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/17 17:46:07 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 
 #include "pollingServ.hpp"
 
-# define BACKLOG 100
+# define BACKLOG 1000000
 
 # define BUFFER_SIZE 1024
 

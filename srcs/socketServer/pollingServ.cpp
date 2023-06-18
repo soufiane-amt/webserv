@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/15 18:35:36 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/16 20:39:07 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pollingServ.hpp"
 
+
+int64_t timing() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    int64_t currentTime = tv.tv_sec;
+    return currentTime;
+}
 
 std::vector<char>    request_response(std::string msg, int targeted_serv)
 {
@@ -71,6 +78,7 @@ std::vector<appendClient>::iterator   polling::findClient(std::vector<tcpServer>
         }
         end = servIT->getClientsVec().end();
     }
+    *found = 0;
     return (end);
 }
 
@@ -96,6 +104,7 @@ void    polling::acceptConnection(appendClient &client, int fd, tcpServer &serv)
     setsockopt(newFd, SOL_SOCKET, SO_NOSIGPIPE, &check, sizeof(check));
     client.setClientFd(newFd);
     this->pushFd(client.getClientFd(), POLLIN);
+    client.setTime(timing());
     serv.setClient(client);
 }
 
@@ -166,7 +175,7 @@ void    polling::handlePoll()
             else //just regular client ready to recieve 
             {   
                 std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd, &found);
-                std::cout << "Server index:" << found << std::endl;
+                checkRecv->setTime(timing());
                 checkRecv->recvHead();
                 //client Fd executed the recv and now ready to send
                 if (checkRecv->getResponseStat() == responseGo)
@@ -191,6 +200,26 @@ void    polling::handlePoll()
         {
             std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd, &found);
             polling::closeConnections(checkSend, pfd.fd, index);
+        }
+    }
+}
+
+void    polling::handleTimeout()
+{
+    int found = 0;
+
+    std::cout << "Checking Timeout !" << std::endl;
+    for (size_t i = 0; i < this->_pollfds.size(); i++)
+    {
+        pollfd& pfd = this->_pollfds[i];
+        std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd, &found);
+        if (found != 0)
+        {
+            if (timing() - checkRecv->getTime() >= 10)
+            {
+                std::cout << "Client Timedout!" << std::endl;
+                polling::closeConnections(checkRecv, pfd.fd, i);
+            }
         }
     }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/16 15:52:41 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/16 21:14:26 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ void        responsePreparation::prepare_meta_body_data()
 
 void responsePreparation::prepare_allow()
 {
-    
-        // std::cout << _statusCode.get_status_code() <<"\n";
     if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
     {
         std::string allow = "Allow: "+ _allowed_methods + CRLF;
@@ -183,14 +181,12 @@ void    responsePreparation::execute_cgi()
     std::string resp;
 
     std::string body = _request.body;
-    std::cout << "------------ Executing CGI -----------" << std::endl;
     cgi.handleCGI(_request.body,resp);
     _response.insert(_response.end(), resp.begin(), resp.end());
 }
 
 void    responsePreparation::exceute_post()
 {
-    std::cout << "------Header " << _request.header["URI"] << std::endl;
     if (utility::ressource_is_cgi(_request.header["URI"]))
     {
         set_env_variables_for_cgi();
@@ -213,11 +209,9 @@ bool        responsePreparation::file__delet_is_allowed(const std::string& file_
 
     for (size_t i = 0; i < random_files.size(); i++)
     {
-        // std::cout << "__+__" << random_path + random_files[i] <<std::endl;
         if (utility::arePathsSame((random_path + random_files[i]).c_str(), file_path.c_str()))
             return true;
     }
-    // std::cout << "+++++++++++<<<<<>>>>>++++++++++++++\n";
     return false;
 }
 
@@ -297,8 +291,6 @@ void responsePreparation::_init(int targeted_serv)
     _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                         utility::search_directive("autoindex", server_locations[_request.targeted_Location]) == "on");
     _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location]);
-    // _execute_cgi    = (_request.header.at("URI") == "www/cgi/" + FIRST_SCRIPT || _request.header.at("URI") == "www/cgi/" + SECOND_SCRIPT)
-    // std::cout << _request.header.at("URI") << std::endl;
 }
 
 void responsePreparation::prepare_eTag()
@@ -372,7 +364,6 @@ void        responsePreparation::set_env_variables_for_cgi()
     try
     {
         setenv("CONTENT-LENGTH", _request.header.at("Content-Length").c_str(), 1);
-        std::cout << "------------========\n";
         setenv("CONTENT-TYPE", _request.header.at("Content-Type").c_str(), 1);
         setenv("UPLOAD_DIR",  parser.get_server_directives(id, "upload").c_str(),1);
         /* code */

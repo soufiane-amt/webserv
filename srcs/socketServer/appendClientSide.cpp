@@ -29,7 +29,17 @@ appendClient::~appendClient()
 {
     std::cout << "client destructor" << std::endl;
 }
- 
+
+void    appendClient::setTime(int64_t t)
+{
+    this->_time = t;
+}
+
+int64_t appendClient::getTime()
+{
+    return (this->_time);
+}
+
 void    appendClient::setClientFd(int fd)
 {
     this->_clientFd = fd;

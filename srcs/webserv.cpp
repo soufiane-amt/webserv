@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/14 19:08:18 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/16 20:38:33 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int main (int argc, char **argv, char **env)
 	 while (1)
     {
         //waiting for events using poll()
-        int poll_count = pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), -1);
+        int poll_count = pl.callPoll((pollfd *)pl.getPollfdAddrs(), pl.getSize(), 5000);
         
         if (poll_count  == -1)
         {
@@ -120,8 +120,11 @@ int main (int argc, char **argv, char **env)
         }
         else
         {
+			//handle timeout
+			pl.handleTimeout();   
+			
             //handle I/O events
-            pl.handlePoll();        
+            pl.handlePoll();     
         }
     }
     

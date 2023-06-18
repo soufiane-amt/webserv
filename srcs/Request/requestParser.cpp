@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   requestParser.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/06/18 12:58:29 by samajat          ###   ########.fr       */
+=======
+/*   Updated: 2023/06/16 21:13:27 by fech-cha         ###   ########.fr       */
+>>>>>>> 01a214ae8362ebde67f190378fc6e78e05e46e2a
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +30,14 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
     {
         for (size_t j = 0; j < spl_request[i].size(); j++)
             _request.body.push_back(spl_request[i][j]);
+<<<<<<< HEAD
         _request.body.append(CRLF CRLF);
     }
     // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
+=======
+>>>>>>> 01a214ae8362ebde67f190378fc6e78e05e46e2a
     parseHeader();
 }
 
@@ -65,7 +72,6 @@ void    clientRequestParser::parseFirstLine ()
     _request.header["Method"] = firstLineParts[0];
     
     _request.header["QUERY_STRING"] = utility::get_query_string(firstLineParts[1]);
-    // std::cout << "********QUERY_STRING: " << _request.header["QUERY_STRING"] << std::endl;
     utility::remove_string_queries(firstLineParts[1]);
     
     _request.header["URI"] = firstLineParts[1];

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/12 04:16:51 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/16 20:30:01 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class appendClient
 { 
     private:
     
+        int64_t _time;
+        
         //checking flags
         unsigned long        _contentLength;
         int         _checkHead;
@@ -81,6 +83,9 @@ class appendClient
         void    getContentLength();
         std::vector<char> getHTTPResponse();
         void    setHTTPResponse(std::vector<char> res);
+
+        void    setTime(int64_t t);
+        int64_t getTime();
 
 };
 

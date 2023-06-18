@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/16 18:20:06 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/18 20:20:27 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ void    CGI::setCGIpath(std::string filename)
 
 void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 {
+
+    // std::cout << "==========> Body inside CGI : <==========" << std::endl;
+    // std::cout << body << std::endl;
+    
     extern char **environ;
     int check = 0;
     int fd[2];
@@ -110,11 +114,12 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
     
     if (pid == 0)
     {
-        dup2(fd[1], STDOUT_FILENO);
-        close(fd[1]);
+        dup2(fd[1], 1);
+		close(fd[1]);
+
 
         //create a file to store the body of the http request
-        std::FILE *tempStore;
+		std::FILE *tempStore;
 		tempStore = tmpfile();
 		
     	if (tempStore) 
@@ -122,9 +127,7 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
             //get the body of the http request
             //null terminate the string in char *
         	std::fprintf(tempStore, "%s", body.c_str());
-            
-            //set the file position indicator of the temporary file back to the beginning
-            std::fseek(tempStore, 0, SEEK_SET);
+        	std::rewind(tempStore);
     	}
         //make the body as input 
 		dup2(fileno(tempStore), 0);
@@ -159,9 +162,11 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 	char buffer[1];
 	while (read(0, buffer, 1) > 0)
 	   cgiResp.append(buffer, 1);
+    
 
 	dup2(tmp, 0);
 	close(tmp);
+    // std::cout << "CGI Resp: " << std::endl << cgiResp << std::endl;
 
     //free allocated memory
     // int getSize;

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   requestParser.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/06/18 12:58:29 by samajat          ###   ########.fr       */
-=======
-/*   Updated: 2023/06/16 21:13:27 by fech-cha         ###   ########.fr       */
->>>>>>> 01a214ae8362ebde67f190378fc6e78e05e46e2a
+/*   Updated: 2023/06/18 13:12:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +24,14 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
     _tokens = utility::split(spl_request[0], CRLF);
     for (size_t i = 1; i < spl_request.size(); i++)
     {
-        for (size_t j = 0; j < spl_request[i].size(); j++)
+        for (size_t j = 0; j < spl_request[i].size(); j++)//this  size function will cause a problem in case of a binary file
             _request.body.push_back(spl_request[i][j]);
-<<<<<<< HEAD
-        _request.body.append(CRLF CRLF);
+        if (i != spl_request.size() - 1)
+            _request.body.append(CRLF CRLF);
     }
     // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    
-=======
->>>>>>> 01a214ae8362ebde67f190378fc6e78e05e46e2a
     parseHeader();
 }
 

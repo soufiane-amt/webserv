@@ -171,6 +171,24 @@ void    appendClient::getBodyRest()
     }
 }
 
+void    appendClient::getBodyRestChunk()
+{
+    //check pos of CRLF and get the beginning of the body
+    std::string::size_type pos = this->_header.find(myCRLF);
+    if (pos != std::string::npos)
+    {
+        //extract body
+        for (std::string::size_type i = pos + 4; i < this->_header.size(); i++)
+            this->_body.push_back(this->_header[i]);
+        this->_header.erase(pos + 4);
+        if (this->checkCRLForChunk(lastChunk) != std::string::npos)
+        {
+            this->parseChunked(this->_body);
+            this->_responseStatus = responseGo;
+        }
+    }
+}
+
 void    appendClient::recvBody(std::string req)
 {
     this->setBody(req);
@@ -181,7 +199,7 @@ void    appendClient::recvBody(std::string req)
     }
     else if (this->_bodyType == chunked)
     {
-        if (this->checkCRLForChunk(lastChunk))
+        if (this->checkCRLForChunk(lastChunk) != std::string::npos)
         {
             this->parseChunked(this->_body);
             this->_responseStatus = responseGo;
@@ -233,7 +251,7 @@ void    appendClient::getContentLength()
             // Check if the length string contains only digits
             for (std::string::size_type i = 0; i < lengthStr.length(); ++i) {
                 if (!std::isdigit(lengthStr[i])) {
-                    // throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
+                    throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
                 }
             }
             this->_contentLength = std::atol(lengthStr.c_str());
@@ -271,7 +289,9 @@ void    appendClient::recvHead()
                     if (this->_contentLength > 0)
                         this->getBodyRest();
                 }
-                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
+                if (this->_bodyType == chunked)
+                    this->getBodyRestChunk();
+                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk) != std::string::npos)
                     this->parseChunked(this->_body);
             }
     }
@@ -290,6 +310,9 @@ void    appendClient::recvHead()
 
 void    appendClient::parseChunked(std::string& chunkedData)
 {
+
+    std::cout << "===========> Chunked Body: <===========\n" << std::endl;
+    std::cout << chunkedData << std::endl;
      int chunkflag = 0;
     std::istringstream iss(chunkedData);
     std::string res;
@@ -336,6 +359,7 @@ void    appendClient::parseChunked(std::string& chunkedData)
         }
     }
     this->_body.clear();
-    this->_body.append(res);
+    for (size_t i = 0 ; i < res.size(); i++)
+        this->_body.push_back(res[i]);
     this->_checkBody = endOfBody;
 }

@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/15 18:32:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/18 12:58:29 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
 
     _tokens = utility::split(spl_request[0], CRLF);
     for (size_t i = 1; i < spl_request.size(); i++)
+    {
         for (size_t j = 0; j < spl_request[i].size(); j++)
             _request.body.push_back(spl_request[i][j]);
+        _request.body.append(CRLF CRLF);
+    }
     // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
     // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
     //     std::cout << "=>" << *it << std::endl;    

@@ -20,6 +20,15 @@
 #include "pollingServ.hpp"
 
 
+int toDec(std::string hex)
+{
+    int nb;
+    std::istringstream size(hex);
+    size >> std::hex >> nb;
+
+    return (nb);
+}
+
 appendClient::appendClient(): _contentLength(-1), _checkHead(-1), _checkBody(-1), _bodyType(-1), _responseStatus(-1),  _clientFd(-69)
 {
     
@@ -288,62 +297,34 @@ void    appendClient::recvHead()
     }
 }
 
-void    appendClient::parseChunked(std::string& chunkedData)
+void    appendClient::parseChunked(std::string &body)
 {
-     int chunkflag = 0;
-    std::istringstream iss(chunkedData);
-    std::string res;
+    // std::cout << "===========> Chunked Body: <===========\n" << std::endl;
+    // std::cout << body << std::endl;
 
-    std::string line;
-    std::size_t chunkSize;
-    std::string chunk = "";
+    std::string size;
+    std::string result;
+    size_t cSize;
 
-    // Read and process each chunk
-    while (std::getline(iss, line)) {
-        if (chunkflag == 0)
-        {
-        std::istringstream chunkSizeStream(line);
-        if (!(chunkSizeStream >> std::hex >> chunkSize)) {
-            std::cerr << "Error: Invalid chunk size." << std::endl;
-            break ;
-        }
-        else
-        {
-            chunkflag = 1;
-            continue;
-        }
-        }
-
-        if (chunkSize == 0) {
-            break;  // Reached the end of the chunked data
-        }
-
-        if (chunkflag == 1)
-        {   
-            std::stringstream chunkStream(line);
-            chunkStream >> chunk;
-            if (chunk.size() != chunkSize)
-            {
-                std::cout << "Error size doesn't match" << std::endl;
-                break;
-            }
-            else
-            {
-                res.append(chunk);
-                chunk = "";
-            }
-            chunkflag = 0;
-        }
+    while(1)
+    {
+        size_t pos = body.find("\r\n");
+        if (pos == std::string::npos)
+            break;
+        
+        size = body.substr(0,pos);
+        cSize = toDec(size);
+        if (cSize == 0)
+            break;
+        body = body.substr(pos + 2);
+        result += body.substr(0, cSize);
+        body = body.substr(cSize);
+        body = body.substr(2);
     }
     this->_body.clear();
-    this->_body.append(res);
+    for (size_t i = 0 ; i < result.size(); i++)
+        this->_body.push_back(result[i]);
     this->_checkBody = endOfBody;
+
+    std::cout << "Chunked body after parsing: " << std::endl << this->_body << std::endl;;
 }
-
-
-
-// Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575
-
-// -----------------------------974767299852498929531610575
-
-//  = lseek(fd, end)

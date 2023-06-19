@@ -8,8 +8,14 @@
 </head>
 <body>
     <main>
-        <h1>python post</h1>
         <p>
+            <h1>python get</h1>
+            <form action = "../cgi_files/hello.py" method = "GET">
+                First Name: <input type = "text" name = "first_name">  <br />
+                Last Name: <input type = "text" name = "last_name" />
+                <input type = "submit" value = "Submit" />
+            </form>     
+            <h1>python post</h1>
             <form action = "../cgi_files/hello.py" method = "POST">
                 First Name: <input type = "text" name = "first_name">  <br />
                 Last Name: <input type = "text" name = "last_name" />

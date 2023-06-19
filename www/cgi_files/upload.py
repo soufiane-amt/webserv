@@ -7,10 +7,6 @@ import os
 
 form = cgi.FieldStorage()
 
-for key in form.keys():
-    value = form.getvalue(key)
-    print(f"Key: {key}, Value: {value}")
-
 if 'file' in form:
     # Get the uploaded file
     file_item = form['file']

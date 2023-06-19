@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/16 21:14:26 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/19 19:15:25 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,20 +363,19 @@ void        responsePreparation::set_env_variables_for_cgi()
     
     try
     {
-        setenv("CONTENT-LENGTH", _request.header.at("Content-Length").c_str(), 1);
-        setenv("CONTENT-TYPE", _request.header.at("Content-Type").c_str(), 1);
-        setenv("UPLOAD_DIR",  parser.get_server_directives(id, "upload").c_str(),1);
+        setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
+        setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);
+        setenv("UPLOAD_DIR", "./www/upload/",1);
         /* code */
     }
     catch(const std::exception& e)
     {
-        setenv("CONTENT-LENGTH", "", 1);
-        setenv("CONTENT-TYPE", "", 1);
+        setenv("CONTENT_LENGTH", "", 1);
+        setenv("CONTENT_TYPE", "", 1);
         setenv("UPLOAD_DIR", "", 1);
         
     }
-    
-    
+
     std::string script_name = _request.header.at("URI");
     setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
     setenv("SERVER_PORT", port.c_str(), 1);

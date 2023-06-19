@@ -180,6 +180,24 @@ void    appendClient::getBodyRest()
     }
 }
 
+void    appendClient::getBodyRestChunk()
+{
+    //check pos of CRLF and get the beginning of the body
+    std::string::size_type pos = this->_header.find(myCRLF);
+    if (pos != std::string::npos)
+    {
+        //extract body
+        for (std::string::size_type i = pos + 4; i < this->_header.size(); i++)
+            this->_body.push_back(this->_header[i]);
+        this->_header.erase(pos + 4);
+        if (this->checkCRLForChunk(lastChunk) != std::string::npos)
+        {
+            this->parseChunked(this->_body);
+            this->_responseStatus = responseGo;
+        }
+    }
+}
+
 void    appendClient::recvBody(std::string req)
 {
     this->setBody(req);
@@ -190,7 +208,7 @@ void    appendClient::recvBody(std::string req)
     }
     else if (this->_bodyType == chunked)
     {
-        if (this->checkCRLForChunk(lastChunk))
+        if (this->checkCRLForChunk(lastChunk) != std::string::npos)
         {
             this->parseChunked(this->_body);
             this->_responseStatus = responseGo;
@@ -214,6 +232,8 @@ void    appendClient::getBodyType()
     } else if (transfer_chunked != std::string::npos){
         this->_bodyType = chunked;
     }
+    else
+        this->_bodyType = nobody;
 }
 
 void    appendClient::setHTTPRequest()
@@ -240,14 +260,12 @@ void    appendClient::getContentLength()
             // Check if the length string contains only digits
             for (std::string::size_type i = 0; i < lengthStr.length(); ++i) {
                 if (!std::isdigit(lengthStr[i])) {
-                    // throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
+                    throw std::runtime_error("Invalid Content-Length: Non-digit characters detected.");
                 }
             }
             this->_contentLength = std::atol(lengthStr.c_str());
         }
     }
-    else
-        this->_checkBody = nobody;
 }
 
 void    appendClient::recvHead()
@@ -274,17 +292,19 @@ void    appendClient::recvHead()
                 this->setHeadStatus(endOfHeader);
                 if (this->getHeadStatus() == endOfHeader)
                     this->getBodyType();
-                this->getContentLength();
                 if (this->_bodyType == contentLength)
                 {
+                    this->getContentLength();
                     if (this->_contentLength > 0)
                         this->getBodyRest();
                 }
-                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk))
+                if (this->_bodyType == chunked)
+                    this->getBodyRestChunk();
+                if (this->_bodyType == chunked && this->checkCRLForChunk(lastChunk) != std::string::npos)
                     this->parseChunked(this->_body);
             }
     }
-    if (this->getHeadStatus() == endOfHeader && this->getBodyStatus() == nobody)
+    if (this->getHeadStatus() == endOfHeader && this->_bodyType == nobody)
     {
         this->_header.append(myCRLF);
         this->_httpRequest = this->_header;
@@ -299,8 +319,8 @@ void    appendClient::recvHead()
 
 void    appendClient::parseChunked(std::string &body)
 {
-    // std::cout << "===========> Chunked Body: <===========\n" << std::endl;
-    // std::cout << body << std::endl;
+    std::cout << "===========> Chunked Body: <===========\n" << std::endl;
+    std::cout << body << std::endl;
 
     std::string size;
     std::string result;
@@ -326,5 +346,5 @@ void    appendClient::parseChunked(std::string &body)
         this->_body.push_back(result[i]);
     this->_checkBody = endOfBody;
 
-    std::cout << "Chunked body after parsing: " << std::endl << this->_body << std::endl;;
+    std::cout << "Chunked body after parsing: " << std::endl << result << std::endl;;
 }

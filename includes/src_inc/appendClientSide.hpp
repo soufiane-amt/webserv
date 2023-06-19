@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/16 20:30:01 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/17 18:47:28 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ class appendClient
     
         void    getBodyType();
         void    getBodyRest();
+        void    getBodyRestChunk();
         int     getResponseStat();
         void    setResponseStat(int stat);
         void    setHTTPRequest();

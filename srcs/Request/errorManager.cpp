@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/20 18:01:55 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/20 18:45:36 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void     errorManager::isLocationRedirected(const std::string& targetLocat,locat
 
 std::string errorManager::isURIValid(const std::string& URI, location_t server_location) {
     
-    std::cout << URI[0] <<"--------\n";
     if (URI[0] != '/')
         throw StatusCode(BAD_REQUEST);
     if (URI.size() > MAX_URI_SIZE)
@@ -161,7 +160,6 @@ bool     errorManager::isRequestValid(http_message_t &request, int targeted_serv
     location_t     server_location = parser.get_server_locations(targeted_serv);
     header_t              &header         = request.header;
 
-    std::cout << "|" << (header.find("URI")->second)[0] << "|" << std::endl;
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);
 
     request_has_valid_headers(header, !request.body.empty());

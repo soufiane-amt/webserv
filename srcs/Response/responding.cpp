@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/20 18:12:13 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/20 19:22:12 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,7 +360,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::string protocol = "HTTP1.1";
     std::string port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]);
     
-    
+    setenv("REDIRECT_STATUS","200",1);
     setenv("SERVER_NAME", parser.get_server_directives(id, "server_name").c_str(), 1);
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);

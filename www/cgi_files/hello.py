@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python3
 # Import modules for CGI handling
 import cgi
 # Create instance of FieldStorage

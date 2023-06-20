@@ -1,7 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3
 
+import cgi
 import hashlib, datetime, os
 from http import cookies
+
+form = cgi.FieldStorage()
+
+first_name = form.getvalue('first_name')
+last_name  = form.getvalue('last_name')
+
 
 expires = datetime.datetime.now() + datetime.timedelta(days=365)
 
@@ -22,10 +29,11 @@ if not client_cookie.get('sid'):
     cookie['sid']['path'] = '/'
     cookie['sid']['HttpOnly'] = True;
 
-print(cookie)
+# print(cookie)
 print("HTTP/1.1 200 OK\r")
 print("Content-type: text/html\r\n\r")
 print('<html><body>')
+print ("<h1>Session of  %s %s</h1>" % (first_name, last_name))
 if client_cookie.get('sid'):
     print('<p>Welcome back!</p>')
 else:

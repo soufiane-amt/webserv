@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/20 12:54:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 19:37:33 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int CGI::hasPythonOrPhpExtension(const std::string& filename) {
 
     if (extension == ".py")
         return (1);
-    else if (extension == "php")
+    else if (extension == ".pl")
         return (2);
     return (-1);
 }
@@ -64,7 +64,11 @@ void    CGI::setCGIpath(std::string filename)
         this->_cgi.push_back(path);
     } 
     else if (hasPythonOrPhpExtension(filename) == 2) {
-        std::cout << "The filename have a .php extension." << std::endl;
+        std::string exec = "/usr/bin/perl";
+        std::string path = "./www/cgi_files" + filename;
+    
+        this->_cgi.push_back(exec);
+        this->_cgi.push_back(path);
     }
     // else
         //error case    
@@ -91,7 +95,7 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
         //set http return status to 502
         return ;
     }
-    
+
     if (pid == 0)
     {
         dup2(fd[1], 1);
@@ -119,12 +123,12 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 
         //convert cgi strings to char **
         char    **cgiExec = convert_vector_to_char_array(this->_cgi);
-        
+
         if (execve(cgiExec[0], cgiExec, environ) < 0)
             exit(EXIT_FAILURE);
             
         //free allocated memory
-        freeConvertedArray(cgiExec,this->_cgi.size());
+        // freeConvertedArray(cgiExec,this->_cgi.size());
     }
     waitpid(pid, &check, 0);
     //checks if the child process was terminated by a signal
@@ -139,7 +143,7 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 
 	char buffer[1];
 	while (read(0, buffer, 1) > 0)
-	   cgiResp.append(buffer, 1);
+        cgiResp.push_back(buffer[0]);
     
 	dup2(tmp, 0);
 	close(tmp);

@@ -6,19 +6,13 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/18 20:20:27 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:54:16 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgiProgram.hpp"
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <vector>
 
 	// HTTP_COOKIE="//get the cookie from the header 
-
-    //cgiExec = usr/bin/executable + path
 
 char** convert_vector_to_char_array(std::vector<std::string>& vec) 
 {
@@ -39,16 +33,6 @@ void freeConvertedArray(char** array, size_t size) {
     delete[] array;
 }
 
-
-void    handleSignalTimeout(int signal)
-{
-    if (signal == SIGALRM)
-    {
-        std::cout << "Timeout occured!" << std::endl;
-        exit (EXIT_FAILURE);
-    }
-}
-
 CGI::CGI()
 {
 
@@ -59,7 +43,7 @@ CGI::~CGI()
     
 }
 
-int hasPythonOrPhpExtension(const std::string& filename) {
+int CGI::hasPythonOrPhpExtension(const std::string& filename) {
     std::string extension = filename.substr(filename.length() - 3);
     std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
@@ -89,10 +73,6 @@ void    CGI::setCGIpath(std::string filename)
 
 void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 {
-
-    // std::cout << "==========> Body inside CGI : <==========" << std::endl;
-    // std::cout << body << std::endl;
-    
     extern char **environ;
     int check = 0;
     int fd[2];
@@ -117,25 +97,21 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
         dup2(fd[1], 1);
 		close(fd[1]);
 
+        std::FILE* file;
+        const char* name = "/Users/fech-cha/Desktop/webserv/test.txt"; // Specify the filename here
 
-        //create a file to store the body of the http request
-		std::FILE *tempStore;
-		tempStore = tmpfile();
-		
-    	if (tempStore) 
+        file = std::fopen(name, "w+"); // Open the file in write/read mode
+
+        if (file) 
         {
-            //get the body of the http request
-            //null terminate the string in char *
-        	std::fprintf(tempStore, "%s", body.c_str());
-        	std::rewind(tempStore);
-    	}
-        //make the body as input 
-		dup2(fileno(tempStore), 0);
-		std::fclose(tempStore);
-
-        //alarm 
-        signal(SIGALRM, handleSignalTimeout);
-        alarm(5);
+            // Write each character to the file
+            for (size_t i = 0; i < body.size() ; ++i) {
+                std::fputc(body[i], file);
+            }
+            std::rewind(file);
+        }
+        dup2(fileno(file), 0);
+        std::fclose(file); // Close the file after writing
         
         char *str = getenv("SCRIPT_FILENAME");
         std::string filename(str);
@@ -144,9 +120,11 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
         //convert cgi strings to char **
         char    **cgiExec = convert_vector_to_char_array(this->_cgi);
         
-        // char *const args[] = {"python3", "cgi_exemple.py", NULL};
         if (execve(cgiExec[0], cgiExec, environ) < 0)
             exit(EXIT_FAILURE);
+            
+        //free allocated memory
+        freeConvertedArray(cgiExec,this->_cgi.size());
     }
     waitpid(pid, &check, 0);
     //checks if the child process was terminated by a signal
@@ -163,19 +141,6 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 	while (read(0, buffer, 1) > 0)
 	   cgiResp.append(buffer, 1);
     
-
 	dup2(tmp, 0);
 	close(tmp);
-    // std::cout << "CGI Resp: " << std::endl << cgiResp << std::endl;
-
-    //free allocated memory
-    // int getSize;
-	// freeConvertedArray(cgiEnv,getSize);
-	// freeConvertedArray(cgiExec,getSize);
-
-    //parse the cgiResp, and generate HTTP Response (HEADER + BODY)
-    
-    // std::cout << "Printing Response:" <<std::endl;
-    // std::cout << cgiResp << std::endl;
-    
 }

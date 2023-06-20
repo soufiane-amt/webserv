@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/15 17:30:16 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/20 12:50:16 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGIPROGRAM_HPP
 # define CGIPROGRAM_HPP
 
-#include <vector>
-#include <string>
-#include <iostream>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <cstdio>
 
 class CGI
 {
@@ -27,6 +30,7 @@ class CGI
         CGI();
         ~CGI();
         void    handleCGI(std::string &body, std::string &resp);
+        int     hasPythonOrPhpExtension(const std::string& filename);
         void    setCGIpath(std::string filename);
 };
 

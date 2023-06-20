@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/16 20:39:07 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:26:15 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,14 @@ void    polling::handlePoll()
         
         pollfd& pfd = this->_pollfds[index];
         
+        //client hang up
+        if (pfd.revents & POLLHUP)
+        {
+            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd, &found);
+            polling::closeConnections(checkSend, pfd.fd, index);
+        }
         //check if someone ready to read/connect
-        if (pfd.revents & POLLIN)
+        else if (pfd.revents & POLLIN)
         {
             //handle new connections 
             if (pfd.fd == this->_sockets[index] && index < this->_sockets.size())
@@ -180,7 +186,7 @@ void    polling::handlePoll()
                 //client Fd executed the recv and now ready to send
                 if (checkRecv->getResponseStat() == responseGo)
                 {
-                    std::cout << "Printing the request:" << std::endl;
+                    // std::cout << "Printing the request:" << std::endl;
                     std::cout << checkRecv->getHTTPRequest() << std::endl;
                     checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest(), found));
                     pfd.events = POLLOUT;
@@ -194,12 +200,6 @@ void    polling::handlePoll()
             checkSend->sendReq(pfd.fd);
             if (checkSend->getResponseStat() == closeConnect)
                 polling::closeConnections(checkSend,pfd.fd, index);
-        }
-        //client hang up
-        if (pfd.revents & POLLHUP)
-        {
-            std::vector<appendClient>::iterator checkSend = polling::findClient(this->_servers, pfd.fd, &found);
-            polling::closeConnections(checkSend, pfd.fd, index);
         }
     }
 }

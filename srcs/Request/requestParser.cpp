@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   requestParser.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/18 13:12:35 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/20 17:31:47 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one of the _tokens lines has a height of two please declare it as an error
 {
+    std::cout << "Inside parser:" << clientRequestMsg << std::endl;
     std::vector<std::string>spl_request;
     if (clientRequestMsg.find(CRLF CRLF) != std::string::npos)
         spl_request = utility::split(clientRequestMsg, CRLF CRLF);

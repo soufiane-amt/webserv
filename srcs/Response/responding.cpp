@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/19 19:15:25 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:12:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,11 +286,15 @@ std::string responsePreparation::get_mime_type(const std::string& filename) {
 
 void responsePreparation::_init(int targeted_serv)
 {
+    
     id = targeted_serv;
-    server_locations = parser.get_server_locations(targeted_serv);
-    _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                        utility::search_directive("autoindex", server_locations[_request.targeted_Location]) == "on");
-    _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location]);
+    if (!_statusCode.is_error_status())
+    {
+        server_locations = parser.get_server_locations(targeted_serv);
+        _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
+                            utility::search_directive("autoindex", server_locations[_request.targeted_Location]) == "on");
+        _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location]);
+    }
 }
 
 void responsePreparation::prepare_eTag()

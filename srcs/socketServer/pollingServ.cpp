@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/20 17:26:15 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:06:05 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ std::vector<char>    request_response(std::string msg, int targeted_serv)
     catch(const StatusCode& e)
     {
         responsePreparation response(_request,targeted_serv, e);
+
+        std::cout << response.get_response().data()<< std::endl;
         return response.get_response();
     }
     return std::vector<char>();

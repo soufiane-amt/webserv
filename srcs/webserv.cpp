@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/16 20:38:33 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:44:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	ft_parsing(int ac, char *av)
 	}
 	else
 	{
-		std::cout << "there is no config file" << std::endl;
-		return (1);
+		std::cout << "Invalid config file" << std::endl;
+		return (-1);
 	}
 	try
 	{

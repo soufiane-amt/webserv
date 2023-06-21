@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 15:50:35 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/21 15:53:20 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
     
-    try
+    try//All these variables require the action from post 
     {
         setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
         setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);

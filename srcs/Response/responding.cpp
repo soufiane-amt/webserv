@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 21:22:46 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 22:37:56 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,7 +386,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     try{setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);}
     catch(const std::out_of_range& e){}
     
-    try{setenv("HTTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);}
+    try{setenv("HTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);}
     catch(const std::out_of_range& e){}
     
     std::string script_name = _request.header.at("URI");

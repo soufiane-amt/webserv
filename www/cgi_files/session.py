@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 
+import sys
 import cgi
 import hashlib, datetime, os
 from http import cookies
@@ -23,15 +24,17 @@ if string_cookie:
 if not client_cookie.get('sid'):
     # The sid will be a hash of the server time
     sid = hashlib.sha256(repr(datetime.datetime.now()).encode('utf-8')).hexdigest()
+    
     # Set the cookie with the session ID and expiration date
     cookie['sid'] = sid
     cookie['sid']['expires'] = expires.strftime("%a, %d-%b-%Y %H:%M:%S PST")
     cookie['sid']['path'] = '/'
     cookie['sid']['HttpOnly'] = True;
 
-# print(cookie)
 print("HTTP/1.1 200 OK\r")
-print("Content-type: text/html\r\n\r")
+print("Content-type: text/html")
+print(cookie)
+print()
 print('<html><body>')
 print ("<h1>Session of  %s %s</h1>" % (first_name, last_name))
 if client_cookie.get('sid'):

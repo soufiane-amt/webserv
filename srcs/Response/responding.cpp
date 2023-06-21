@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 15:53:20 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/21 17:19:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,6 +359,21 @@ void        responsePreparation::change_status_line(const char *status_code)
     addToEnvVector(this->_env, "SCRIPT_FILENAME", getCGIScriptName());
 */
 
+void        initialize_variable_2_empty()
+{
+    setenv("SERVER_NAME", "", 1);
+    setenv("REQUEST_METHOD", "", 1);
+    setenv("QUERY_STRING", "", 1);
+    setenv("PATH_INFO", "", 1);
+    setenv("UPLOAD_DIR", "", 1);
+    setenv("CONTENT_TYPE", "", 1);
+    setenv("CONTENT_LENGTH", "", 1);
+    setenv("SCRIPT_FILENAME", "", 1);
+    setenv("SERVER_PORT", "", 1);
+    setenv("SERVER_SOFTWARE", "", 1);
+    setenv("GATEWAY_INTERFACE", "", 1);
+    setenv("SERVER_PROTOCOL", "", 1);
+}
 void        responsePreparation::set_env_variables_for_cgi()
 {
     std::string software = "webserv";
@@ -366,41 +381,30 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::string protocol = "HTTP1.1";
     std::string port  = utility::search_directive("listen", parser.get_server_locations(id)[_request.targeted_Location]);
     
+    initialize_variable_2_empty () ;
     setenv("REDIRECT_STATUS","200",1);
     setenv("SERVER_NAME", parser.get_server_directives(id, "server_name").c_str(), 1);
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
     
-    try//All these variables require the action from post 
-    {
-        setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
-        setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);
-        setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
-        setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);
-    }
-    catch(const std::exception& e)
-    {
-        setenv("CONTENT_LENGTH", "", 1);
-        setenv("CONTENT_TYPE", "", 1);
-        setenv("UPLOAD_DIR", "", 1);
-        
-    }
-
+    setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);
+    setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
+    
+    try{setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);}
+    catch(const std::out_of_range& e){}
+    
+    try{setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);}
+    catch(const std::out_of_range& e){}
+    
+    
     std::string script_name = _request.header.at("URI");
     setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
     setenv("SERVER_PORT", port.c_str(), 1);
     setenv("SERVER_SOFTWARE", software.c_str(), 1);
     setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
-    // std::cout << parser.get_server_directives(id, "upload").c_str() <<"{{{{{{{{{{}}}"<< std::endl;
-    //now I will print them all
 
-    // std::cout << "REQUEST_METHOD: " << getenv("REQUEST_METHOD") << std::endl;
-    // std::cout << "QUERY_STRING: " << getenv("QUERY_STRING") << std::endl;
-    // std::cout << "SCRIPT_FILENAME: " << getenv("SCRIPT_FILENAME") << std::endl;
-    // std::cout << "SERVER_PORT: " << getenv("SERVER_PORT") << std::endl;
     //set cookies
-    //DOCUMENT_ROOT
 }
 
 

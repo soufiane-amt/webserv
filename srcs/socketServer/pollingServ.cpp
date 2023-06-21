@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pollingServ.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 01:05:08 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 16:06:04 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,8 @@ void    polling::handlePoll()
                 //client Fd executed the recv and now ready to send
                 if (checkRecv->getResponseStat() == responseGo)
                 {
-                    // std::cout << "Printing the request:" << std::endl;
-                    // std::cout << checkRecv->getHTTPRequest() << std::endl;
+                    std::cout << "Printing the request:" << std::endl;
+                    std::cout << checkRecv->getHTTPRequest() << std::endl;
                     checkRecv->setHTTPResponse(request_response(checkRecv->getHTTPRequest(), found));
                     pfd.events = POLLOUT;
                 }

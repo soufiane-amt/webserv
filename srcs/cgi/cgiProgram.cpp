@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 15:44:07 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/21 16:39:08 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int CGI::hasPythonOrPhpExtension(const std::string& filename) {
 void    CGI::setCGIpath(std::string filename)
 {   
     char *info = getenv("PATH_INFO");
+    std::cerr << "info: " << info <<std::endl;
 
     if (hasPythonOrPhpExtension(filename) == 1) {
         std::string exec = "/usr/local/bin/python3";
@@ -86,7 +87,7 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     int check = 0;
     int fd[2];
     std::cout << "=> CGI" << std::endl;
-    // std::cout << getenv("PATH_INFO") << std::endl;
+    std::cout << "=> body: " << std::endl << body << std::endl;
     
     //execution
     int tmp = dup(0);
@@ -122,13 +123,19 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
         
         char *str = getenv("SCRIPT_FILENAME");
         std::string filename(str);
+        std::cerr << "filename: " << filename << std::endl;
         this->setCGIpath(filename);
-
+        
+        for (size_t i = 0; i < this->_cgi.size(); ++i)
+            std::cerr << "cgi[" << i << "]: " << this->_cgi[i] << std::endl;
         //convert cgi strings to char **
         char    **cgiExec = convert_vector_to_char_array(this->_cgi);
 
         if (execve(cgiExec[0], cgiExec, environ) < 0)
+        {
+            std::cerr << "execve failed" << std::endl;
             exit(EXIT_FAILURE);
+        }
             
         //free allocated memory
         freeConvertedArray(cgiExec,this->_cgi.size());
@@ -137,7 +144,10 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     
     //checks if the child process was terminated by a signal
     if (WIFSIGNALED(check) || check != 0)
+    {
+        std::cerr << "child process was terminated by a signal" << std::endl;
         return (-1);
+    }
     dup2(fd[0], 0);
 	close(fd[0]);
 	close(fd[1]);

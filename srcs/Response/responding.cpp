@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 15:12:12 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/21 15:50:35 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,8 +376,7 @@ void        responsePreparation::set_env_variables_for_cgi()
         setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
         setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);
         setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
-        setenv("PATH_INFO", utility::search_directive("root", parser.get_server_locations(id)[" cgi_files"]).c_str(),1);
-        /* code */
+        setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);
     }
     catch(const std::exception& e)
     {

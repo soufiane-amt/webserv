@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 18:05:15 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/21 20:05:53 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,15 +388,15 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
     
-    setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);
-    setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
     
-    try{setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);}
+    try{
+        setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);
+        setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
+        setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);
+        setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
+        setenv("HTTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);
+    }
     catch(const std::out_of_range& e){}
-    
-    try{setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);}
-    catch(const std::out_of_range& e){}
-    
     
     std::string script_name = _request.header.at("URI");
     setenv("SCRIPT_FILENAME", script_name.substr(script_name.rfind('/')).c_str(), 1);
@@ -405,13 +405,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
-    
-    try{setenv("HTTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);}
-    catch(const std::out_of_range& e){}
-    
-
-    //set cookies
-}
+    }
 
 
 

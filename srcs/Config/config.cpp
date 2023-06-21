@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/21 15:49:09 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:43:44 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,9 +258,14 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	{
 		if ((it - 1)->value == "cgi" && i != 1)
 			throw Config::Error_config_file();
+		if ((it - 1)->value == "upload")
+		{
+			if (it->value.back() != '/')
+				it->value += '/';
+		}
 		if ((it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
-		if (it->value.back() == '/' && it->value.size() > 1)
+		if (it->value.back() == '/' && it->value.size() > 1 && (it - 1)->value != "upload")
 			it->value.pop_back();
 		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();

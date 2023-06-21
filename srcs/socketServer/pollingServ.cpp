@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 00:00:22 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 01:05:08 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void    polling::handleTimeout()
 {
     int found = 0;
 
-    std::cout << "Checking Timeout !" << std::endl;
+    // std::cout << "Checking Timeout !" << std::endl;
     for (size_t i = 0; i < this->_pollfds.size(); i++)
     {
         pollfd& pfd = this->_pollfds[i];

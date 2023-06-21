@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/20 12:50:16 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:10:25 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <vector>
 #include <fstream>
 #include <cstdio>
+#include <cctype>
 
 class CGI
 {

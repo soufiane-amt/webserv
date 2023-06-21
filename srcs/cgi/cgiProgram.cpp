@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/20 19:37:33 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:28:13 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,16 @@ CGI::~CGI()
 
 int CGI::hasPythonOrPhpExtension(const std::string& filename) {
     std::string extension = filename.substr(filename.length() - 3);
-    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+    for (std::string::iterator it = extension.begin(); it != extension.end(); ++it) {
+        *it = std::tolower(static_cast<unsigned char>(*it));
+    }
 
     if (extension == ".py")
-        return (1);
+        return 1;
     else if (extension == ".pl")
-        return (2);
-    return (-1);
+        return 2;
+    return -1;
 }
 
 void    CGI::setCGIpath(std::string filename)
@@ -70,8 +73,6 @@ void    CGI::setCGIpath(std::string filename)
         this->_cgi.push_back(exec);
         this->_cgi.push_back(path);
     }
-    // else
-        //error case    
 }
 
 
@@ -102,9 +103,10 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
 		close(fd[1]);
 
         std::FILE* file;
-        const char* name = "/Users/fech-cha/Desktop/webserv/test.txt"; // Specify the filename here
-
-        file = std::fopen(name, "w+"); // Open the file in write/read mode
+        const char* name = "/tmp/.body";
+        
+        // Open the file in write/read mode, create if it doesn't exist
+        file = std::fopen(name, "w+"); 
 
         if (file) 
         {
@@ -115,7 +117,8 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
             std::rewind(file);
         }
         dup2(fileno(file), 0);
-        std::fclose(file); // Close the file after writing
+        // Close the file after writing
+        std::fclose(file); 
         
         char *str = getenv("SCRIPT_FILENAME");
         std::string filename(str);
@@ -128,9 +131,10 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
             exit(EXIT_FAILURE);
             
         //free allocated memory
-        // freeConvertedArray(cgiExec,this->_cgi.size());
+        freeConvertedArray(cgiExec,this->_cgi.size());
     }
     waitpid(pid, &check, 0);
+    
     //checks if the child process was terminated by a signal
     if (WIFSIGNALED(check) || check != 0)
     {

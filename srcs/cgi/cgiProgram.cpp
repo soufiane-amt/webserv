@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 12:41:27 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:49:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,19 @@ int CGI::hasPythonOrPhpExtension(const std::string& filename) {
 
 void    CGI::setCGIpath(std::string filename)
 {   
+    char *info = getenv("PATH_INFO");
+
     if (hasPythonOrPhpExtension(filename) == 1) {
         std::string exec = "/usr/local/bin/python3";
-        std::string path = "./www/cgi_files" + filename;
-    
+        std::string path = std::string(info) + filename;
+
+        std::cerr << "path: " << path << std::endl;
         this->_cgi.push_back(exec);
         this->_cgi.push_back(path);
     } 
     else if (hasPythonOrPhpExtension(filename) == 2) {
         std::string exec = "/usr/bin/perl";
-        std::string path = "./www/cgi_files" + filename;
+        std::string path = std::string(info) + filename;
     
         this->_cgi.push_back(exec);
         this->_cgi.push_back(path);
@@ -78,9 +81,12 @@ void    CGI::setCGIpath(std::string filename)
 
 int    CGI::handleCGI(std::string &body, std::string &cgiResp)
 {
+
     extern char **environ;
     int check = 0;
     int fd[2];
+    std::cout << "=> CGI" << std::endl;
+    std::cout << getenv("PATH_INFO") << std::endl;
     
     //execution
     int tmp = dup(0);

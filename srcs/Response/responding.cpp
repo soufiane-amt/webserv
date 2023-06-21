@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/20 19:22:12 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:12:12 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,13 @@ void    responsePreparation::execute_cgi()
     std::string resp;
 
     std::string body = _request.body;
-    cgi.handleCGI(_request.body,resp);
+    if (cgi.handleCGI(_request.body,resp) == -1)
+    {
+        _statusCode = StatusCode(BAD_GATEWAY);
+        prepare_error_response();
+        return;
+    }
+        
     _response.insert(_response.end(), resp.begin(), resp.end());
 }
 
@@ -358,7 +364,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::string software = "webserv";
     std::string gateway = "CGI";
     std::string protocol = "HTTP1.1";
-    std::string port  = utility::search_directive("listen", parser.get_server_locations(0)[_request.targeted_Location]);
+    std::string port  = utility::search_directive("listen", parser.get_server_locations(id)[_request.targeted_Location]);
     
     setenv("REDIRECT_STATUS","200",1);
     setenv("SERVER_NAME", parser.get_server_directives(id, "server_name").c_str(), 1);
@@ -369,7 +375,8 @@ void        responsePreparation::set_env_variables_for_cgi()
     {
         setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);
         setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);
-        setenv("UPLOAD_DIR", "./www/upload/",1);
+        setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);
+        setenv("PATH_INFO", utility::search_directive("root", parser.get_server_locations(id)[" cgi_files"]).c_str(),1);
         /* code */
     }
     catch(const std::exception& e)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 13:49:17 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/21 15:44:07 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     int check = 0;
     int fd[2];
     std::cout << "=> CGI" << std::endl;
-    std::cout << getenv("PATH_INFO") << std::endl;
+    // std::cout << getenv("PATH_INFO") << std::endl;
     
     //execution
     int tmp = dup(0);

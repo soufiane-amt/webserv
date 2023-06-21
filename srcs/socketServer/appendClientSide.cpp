@@ -175,7 +175,7 @@ void    appendClient::getBodyRest()
         for (std::string::size_type i = pos + 4; i < this->_header.size(); i++)
             this->_body.push_back(this->_header[i]);
         this->_header.erase(pos + 4);
-        if (this->_contentLength <= this->_body.size())
+        if ((unsigned long)this->_contentLength <= this->_body.size())
             this->_checkBody = endOfBody;
     }
 }
@@ -203,7 +203,7 @@ void    appendClient::recvBody(std::string req)
     this->fillBody(req);
     if (this->_bodyType == contentLength)
     {
-        if (this->_contentLength <= this->_body.size())
+        if ((unsigned long)this->_contentLength <= this->_body.size())
             this->_checkBody = endOfBody;
     }
     else if (this->_bodyType == chunked)

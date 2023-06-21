@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 20:06:16 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 19:42:37 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 21:24:11 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class appendClient
         int64_t _time;
         
         //checking flags
-        unsigned long        _contentLength;
+        long long        _contentLength;
         int         _checkHead;
         int         _checkBody;
         int         _bodyType;

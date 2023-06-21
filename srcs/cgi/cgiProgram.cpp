@@ -6,13 +6,11 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 19:05:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 00:05:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgiProgram.hpp"
-
-	// HTTP_COOKIE="//get the cookie from the header 
 
 void    handleSignalTimeout(int signal)
 {
@@ -34,7 +32,6 @@ char** convert_vector_to_char_array(std::vector<std::string>& vec)
     return arr;
 }
 
-//avoid memory leaks
 void freeConvertedArray(char** array, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         delete[] array[i];
@@ -94,8 +91,6 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     extern char **environ;
     int check = 0;
     int fd[2];
-    std::cout << "=> CGI" << std::endl;
-    std::cout << "=> body: " << std::endl << body << std::endl;
     
     //execution
     int tmp = dup(0);
@@ -140,10 +135,6 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
         
         //convert cgi strings to char **
         char    **cgiExec = convert_vector_to_char_array(this->_cgi);
-
-        // std::string location(getenv("PATH_INFO"));
-        // if (chdir(location.c_str()) < 0)
-        //     exit(EXIT_FAILURE);
 
         if (execve(cgiExec[0], cgiExec, environ) < 0)
         {

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/21 14:52:14 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:49:09 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,8 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 	}
 	else if ((it - 1)->value == "root" || (it - 1)->value == "upload" || (it - 1)->value == "cgi")
 	{
+		if ((it - 1)->value == "cgi" && i != 1)
+			throw Config::Error_config_file();
 		if ((it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();
 		if (it->value.back() == '/' && it->value.size() > 1)

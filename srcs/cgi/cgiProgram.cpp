@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 12:28:13 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:41:27 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void    CGI::setCGIpath(std::string filename)
 }
 
 
-void    CGI::handleCGI(std::string &body, std::string &cgiResp)
+int    CGI::handleCGI(std::string &body, std::string &cgiResp)
 {
     extern char **environ;
     int check = 0;
@@ -85,17 +85,11 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
     //execution
     int tmp = dup(0);
     if (pipe(fd) < 0)
-    {
-        //set http return status to 502
-        return ;
-    }
+        return (-1);
 
     pid_t pid = fork();
     if (pid < 0)
-    {
-        //set http return status to 502
-        return ;
-    }
+        return (-1);
 
     if (pid == 0)
     {
@@ -137,10 +131,7 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
     
     //checks if the child process was terminated by a signal
     if (WIFSIGNALED(check) || check != 0)
-    {
-        //set http return status to 502
-        return ;
-    }
+        return (-1);
     dup2(fd[0], 0);
 	close(fd[0]);
 	close(fd[1]);
@@ -151,4 +142,5 @@ void    CGI::handleCGI(std::string &body, std::string &cgiResp)
     
 	dup2(tmp, 0);
 	close(tmp);
+    return (1);
 }

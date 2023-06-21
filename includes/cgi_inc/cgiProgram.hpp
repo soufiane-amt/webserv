@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:09:17 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 12:10:25 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:39:15 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class CGI
     public:
         CGI();
         ~CGI();
-        void    handleCGI(std::string &body, std::string &resp);
+        int     handleCGI(std::string &body, std::string &resp);
         int     hasPythonOrPhpExtension(const std::string& filename);
         void    setCGIpath(std::string filename);
 };

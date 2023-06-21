@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/15 19:03:12 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:52:14 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	Config::tokenize(std::vector<std::string> &lines, std::vector<key_val> &tok
 		}
 		else if (*it == "listen" || *it == "server_name" || *it == "max_body_size"
 			|| *it == "return" || *it == "root" || *it == "autoindex" || *it == "allow"
-			|| *it == "index" || *it == "upload" || *it == "path_info")
+			|| *it == "index" || *it == "upload" || *it == "path_info" || *it == "cgi")
 		{
 			kv.key = TOKEN_DIRECTIVE;
 			kv.value = *it;
@@ -254,7 +254,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 		else if (i == 1)
 			directives[(it - 1)->value] = it->value;
 	}
-	else if ((it - 1)->value == "root" || (it - 1)->value == "upload")
+	else if ((it - 1)->value == "root" || (it - 1)->value == "upload" || (it - 1)->value == "cgi")
 	{
 		if ((it + 1)->key != TOKEN_SEMICOLON)
 			throw Config::Error_config_file();

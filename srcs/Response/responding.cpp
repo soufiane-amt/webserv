@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 10:15:59 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 17:14:28 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,10 +377,10 @@ void        responsePreparation::set_env_variables_for_cgi()
     try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);}
     catch(const std::out_of_range& e){}
     
-    try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1)    }
+    try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);}
     catch(const std::out_of_range& e){}
     
-    try{setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1)}
+    try{setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);}
     catch(const std::out_of_range& e){}
     
     try{setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);}

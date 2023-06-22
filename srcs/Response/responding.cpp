@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 10:13:40 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 10:15:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,7 +345,6 @@ void        responsePreparation::change_status_line(const char *status_code)
 }
 
 
-
 void        initialize_variable_2_empty()
 {
     setenv("SERVER_NAME", "", 1);
@@ -375,6 +374,8 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("REQUEST_METHOD", _request.header.at("Method").c_str(), 1);
     setenv("QUERY_STRING", _request.header.at("QUERY_STRING").c_str(), 1);
     
+    try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);}
+    catch(const std::out_of_range& e){}
     
     try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1)    }
     catch(const std::out_of_range& e){}
@@ -398,31 +399,5 @@ void        responsePreparation::set_env_variables_for_cgi()
     setenv("GATEWAY_INTERFACE", gateway.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
     setenv("SERVER_PROTOCOL", protocol.c_str(),1);
+    
     }
-
-
-
-// #include <unistd.h>
-
-
-// bool             responsePreparation::check_if_cgi(std::string file_path)
-// {
-//     static std::string cgi_path = "www/cgi/";
-
-
-//     //check if the path leads to the right cgi script
-
-//     size_t pos = file_path.rfind("/");
-//     // if (cgi_path == )
-//     // if (file_path.find(cgi_path) != std::string::npos)
-//     // {
-//     //     std::string cgi_script = file_path.substr(file_path.find(cgi_path) + cgi_path.size());
-//     //     std::string cgi_script_path = cgi_path + cgi_script;
-//     //     if (access(cgi_script_path.c_str(), F_OK) == -1)
-//     //         change_status_line(NOT_FOUND);
-//     //     else if (access(cgi_script_path.c_str(), X_OK) == -1)
-//     //         change_status_line(FORBIDDEN);
-//     //     return true;
-//     // }
-//     return false;
-// }

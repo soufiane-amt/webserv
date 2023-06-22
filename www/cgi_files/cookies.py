@@ -20,10 +20,10 @@ for key in values:
 
 
 # Output the HTTP message containing the cookie
-print (cookie)
 print("HTTP/1.1 200 OK\r")
-print("Content-type: text/html\r\n\r")
-
+print("Content-type: text/html")
+print(cookie)
+print()
 print ('<html><body>')
 if len(client_cookie) == 0:
     print ('<p>cookie: is not set</p>')

@@ -3,16 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cgiProgram.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 16:39:08 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 00:05:21 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgiProgram.hpp"
 
-	// HTTP_COOKIE="//get the cookie from the header 
+void    handleSignalTimeout(int signal)
+{
+    if (signal == SIGALRM)
+    {
+        std::cout << "Timeout occured!" << std::endl;
+        exit (EXIT_FAILURE);
+    }
+}
 
 char** convert_vector_to_char_array(std::vector<std::string>& vec) 
 {
@@ -25,7 +32,6 @@ char** convert_vector_to_char_array(std::vector<std::string>& vec)
     return arr;
 }
 
-//avoid memory leaks
 void freeConvertedArray(char** array, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         delete[] array[i];
@@ -60,7 +66,6 @@ int CGI::hasPythonOrPhpExtension(const std::string& filename) {
 void    CGI::setCGIpath(std::string filename)
 {   
     char *info = getenv("PATH_INFO");
-    std::cerr << "info: " << info <<std::endl;
 
     if (hasPythonOrPhpExtension(filename) == 1) {
         std::string exec = "/usr/local/bin/python3";
@@ -86,8 +91,6 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     extern char **environ;
     int check = 0;
     int fd[2];
-    std::cout << "=> CGI" << std::endl;
-    std::cout << "=> body: " << std::endl << body << std::endl;
     
     //execution
     int tmp = dup(0);
@@ -119,15 +122,17 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
         }
         dup2(fileno(file), 0);
         // Close the file after writing
-        std::fclose(file); 
-        
+        std::fclose(file);
+
         char *str = getenv("SCRIPT_FILENAME");
         std::string filename(str);
-        std::cerr << "filename: " << filename << std::endl;
         this->setCGIpath(filename);
         
-        for (size_t i = 0; i < this->_cgi.size(); ++i)
-            std::cerr << "cgi[" << i << "]: " << this->_cgi[i] << std::endl;
+        //alarm 
+        if (filename != "/upload.py")        
+            signal(SIGALRM, handleSignalTimeout);
+        alarm(5); 
+        
         //convert cgi strings to char **
         char    **cgiExec = convert_vector_to_char_array(this->_cgi);
 
@@ -144,10 +149,8 @@ int    CGI::handleCGI(std::string &body, std::string &cgiResp)
     
     //checks if the child process was terminated by a signal
     if (WIFSIGNALED(check) || check != 0)
-    {
-        std::cerr << "child process was terminated by a signal" << std::endl;
         return (-1);
-    }
+
     dup2(fd[0], 0);
 	close(fd[0]);
 	close(fd[1]);

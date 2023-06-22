@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 22:37:56 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 10:15:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,10 @@ void        responsePreparation::set_env_variables_for_cgi()
     try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1);}
     catch(const std::out_of_range& e){}
     
-    try{setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1);}
+    try{setenv("PATH_INFO", parser.get_server_directives(id, "cgi").c_str(),1)    }
+    catch(const std::out_of_range& e){}
+    
+    try{setenv("UPLOAD_DIR", parser.get_server_directives(id, "upload").c_str(),1)}
     catch(const std::out_of_range& e){}
     
     try{setenv("CONTENT_TYPE", _request.header.at("Content-Type").c_str(), 1);}
@@ -386,7 +389,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     try{setenv("CONTENT_LENGTH", _request.header.at("Content-Length").c_str(), 1);}
     catch(const std::out_of_range& e){}
     
-    try{setenv("HTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);}
+    try{setenv("HTTTP_COOKIE", _request.header.at("Cookie").c_str(), 1);}
     catch(const std::out_of_range& e){}
     
     std::string script_name = _request.header.at("URI");

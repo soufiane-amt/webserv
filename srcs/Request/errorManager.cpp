@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/21 16:10:57 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 17:31:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
     if (Method == "POST" && !_request_has_meta_data(header))
         throw StatusCode(BAD_REQUEST);
     if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
-        throw StatusCode(BAD_REQUEST);
+        throw StatusCode(SERVICE_UNAVAILABLE);
     if (!_request_is_chunked(header) && Method == "POST" && !requestHasBody)
         throw StatusCode(BAD_REQUEST);
     if (Method == "POST" && !_request_is_chunked(header) && (!__request_has_content_length(header) || !__request_has_content_type(header) ))
         throw StatusCode(BAD_REQUEST);
-    std::cout << "---------"<< std::endl;
     if (Method == "POST" && __request_has_content_length(header) && _request_is_chunked(header) )
         throw StatusCode(BAD_REQUEST);
 }

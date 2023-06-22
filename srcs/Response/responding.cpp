@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 17:24:36 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 22:09:54 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,8 +298,8 @@ void responsePreparation::_init(int targeted_serv)
     {
         server_locations = parser.get_server_locations(targeted_serv);
         _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
-                            utility::search_directive("autoindex", server_locations[_request.targeted_Location]) == "on");
-        _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location]);
+                            utility::search_directive("autoindex", server_locations[_request.targeted_Location], id) == "on");
+        _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location], id);
     }
 }
 
@@ -366,7 +366,7 @@ void        responsePreparation::set_env_variables_for_cgi()
     std::string software = "webserv";
     std::string gateway = "CGI";
     std::string protocol = "HTTP1.1";
-    std::string port  = utility::search_directive("listen", parser.get_server_locations(id)[_request.targeted_Location]);
+    std::string port  = utility::search_directive("listen", parser.get_server_locations(id)[_request.targeted_Location], id);
     
     initialize_variable_2_empty () ;
     setenv("REDIRECT_STATUS","200",1);

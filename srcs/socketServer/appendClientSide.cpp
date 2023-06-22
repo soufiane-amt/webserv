@@ -315,7 +315,10 @@ void    appendClient::recvHead()
                     if (this->_contentLength > 0)
                         this->getBodyRest();
                     else if (this->_contentLength < 0)
+                    {
+                        this->getBodyRest();
                         this->_bodyType = nobody;
+                    }
                 }
                 if (this->_bodyType == chunked)
                     this->getBodyRestChunk();

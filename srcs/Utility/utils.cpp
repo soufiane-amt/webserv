@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/11 18:12:29 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:58:25 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int        utility::check_file_or_directory(const std::string& path)
                             // utility::search_directive :
 /* ************************************************************************** */
 
-std::string     utility::search_directive (const std::string &directive,  directive_t& location_dirts)
+std::string     utility::search_directive (const std::string &directive,  directive_t& location_dirts, int targeted_serv)
 {
     std::string dir_value = "";
     try
@@ -312,7 +312,7 @@ std::string     utility::search_directive (const std::string &directive,  direct
     {
         try
         {
-            dir_value = parser.get_server_directives (0, directive);
+            dir_value = parser.get_server_directives (targeted_serv, directive);
         }
         catch(const std::exception& e)
         {

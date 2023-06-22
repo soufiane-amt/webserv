@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/20 17:44:03 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 22:32:25 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 #include <string.h>
 #include "pollingServ.hpp"
 #include <fcntl.h>
-    
+
+int                            errorManager::targeted_serv = 0;
 //According to RFC "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive. "
 //So we need to convert all the keys to lower case
 // std::string toLower(std::string str)
@@ -68,7 +69,7 @@ int	ft_parsing(int ac, char *av)
 	{
 		Config parser2(file);
 		parser = parser2;
-		// parser.server_print();
+		parser.server_print();
 	}
 	catch(std::exception &e)
 	{

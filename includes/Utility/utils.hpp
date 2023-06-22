@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/02 16:09:14 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 22:01:47 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ struct utility
 
     static int                                  check_file_or_directory(const std::string& path);
     
-    static std::string                          search_directive (const std::string &directive,  directive_t& location_dirts);
+    static std::string                          search_directive (const std::string &directive,  directive_t& location_dirts, int targeted_serv);
 
 
     static std::string                          get_file_hash(const std::string& path);

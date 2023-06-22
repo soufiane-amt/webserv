@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/21 17:43:44 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:47:25 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	Config::server_host(server_t &servers)
 
 void	Config::server_print()
 {
-	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
+	for (server_t::iterator it = servers.begin() + 1; it != servers.end(); ++it)
 	{
         directive_t& directives = it->first;
         location_t& locations = it->second;
@@ -79,6 +79,7 @@ void	Config::server_print()
                 std::cout << "    Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
             }
         }
+		break;
     }
 }
 

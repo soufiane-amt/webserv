@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 17:31:10 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/22 22:29:14 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,20 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
 
 void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirts)
 {
-    std::string allow_value = utility::search_directive ("allow", location_dirts);
+    std::string allow_value = utility::search_directive ("allow", location_dirts, targeted_serv);
     if (allow_value == "")
         return ;
     std::vector <std::string> allowedMethods = utility::split(allow_value, " ");
+    std::cout << "SIze :" << allow_value << std::endl;
     for (size_t i = 0; i < allowedMethods.size(); i++)
         if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
-    
+    std::cout << "-------------\n";
     for (size_t i = 0; i < _Methods->size(); i++)
         if (Method == _Methods[i])
             throw StatusCode(METHOD_NOT_ALLOWED) ;
+    std::cout << "-------------\n";
+    
     throw StatusCode(BAD_REQUEST);
 }
 
@@ -74,7 +77,7 @@ void     errorManager::isLocationRedirected(const std::string& targetLocat,locat
     location_t::iterator it = server_location.find(targetLocat);
     if (it != server_location.end())
     {
-        std::string red = utility::search_directive ("return", server_location[targetLocat]);
+        std::string red = utility::search_directive ("return", server_location[targetLocat], targeted_serv);
         if (red != "")
         {
             StatusCode redirection = utility::redirector_proccessor(red);
@@ -107,7 +110,7 @@ std::string errorManager::isURIValid(const std::string& URI, location_t server_l
 void     errorManager::defineFinalUri (header_t& header, const std::string& targetLocat, location_t server_location)
 {
     isLocationRedirected(targetLocat, server_location);
-    std::string root =  utility::search_directive("root", server_location[targetLocat]);
+    std::string root =  utility::search_directive("root", server_location[targetLocat], targeted_serv);
     if (targetLocat.size() == 1 && header.at("URI").size() > 1)//to fix
         root += "/";
     if (header.at("URI").substr(0, targetLocat.size()) != targetLocat && !utility::check_file_or_directory((root + header.at("URI"))) )
@@ -118,8 +121,8 @@ void     errorManager::defineFinalUri (header_t& header, const std::string& targ
         throw StatusCode(NOT_FOUND);
     if (utility::check_file_or_directory(header.at("URI")) == S_DIRECTORY)
     {
-        std::string it_ind = utility::search_directive("index", server_location[targetLocat]);
-        std::string it_auto = utility::search_directive("autoindex", server_location[targetLocat]);
+        std::string it_ind = utility::search_directive("index", server_location[targetLocat], targeted_serv);
+        std::string it_auto = utility::search_directive("autoindex", server_location[targetLocat], targeted_serv);
         //------->/at the begining of the URI or at the end of the index may cause a problem//this is only a temporary solution
         if (it_ind != "")
         {
@@ -148,16 +151,18 @@ void   errorManager::isHostValid(const header_t& header)
             throw StatusCode(BAD_REQUEST);
 }
 
-void    errorManager::isBodySizeValid(const std::string& body,  directive_t& header)
+void    errorManager::isBodySizeValid(const std::string& body,  directive_t& serv_directives)
 {
-    std::string max_body_size = utility::search_directive ("max_body_size", header);
+    std::string max_body_size = utility::search_directive ("max_body_size", serv_directives, targeted_serv);
     if (max_body_size != "" && static_cast<int>(body.size()) > atoi(max_body_size.c_str()))
         throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 }
 
-bool     errorManager::isRequestValid(http_message_t &request, int targeted_serv)
+bool     errorManager::isRequestValid(http_message_t &request, int targeted_ser)
 {
+    targeted_serv = targeted_ser;
     location_t     server_location = parser.get_server_locations(targeted_serv);
+    std::cout << "index : ====>"<<targeted_serv << std::endl;
     header_t              &header         = request.header;
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 18:16:41 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:25:23 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ std::vector<char>    request_response(std::string msg, int targeted_serv)
     catch(const StatusCode& e)
     {
         responsePreparation response(_request,targeted_serv, e);
-
+        
+        std::cout << "======> Response : <======="<< std::endl;
         std::cout << response.get_response().data()<< std::endl;
         return response.get_response();
     }

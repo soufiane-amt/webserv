@@ -20,13 +20,30 @@
 #include "pollingServ.hpp"
 
 
-int toDec(std::string hex)
+int toDec(std::string &hexString)
 {
-    int nb;
-    std::istringstream size(hex);
-    size >> std::hex >> nb;
+    int result = 0;
+    int multiplier = 1;
 
-    return (nb);
+    for (int i = hexString.length() - 1; i >= 0; --i) {
+        char c = hexString[i];
+        int digit;
+
+        if (c >= '0' && c <= '9') {
+            digit = c - '0';
+        } else if (c >= 'A' && c <= 'F') {
+            digit = c - 'A' + 10;
+        } else if (c >= 'a' && c <= 'f') {
+            digit = c - 'a' + 10;
+        } else {
+            return -1;  // Not a valid hexadecimal number
+        }
+
+        result += digit * multiplier;
+        multiplier *= 16;
+    }
+
+    return result;
 }
 
 appendClient::appendClient(): _contentLength(-1), _checkHead(-1), _checkBody(-1), _bodyType(-1), _responseStatus(-1),  _clientFd(-69)
@@ -323,23 +340,36 @@ void    appendClient::resolveChunk(std::string &body)
 {
     std::string size;
     std::string result;
-    size_t cSize;
+    size_t cSize = -1;
 
-    while(1)
+    while(cSize != 0)
     {
         size_t pos = body.find(newline);
         if (pos == std::string::npos)
             break;
         
-        size = body.substr(0,pos);
-        cSize = toDec(size);
+        //clear string before the iteration (it can come with garbage value)
+        size.clear();
+        for (size_t i = 0; i < pos ; i++)
+            size.push_back(body[i]);
         
+        cSize = toDec(size);
+        if (static_cast<int>(cSize) == -1 || cSize > body.size())
+        {
+            this->_body.clear();
+            this->_bodyType = nobody;
+            return ;
+        }
         if (cSize == 0)
             break;
-        body = body.substr(pos + 2);
-        result += body.substr(0, cSize);
-        body = body.substr(cSize);
-        body = body.substr(2);
+
+        body.erase(0, pos + 2);
+
+        for (size_t i = 0; i < cSize; i++)
+            result.push_back(body[i]);
+
+        body.erase(0, cSize);
+        body.erase(0, 2);
     }
     this->_body.clear();
     for (size_t i = 0 ; i < result.size(); i++)

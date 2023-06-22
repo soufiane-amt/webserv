@@ -5,23 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome</title>
   <style>
-    .form-upload {
-  margin-top: 40px;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #222;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+  color: #fff;
+  font-size: 42px;
+  margin-top: 50px;
 }
 
-/* Styles for CGI form */
-.form-cgi {
+p {
+  color: #ccc;
+  font-size: 20px;
   margin-top: 20px;
 }
 
-/* Styles for form buttons */
-input[type="submit"] {
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #333;
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.button {
   display: inline-block;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 3px;
   transition: background-color 0.3s ease;
-  background-color: #333;
+  background-color: #666;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -29,56 +47,18 @@ input[type="submit"] {
   margin-top: 10px;
 }
 
-input[type="submit"]:hover {
-  background-color: #666;
+.button:hover {
+  background-color: #888;
 }
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 20px;
-    }
-    
-    h1 {
-      color: #333;
-      font-size: 32px;
-      margin-top: 50px;
-    }
-    
-    p {
-      color: #666;
-      font-size: 18px;
-      margin-top: 20px;
-    }
-    
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 3px;
-      transition: background-color 0.3s ease;
-    }
-    
-    .button:hover {
-      background-color: #666;
-	  .button-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
-    }
-    
-    }
-  </style>
+
+.form-upload {
+  margin-top: 40px;
+}
+
+.form-cgi {
+  margin-top: 20px;
+}
+</style>
 </head>
 <body>
   <div class="container">
@@ -87,11 +67,12 @@ input[type="submit"]:hover {
     <br>
     <h1>Execute Upload</h1>
     <form action="http://localhost:6969/" method="GET" class="form-upload">
-      <input type="submit" value="Upload" />
+      <input type="submit" value="Upload" class="button" />
     </form>
     <h1>Execute CGI</h1>
     <form action="http://localhost:5000/" method="GET" class="form-cgi">
-      <input type="submit" value="CGI" />
-    </form>     
+      <input type="submit" value="CGI" class="button" />
+    </form>
+  </div>
 </body>
 </html>

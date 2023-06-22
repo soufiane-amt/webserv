@@ -1,86 +1,91 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>CGI Execution</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f1f1f1;
-            }
-            
-            h1 {
-                text-align: center;
-            }
-            
-            form {
-                max-width: 400px;
-                margin: 0 auto;
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 4px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-            
-            label {
-                display: block;
-                margin-bottom: 10px;
-            }
-            
-            button {
-                display: block;
-                margin-top: 20px;
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-                font-size: 16px;
-                transition: background-color 0.3s ease;
-            }
-            
-            button:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Execute CGI</h1>
-        <form method="post" enctype="multipart/form-data" action="../cgi_files/cgi_exemple.py">
-            <br>
-            <div>
-                <button>Welcoming CGI</button>
-            </div>
-        </form>
-        <br>
-        <form method="get" action="form.html">
-            <br>
-            <div>
-                <button>Python Form Exemple</button>
-            </div>
-        </form>
-        <br>
-        <form action = "perl.html" method = "GET">
-            <br>
-            <div>
-                <button>Perl Form Exemple</button>
-            </div>
-        </form>
-        <br>
-        <form action = "session.html" method = "GET">
-            <br>
-            <div>
-                <button>Execute Session</button>
-            </div>
-        </form>
-        <br>
-        <form action = "cookie.html" method = "GET">
-            <br>
-            <div>
-                <button>Execute Cookie</button>
-            </div>
-        </form>
+<head>
+    <meta charset="UTF-8">
+    <title>CGI Execution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            font-size: 42px;
+            margin-top: 50px;
+        }
 
-    </body>
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: #333;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    button {
+        display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+  background-color: #666;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #888;
+    }
+</style>
+</head>
+<body>
+    <h1>Execute CGI</h1>
+    <form method="post" enctype="multipart/form-data" action="../cgi_files/cgi_exemple.py">
+        <br>
+        <div>
+            <button>Welcoming CGI</button>
+        </div>
+    </form>
+    <br>
+    <form method="get" action="form.html">
+        <br>
+        <div>
+            <button>Python Form Example</button>
+        </div>
+    </form>
+    <br>
+    <form action="perl.html" method="GET">
+        <br>
+        <div>
+            <button>Perl Form Example</button>
+        </div>
+    </form>
+    <br>
+    <form action="session.html" method="GET">
+        <br>
+        <div>
+            <button>Execute Session</button>
+        </div>
+    </form>
+    <br>
+    <form action="cookie.html" method="GET">
+        <br>
+        <div>
+            <button>Execute Cookie</button>
+        </div>
+    </form>
+</body>
 </html>

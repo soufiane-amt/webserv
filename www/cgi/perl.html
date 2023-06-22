@@ -1,18 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PHP CGI</title>
+    <meta charset="UTF-8">
+    <title>Perl Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        main {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #333;
+        font-size: 32px;
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    input[type="text"] {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 3px;
+        transition: background-color 0.3s ease;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #666;
+    }
+</style>
 </head>
 <body>
     <main>
-        <p>
-            <h1>Perl Post</h1>
-            <form action = "../cgi_files/post.pl" method = "POST">
-                First Name: <input type = "text" name = "first_name">  <br />
-                Last Name: <input type = "text" name = "last_name" />
-                <input type = "submit" value = "Submit" />
-            </form>     
-        </p>
+        <h1>Perl Post</h1>
+        <form action="../cgi_files/post.pl" method="POST">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required><br>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required><br>
+            <input type="submit" value="Submit">
+        </form>
     </main>
 </body>
 </html>

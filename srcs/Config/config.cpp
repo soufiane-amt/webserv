@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/22 21:47:25 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 11:28:36 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	Config::server_host(server_t &servers)
 
 void	Config::server_print()
 {
-	for (server_t::iterator it = servers.begin() + 1; it != servers.end(); ++it)
+	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
 	{
         directive_t& directives = it->first;
         location_t& locations = it->second;
@@ -79,7 +79,6 @@ void	Config::server_print()
                 std::cout << "    Key: " << dir_it->first << " || Value: " << dir_it->second << std::endl;
             }
         }
-		break;
     }
 }
 
@@ -298,7 +297,7 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 		if (directives.find((it - 1)->value) != directives.end() && i == 1)
 			throw Config::Error_config_file();
 		else if (i == 1)
-			directives[(it - 1)->value] = it->value;
+			directives[(it - 1)->value] = it->value + " " + (it + 1)->value;
 	}
 	else if ((it - 1)->value == "path_info")
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 16:53:10 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/24 00:06:59 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 responsePreparation::responsePreparation(const http_message_t& request, int targeted_serv,const  StatusCode& statusCode):_request(request), _statusCode(statusCode)
 {
     _init(targeted_serv);
-    // check_if_cgi(_request.header["URI"]);
     if(_statusCode.is_error_status())
         prepare_error_response();
     else if (_request.header["Method"] == "GET")

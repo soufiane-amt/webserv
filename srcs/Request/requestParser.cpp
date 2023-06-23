@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   requestParser.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 16:52:54 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 22:22:17 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
 http_message_t& clientRequestParser::getRequest ()
 {
     return (_request);
-}
+}   
 
 void    clientRequestParser::check_the_absoluteURI ()
 {
@@ -104,19 +104,9 @@ void    clientRequestParser::parseOtherLines (std::string line)
 
 void    clientRequestParser::parseHeader ()
 {
-    try
-    {
     parseFirstLine ();
     for (tokens_t::iterator it = _tokens.begin() + 1; it != _tokens.end() ; it++)
         parseOtherLines(*it);
-
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << "the problem is here" << '\n';
-    }
-    
-    
 }
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 16:52:45 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/24 00:06:10 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void     errorManager::request_has_valid_headers(header_t& header, bool requestH
 
     if ((Method == "GET" || Method == "DELETE") && (requestHasBody || _request_has_meta_data(header)))
         throw StatusCode(BAD_REQUEST);
-    if (Method == "POST" && !_request_has_meta_data(header))
+    if (Method == "POST" && (!requestHasBody || !_request_has_meta_data(header)))
         throw StatusCode(BAD_REQUEST);
     if (__request_transfer_encoded(header) && !(_request_is_chunked(header)))
         throw StatusCode(SERVICE_UNAVAILABLE);
@@ -43,7 +43,7 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
 {
     std::string allow_value = utility::search_directive ("allow", location_dirts, targeted_serv);
     if (allow_value == "")
-        return ;
+        allow_value = "GET POST DELETE" ;
     std::vector <std::string> allowedMethods = utility::split(allow_value, " ");
     for (size_t i = 0; i < allowedMethods.size(); i++)
         if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
@@ -171,9 +171,6 @@ bool     errorManager::isRequestValid(http_message_t &request, int targeted_ser)
     defineFinalUri(header, request.targeted_Location, server_location);
     
     isBodySizeValid(request.body, server_location[request.targeted_Location]);
-    // std::string max_body_size = utility::search_directive ("max_body_size", server_location[request.targeted_Location]);
-    // if (max_body_size != "" && static_cast<int>(request.body.size()) > atoi(max_body_size.c_str()))
-    //     throw StatusCode(REQUEST_ENTITY_TOO_LARGE);    
 
     return true;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 22:01:47 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 22:26:44 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,8 @@ typedef    std::string                          body_t;
 struct http_message_t
 {
     // typedef map<std::string, std::string> body_meta_data;
-    typedef struct body_meta_data_t
-    {
-        std::string content_type;
-        int         content_length;
-    }b_meta_data_t;
-     
     header_t        header;
     body_t          body;
-    b_meta_data_t   meta_data;
     
     std::string     targeted_Location;
 };

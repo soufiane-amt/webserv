@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 17:48:56 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 20:17:13 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_parsing(int ac, char *av)
 	if (ac != 2)
 	{
 		std::cerr << "Bad arguments" << std::endl;
-		return (1);
+		exit (1);
 	}
 	std::string		config = av;
 	std::ifstream file (config);
@@ -58,12 +58,12 @@ int	ft_parsing(int ac, char *av)
 	if (file)
 	{
 		if (check_file_name(config, end_char))
-			return (1);
+			exit (1);
 	}
 	else
 	{
 		std::cout << "Invalid config file" << std::endl;
-		return (-1);
+		exit (1);
 	}
 	try
 	{
@@ -74,25 +74,18 @@ int	ft_parsing(int ac, char *av)
 	catch(std::exception &e)
 	{
 		std::cerr << e.what() << '\n';
-		return (-1);
+		exit (1);
 	}
 	return (0);
 }
 
 
-int main (int argc, char **argv, char **env)
+int main (int argc, char **argv)
 {
-	(void)env;
 	//create poll object to handle servers
     polling pl;
 	
-	if (ft_parsing(argc, argv[1]) < 0)
-		return (1);
-    if (argc != 2)
-    {
-        std::cout << "Usage: ./webserv [port]" << std::endl;
-        return 0;
-    }
+	ft_parsing(argc, argv[1]);
 	std::cout << "Welcome To Webserv1.0: " << std::endl;
     std::vector<std::pair<std::string, std::string> > servs = parser.get_host();
 	std::vector<std::pair<std::string, std::string> >::iterator it = servs.begin();

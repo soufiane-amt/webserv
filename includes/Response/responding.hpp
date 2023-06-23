@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 20:21:12 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/15 17:02:57 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/23 23:20:33 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ class responsePreparation
 {
     private:
         typedef std::vector<char>     response_t;
-        typedef int                   response_category_t;
     
         http_message_t          _request;
         StatusCode              _statusCode;
@@ -41,10 +40,6 @@ class responsePreparation
         
 
     private:
-        void             prepare_rest();
-        void             prepare_other_headers();
-
-
         void             prepare_statusLine();
 
         void             prepare_server_name();

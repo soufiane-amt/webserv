@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/23 02:26:18 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:27:46 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,6 @@ void    polling::handlePoll()
             {
                 appendClient    newClient;
                 this->acceptConnection(newClient, this->_sockets[index], this->_servers[index]);
-
-                //print logs of new connection
-                // sock.retrieveClientAdd(); // print the ip of the connection later
                 std::cout << "New server connection on socket : " << newClient.getClientFd() << std::endl;
             }
             else //just regular client ready to recieve 
@@ -215,7 +212,6 @@ void    polling::handleTimeout()
     this->_timeout = 0;
     for (size_t i = 0; i < this->_pollfds.size(); i++)
     {
-        std::cout << "Checking Timeout !" << std::endl;
         pollfd& pfd = this->_pollfds[i];
         std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd, &found);
         if (this->_timeout != 0)

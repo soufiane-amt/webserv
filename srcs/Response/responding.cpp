@@ -6,7 +6,7 @@
 /*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 10:51:51 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/23 11:17:01 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void responsePreparation::prepare_date()
 
 void responsePreparation::prepare_location()
 {
+    std::cout << "-----------------------++====================="<<_statusCode.get_status_code() << std::endl;
     if (_statusCode.get_redir_location() != "")
     {
         std::string location = "Location: " + _statusCode.get_redir_location();

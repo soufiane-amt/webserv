@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:52 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 21:58:25 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:56:19 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,14 +243,10 @@ std::string     utility::list_directory(std::string directory,  std::string targ
     else
     {
         size_t i = directory.find (target_location);
-        std::cout << "i : " << i << std::endl;
-        std::cout << "directory : " << directory << std::endl;
         if (i != std::string::npos)
             direct.erase (0,  i);
 
     }
-    std::cout << "dir : " << direct << std::endl;
-    std::cout << "target_location : " << target_location << std::endl;
     // Open the current directory
     dir = opendir(directory.c_str());
     if (dir == NULL)
@@ -262,7 +258,6 @@ std::string     utility::list_directory(std::string directory,  std::string targ
         direct += "/";
     // Output the list of files and directories in the directory as links
     while ((ent = readdir(dir)) != NULL) {
-            std::cout << "=====>" << direct  + std::string(ent->d_name) << std::endl;
         if (ent->d_type == DT_DIR) {
             // Output a link for a directory
             listing_file += "<a href=\"" + direct  + std::string(ent->d_name) + "/\">" + std::string(ent->d_name) + "/</a><br>\n";
@@ -541,12 +536,6 @@ std::string            utility::get_query_string(std::string path)
 bool                    utility::ressource_is_cgi(std::string path)
 {
     static std::vector<std::string> cgi_files =  addPrefixToVector(get_directory_files("./www/cgi_files/"), "./www/cgi_files/");
-    // std::cout << "++++GOOD+++" << std::endl;
-    for (size_t i = 0; i < cgi_files.size(); i++)
-    {
-        // std::cout << "cgi file : " << cgi_files[i] << std::endl;
-    }
-    
     remove_string_queries(path);
     for (std::vector<std::string>::iterator it = cgi_files.begin(); it != cgi_files.end(); ++it)
         if (arePathsSame(path.c_str(), it->c_str()))

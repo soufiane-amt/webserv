@@ -53,7 +53,7 @@ appendClient::appendClient(): _contentLength(-1), _checkHead(-1), _checkBody(-1)
 
 appendClient::~appendClient()
 {
-    std::cout << "client destructor" << std::endl;
+
 }
 
 void    appendClient::setTime(int64_t t)

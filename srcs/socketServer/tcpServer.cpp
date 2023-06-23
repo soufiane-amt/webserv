@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 22:43:07 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/21 18:59:59 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:54:08 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ tcpServer::tcpServer(polling &pl, int port, std::string host, int index)
 
 tcpServer::~tcpServer()
 {
-    std::cout << "Socket default deconstructor of:" << this->sockfd << std::endl;
+
 }
 
 void    tcpServer::testSysCall(int fd)

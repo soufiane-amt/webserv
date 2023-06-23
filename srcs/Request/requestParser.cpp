@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:44:09 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/20 18:35:04 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:52:54 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ clientRequestParser::clientRequestParser(std::string clientRequestMsg) //if one 
         if (i != spl_request.size() - 1)
             _request.body.append(CRLF CRLF);
     }
-    // std::cout << "spl_request[1]:"<< spl_request[1] <<"|"<<std::endl;
-    // for (tokens_t::iterator it = _tokens.begin(); it != _tokens.end(); it++)
-    //     std::cout << "=>" << *it << std::endl;    
     parseHeader();
 }
 

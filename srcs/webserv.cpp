@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 22:32:25 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:52:03 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int main (int argc, char **argv, char **env)
 		std::istringstream iss(it->first);
 		int port;
 		iss >> port;
-		std::cout << "Port: " << port << " host: " << it->second << " index: " << index << std::endl;
 		tcpServer sock(pl, port, it->second, index);
 		pl.pushServer(sock);
 		index++;

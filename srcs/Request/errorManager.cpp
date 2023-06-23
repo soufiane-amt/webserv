@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 11:19:34 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/23 16:52:45 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,11 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
     if (allow_value == "")
         return ;
     std::vector <std::string> allowedMethods = utility::split(allow_value, " ");
-    std::cout << "SIze :" << allow_value << std::endl;
     for (size_t i = 0; i < allowedMethods.size(); i++)
         if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
     for (size_t i = 0; i < 8; i++)
     {
-        std::cout << _Methods[i] << std::endl;
         if (Method == _Methods[i])
             throw StatusCode(METHOD_NOT_ALLOWED) ;
     }
@@ -62,7 +60,6 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
 
 void     errorManager::isProtocolValid(protocol_t protocol)
 {
-    // std::cout << "protocol:" << protocol << std::endl;
     if (protocol == _validProtocol)
         return ;
     if (protocol.substr( 0, 5) == "HTTP/" && (protocol[5] != '0' && protocol[5] != '\0') )
@@ -162,7 +159,6 @@ bool     errorManager::isRequestValid(http_message_t &request, int targeted_ser)
 {
     targeted_serv = targeted_ser;
     location_t     server_location = parser.get_server_locations(targeted_serv);
-    std::cout << "index : ====>"<<targeted_serv << std::endl;
     header_t              &header         = request.header;
 
     request.targeted_Location = isURIValid(header.find("URI")->second, server_location);

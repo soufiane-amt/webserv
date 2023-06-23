@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 16:52:03 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:48:56 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_parsing(int ac, char *av)
 	{
 		Config parser2(file);
 		parser = parser2;
-		parser.server_print();
+		// parser.server_print();
 	}
 	catch(std::exception &e)
 	{

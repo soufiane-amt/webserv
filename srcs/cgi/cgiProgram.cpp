@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 16:16:53 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/22 00:05:21 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:50:39 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void    CGI::setCGIpath(std::string filename)
         std::string exec = "/usr/local/bin/python3";
         std::string path = std::string(info) + filename;
 
-        std::cerr << "path: " << path << std::endl;
         this->_cgi.push_back(exec);
         this->_cgi.push_back(path);
     } 

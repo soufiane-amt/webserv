@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responding.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 16:58:01 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 22:09:54 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 10:51:51 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void responsePreparation::prepare_allow()
 {
     if (_statusCode.get_status_code() == METHOD_NOT_ALLOWED)
     {
-        std::string allow = "Allow: "+ _allowed_methods + CRLF;
+        std::string allow = "Allow: "+ _allowed_methods;
         _response.insert(_response.end(), allow.begin(), allow.end());
         add_CRLF();
     }
@@ -299,7 +299,11 @@ void responsePreparation::_init(int targeted_serv)
         server_locations = parser.get_server_locations(targeted_serv);
         _dir_listing_on = (utility::check_file_or_directory(_request.header.at("URI")) == S_DIRECTORY && 
                             utility::search_directive("autoindex", server_locations[_request.targeted_Location], id) == "on");
+    }
+    else
+    {
         _allowed_methods = utility::search_directive("allow", server_locations[_request.targeted_Location], id);
+        _allowed_methods == "" ? _allowed_methods = "GET, POST, DELETE" : _allowed_methods;
     }
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorManager.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 18:49:34 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/22 22:29:14 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 10:29:09 by samajat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ void     errorManager::isMethodValid(Method_t Method, directive_t& location_dirt
     for (size_t i = 0; i < allowedMethods.size(); i++)
         if (Method == allowedMethods[i])//valid method must be in the list of valid methods in the config file
             return ;
-    std::cout << "-------------\n";
-    for (size_t i = 0; i < _Methods->size(); i++)
+    for (size_t i = 0; i < 8; i++)
+    {
+        std::cout << _Methods[i] << std::endl;
         if (Method == _Methods[i])
             throw StatusCode(METHOD_NOT_ALLOWED) ;
-    std::cout << "-------------\n";
-    
+    }
     throw StatusCode(BAD_REQUEST);
 }
 

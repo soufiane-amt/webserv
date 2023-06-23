@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:52:32 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/16 20:25:11 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 02:17:41 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class appendClient;
 class   polling
 {
     private:
+        int                         _timeout;
         std::vector<pollfd>         _pollfds;
         std::vector<int>            _sockets;
         std::vector<tcpServer>      _servers;

@@ -6,7 +6,7 @@
 /*   By: fech-cha <fech-cha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 06:54:04 by fech-cha          #+#    #+#             */
-/*   Updated: 2023/06/22 21:25:23 by fech-cha         ###   ########.fr       */
+/*   Updated: 2023/06/23 02:26:18 by fech-cha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ std::vector<char>    request_response(std::string msg, int targeted_serv)
 }
 
 
-polling::polling(void)
+polling::polling(void): _timeout(0)
 {
     
 }
@@ -76,6 +76,7 @@ std::vector<appendClient>::iterator   polling::findClient(std::vector<tcpServer>
             if (clientIT->getClientFd() == fd)
             {
                 *found = servIT->getIndex();
+                this->_timeout = 1;
                 return (clientIT);
             }
         }
@@ -211,12 +212,13 @@ void    polling::handleTimeout()
 {
     int found = 0;
 
-    // std::cout << "Checking Timeout !" << std::endl;
+    this->_timeout = 0;
     for (size_t i = 0; i < this->_pollfds.size(); i++)
     {
+        std::cout << "Checking Timeout !" << std::endl;
         pollfd& pfd = this->_pollfds[i];
         std::vector<appendClient>::iterator checkRecv = polling::findClient(this->_servers, pfd.fd, &found);
-        if (found != 0)
+        if (this->_timeout != 0)
         {
             if (timing() - checkRecv->getTime() >= 10)
             {

@@ -91,14 +91,17 @@
         <div class="form-header">
             <h1>Python POST</h1>
         </div>
+
         <div class="form-container">
-            <form action="../cgi_files/hello.py" method="POST">
-                <label for="post-first-name">First Name:</label>
-                <input type="text" id="post-first-name" name="first_name">
-                <label for="post-last-name">Last Name:</label>
-                <input type="text" id="post-last-name" name="last_name">
+            <form method="post" action="../cgi_files/cgi_second.py">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+                <input type="checkbox" name="Linux"> Linux
+                <input type="checkbox" name="Windows"> Windows
                 <input type="submit" value="Submit">
             </form>
         </div>
+
     </div>
 </body>
+</html>

@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:35:13 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/14 19:03:21 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/24 09:47:00 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class	Config
 	private:
 		server_t servers;
 		std::vector<std::pair<std::string, std::string> > host;
+		std::vector<std::string> ports_number;
 	public:
 		typedef	std::vector<std::string>::iterator vector_it;
 		typedef	std::vector<key_val>::iterator key_val_it;
@@ -74,6 +75,7 @@ class	Config
 		std::vector<std::pair<std::string, std::string> > &get_host();
 		void	fill_servers(directive_t &directives, location_t &locations);
 		void	server_host(server_t &servers);
+		std::vector<std::string> &get_ports_number();
 };
 
 #endif

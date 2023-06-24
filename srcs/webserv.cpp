@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samajat <samajat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:03 by samajat           #+#    #+#             */
-/*   Updated: 2023/06/23 20:17:13 by samajat          ###   ########.fr       */
+/*   Updated: 2023/06/24 10:31:22 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,28 @@ int main (int argc, char **argv)
     std::vector<std::pair<std::string, std::string> > servs = parser.get_host();
 	std::vector<std::pair<std::string, std::string> >::iterator it = servs.begin();
 	int index = 0;
+	std::vector<std::string> ports = parser.get_ports_number();
+	std::vector<std::string>::iterator iter = ports.begin();
+	std::vector<std::string> temp;
+	std::vector<std::string>::iterator temp_it;
 	for (;it != servs.end(); it++)
 	{
-		std::istringstream iss(it->first);
-		int port;
-		iss >> port;
-		tcpServer sock(pl, port, it->second, index);
-		pl.pushServer(sock);
+		if (iter != ports.end())
+		{
+			temp = utility::split(*iter, " ");
+		 	temp_it = temp.begin();
+		}
+		for (size_t i = temp.size(); i > 0 && iter != ports.end(); i--)
+		{
+			std::istringstream iss(*temp_it);
+			int port;
+			iss >> port;
+			tcpServer sock(pl, port, it->second, index);
+			pl.pushServer(sock);
+			temp_it++;
+		}
+		if (iter != ports.end())
+			iter++;
 		index++;
 	}
 

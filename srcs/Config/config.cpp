@@ -6,7 +6,7 @@
 /*   By: sismaili <sismaili@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 10:48:32 by sismaili          #+#    #+#             */
-/*   Updated: 2023/06/23 11:28:36 by sismaili         ###   ########.fr       */
+/*   Updated: 2023/06/24 09:52:38 by sismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Config& Config::operator= (const Config& copy)
 {
 	this->servers = copy.servers;
 	this->host = copy.host;
+	this->ports_number = copy.ports_number;
 	return *this;
 }
 
@@ -35,6 +36,11 @@ std::vector<std::pair<std::string, std::string> > &Config::get_host()
 	return (this->host);
 }
 
+std::vector<std::string>	&Config::get_ports_number() 
+{
+	return (ports_number);
+}
+
 void	Config::server_host(server_t &servers)
 {
 	for (server_t::iterator it = servers.begin(); it != servers.end(); ++it)
@@ -44,7 +50,10 @@ void	Config::server_host(server_t &servers)
 		for (directive_t::iterator ite = dir.begin(); ite != dir.end(); ite++)
 		{
 			if (ite->first == "listen")
+			{
+				ports_number.push_back(ite->second);
 				ports = utility::split(ite->second, " ");
+			}
 			else if (ite->first == "server_name")
 			{
 				if (ports.size() > 0)
@@ -223,7 +232,9 @@ void Config::d_value_check(directive_t &directives, key_val_it &it, int i)
 			{
 				unique_values.push_back(it->value);
 				if (i == 1)
+				{
 					directives["listen"] += it->value + " ";
+				}
 				else
 					throw Config::Error_config_file();
 			}
